@@ -11,7 +11,7 @@
  Target Server Version : 80015
  File Encoding         : 65001
 
- Date: 02/06/2019 15:22:27
+ Date: 04/06/2019 00:32:48
 */
 
 SET NAMES utf8mb4;
@@ -110,8 +110,8 @@ CREATE TABLE `mm_decoupon` (
   `gmt_past` datetime NOT NULL COMMENT '过期时间',
   `is_used` tinyint(2) unsigned NOT NULL COMMENT '状态，0未使用，1已使用',
   `is_past` tinyint(2) unsigned NOT NULL COMMENT '是否过期，0未过期，1已过期',
-  `min` decimal(10,0) unsigned NOT NULL COMMENT '使用最低额',
-  `worth` decimal(10,0) unsigned NOT NULL COMMENT '优惠券额度',
+  `min` decimal(10,2) unsigned NOT NULL COMMENT '使用最低额',
+  `worth` decimal(10,2) unsigned NOT NULL COMMENT '优惠券额度',
   `is_fromexchange` tinyint(2) unsigned NOT NULL COMMENT '是否是兑换得到优惠券获得来源,0:领取,1:兑换',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci COMMENT='优惠券';
@@ -127,8 +127,8 @@ CREATE TABLE `mm_decouponcdkey` (
   `gmt_past` datetime NOT NULL COMMENT '过期时间',
   `is_exchanged` tinyint(2) unsigned NOT NULL COMMENT '是否兑换，0未兑换，1已兑换',
   `is_past` tinyint(2) unsigned NOT NULL COMMENT '是否已过期',
-  `min` decimal(10,0) unsigned NOT NULL COMMENT '使用最低额度',
-  `worth` decimal(10,0) unsigned NOT NULL COMMENT '优惠券额度',
+  `min` decimal(10,2) unsigned NOT NULL COMMENT '使用最低额度',
+  `worth` decimal(10,2) unsigned NOT NULL COMMENT '优惠券额度',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci COMMENT='优惠券的兑换码';
 
@@ -141,18 +141,6 @@ CREATE TABLE `mm_dict_producttype` (
   `type` varchar(32) COLLATE utf8mb4_general_ci NOT NULL COMMENT '类名',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
--- ----------------------------
--- Records of mm_dict_producttype
--- ----------------------------
-BEGIN;
-INSERT INTO `mm_dict_producttype` VALUES (1, '家电维修');
-INSERT INTO `mm_dict_producttype` VALUES (2, '家电清洗');
-INSERT INTO `mm_dict_producttype` VALUES (3, '家具清洗');
-INSERT INTO `mm_dict_producttype` VALUES (4, '保洁套餐');
-INSERT INTO `mm_dict_producttype` VALUES (5, '开荒套餐');
-INSERT INTO `mm_dict_producttype` VALUES (6, '二次开荒');
-COMMIT;
 
 -- ----------------------------
 -- Table structure for mm_index_advertisement
@@ -219,7 +207,7 @@ CREATE TABLE `mm_order` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `userid` bigint(20) unsigned NOT NULL COMMENT '用户id',
   `ordernumber` varchar(255) COLLATE utf8mb4_general_ci NOT NULL COMMENT '订单号',
-  `amount` decimal(10,0) unsigned NOT NULL COMMENT '总金额，这个是由各个item金额叠加而成的，其实可以直接计算，有点冗余',
+  `amount` decimal(10,2) unsigned NOT NULL COMMENT '总金额，这个是由各个item金额叠加而成的，其实可以直接计算，有点冗余',
   `gmt_create` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '订单生成时间',
   `gmt_modified` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '订单状态更改时间',
   `is_paid` tinyint(2) unsigned NOT NULL COMMENT '是否已经支付,0未支付,1已支付',
@@ -286,13 +274,13 @@ CREATE TABLE `mm_sharetemplate` (
 DROP TABLE IF EXISTS `mm_user`;
 CREATE TABLE `mm_user` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT COMMENT 'id',
-  `openid` int(10) unsigned NOT NULL COMMENT '小程序openid',
+  `openid` varchar(255) COLLATE utf8mb4_general_ci NOT NULL COMMENT '小程序openid',
   `name` varchar(16) COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT '姓名',
   `gmt_create` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '注册时间',
   `invitor_id` bigint(20) unsigned DEFAULT NULL COMMENT '邀请人ID可以为空',
   `phone` varchar(32) COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT '电话号码',
   `avator` varchar(255) COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT '头像',
-  `award` decimal(10,0) unsigned NOT NULL DEFAULT '5' COMMENT '每次邀请并下单获得的佣金',
+  `award` decimal(10,2) unsigned NOT NULL DEFAULT '5.00' COMMENT '每次邀请并下单获得的佣金',
   `integration` decimal(10,0) unsigned NOT NULL DEFAULT '5' COMMENT '每次邀请获得的积分',
   `wxid` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT '微信号，用于提现使用',
   `gmt_modified` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
@@ -306,8 +294,8 @@ DROP TABLE IF EXISTS `mm_wallet`;
 CREATE TABLE `mm_wallet` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `userid` bigint(20) unsigned NOT NULL COMMENT '用户ID',
-  `commission` decimal(10,0) unsigned NOT NULL COMMENT '佣金余额',
-  `credit` decimal(10,0) unsigned NOT NULL COMMENT '积分数量',
+  `commission` decimal(10,2) unsigned NOT NULL COMMENT '佣金余额',
+  `credit` decimal(10,0) unsigned NOT NULL COMMENT '积分数量无小数',
   `gmt_modified` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;

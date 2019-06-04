@@ -1,13 +1,15 @@
 package xyz.ruankun.machinemother.vo;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import xyz.ruankun.machinemother.util.Constant;
 
 public class ResponseEntity<T> {
 
+    @JsonProperty("code")
     private Integer code;
-
+    @JsonProperty("msg")
     private String msg;
-
+    @JsonProperty("data")
     private T data;
 
 

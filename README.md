@@ -14,3 +14,10 @@
 - 布尔字段为is_xxx，使用tinyint unsigned，只取1或者0
 - 所有数字字段均为unsigned，不取负数
 - 数据库名、表名、字段名一律采用小写字母，不得采用大写，windows和linux下存在着不同的大小写敏感问题(现在的mysql版本还不太清楚)
+
+## 6月4日记录
+- 完成小城登录功能
+- 完成小程序注册功能,注册包含登录,注册成功则返回token，同时表示登录了
+- util中添加md5加密工具，加密密钥在application.properties中设置
+- 常量util/Constant下添加了登录注册相关的常量
+- 添加AddrRepository

@@ -14,3 +14,5 @@
 - 布尔字段为is_xxx，使用tinyint unsigned，只取1或者0
 - 所有数字字段均为unsigned，不取负数
 - 数据库名、表名、字段名一律采用小写字母，不得采用大写，windows和linux下存在着不同的大小写敏感问题(现在的mysql版本还不太清楚)
+
+## 增加了swagger/swagger-ui配置

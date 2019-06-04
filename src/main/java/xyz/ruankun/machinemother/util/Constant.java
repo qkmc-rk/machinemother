@@ -11,4 +11,45 @@ public interface Constant {
     String MSG_SUCCESS = "响应成功";
 
     String MSG_SERVER_ERROR = "服务器故障";
+
+    //登录时要用的CODE
+
+    //成功登录
+    Integer LOGIN_SUCCESS = 1;
+
+    //未注册
+    Integer LOGIN_NO_USER = 0;
+
+    //传入code 有误登录失败
+    Integer LOGIN_CODE_ERROR = -1;
+
+    //传入的code已经被使用了
+    Integer LOGIN_CODE_USED = -2;
+
+    //服务器在处理一些操作的时候发生了异常
+    Integer LOGIN_SERVER_ERROR = -3;
+
+    //注册时要用的CODE
+
+    //成功注册
+    Integer REGISTER_SUCCESS = 1;
+
+    //已经注册过了
+    Integer REGISTER_ALREADY_DOWN = 0;
+
+    //传入code 有误注册失败
+    Integer REGISTER_CODE_ERROR = -1;
+
+    //传入的code已经被使用了
+    Integer REGISTER_CODE_USED = -2;
+
+    //服务器在处理一些操作的时候发生了异常
+    Integer REGISTER_SERVER_ERROR = -3;
+
+
+    //登录时微信返回的code
+    //已经被使用的code
+    Integer WX_USED_CODE = 40163;
+    Integer WX_ERROR_CODE = 40029;
+
 }

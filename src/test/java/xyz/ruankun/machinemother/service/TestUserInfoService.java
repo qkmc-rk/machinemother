@@ -9,8 +9,6 @@ import xyz.ruankun.machinemother.entity.User;
 import xyz.ruankun.machinemother.repository.UserRepository;
 
 import javax.annotation.Resource;
-import java.math.BigDecimal;
-import java.math.BigInteger;
 import java.util.Date;
 import java.util.List;
 
@@ -37,7 +35,7 @@ public class TestUserInfoService {
     @Test
     public void Jason0603(){
         User user = new User();
-        user.setOpenId(1234567890);
+        user.setOpenId("1234567890");
         user.setName("Rothschild");
         user.setGmtCreate(new Date());
         user.setIntegration(integration);

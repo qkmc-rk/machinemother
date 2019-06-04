@@ -1,13 +1,16 @@
 package xyz.ruankun.machinemother.entity;
 
+import org.hibernate.annotations.DynamicInsert;
+import org.hibernate.annotations.DynamicUpdate;
+
 import javax.persistence.*;
 import java.io.Serializable;
-import java.math.BigDecimal;
-import java.math.BigInteger;
 import java.util.Date;
 
 @Entity
 @Table(name = "mm_user")
+@DynamicInsert
+@DynamicUpdate
 public class User implements Serializable {
 
     @Id
@@ -16,12 +19,12 @@ public class User implements Serializable {
     private Integer id;
 
     @Column(name = "openid", nullable = false)
-    private Integer openId;
+    private String openId;
 
     @Column(name = "name")
     private String name;
 
-    @Column(name = "gmt_create", nullable = false)
+    @Column(name = "gmt_create")
     private Date gmtCreate;
 
     @Column(name = "invitor_id")
@@ -29,14 +32,15 @@ public class User implements Serializable {
 
     private String phone;
     private String avator;
-    @Column(name = "award", nullable = false)
+    @Column(name = "award")
     private Double award;
 
-    @Column(name = "integration", nullable = false)
+    @Column(name = "integration")
     private Double integration;
     @Column(name = "wxid")
     private String wxId;
-    @Column(name = "gmtModified", nullable = false)
+    //修改by mrruan
+    @Column(name = "gmt_modified")
     private Date gmtModified;
 
     public Integer getId() {
@@ -47,11 +51,11 @@ public class User implements Serializable {
         this.id = id;
     }
 
-    public Integer getOpenId() {
+    public String getOpenId() {
         return openId;
     }
 
-    public void setOpenId(Integer openId) {
+    public void setOpenId(String openId) {
         this.openId = openId;
     }
 

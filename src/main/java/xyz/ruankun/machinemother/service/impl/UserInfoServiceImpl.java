@@ -1,14 +1,26 @@
 package xyz.ruankun.machinemother.service.impl;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.redis.core.StringRedisTemplate;
+import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
+import xyz.ruankun.machinemother.entity.User;
+import xyz.ruankun.machinemother.repository.UserRepository;
 import xyz.ruankun.machinemother.service.UserInfoService;
+import xyz.ruankun.machinemother.util.Constant;
+import xyz.ruankun.machinemother.util.MD5Util;
+import xyz.ruankun.machinemother.vo.weixin.WxServerResult;
+
+import javax.annotation.Resource;
+import java.io.IOException;
+import java.util.Date;
+import java.util.concurrent.TimeUnit;
 
 @Service
 public class UserInfoServiceImpl implements UserInfoService {
@@ -20,6 +32,9 @@ public class UserInfoServiceImpl implements UserInfoService {
 
     @Autowired
     private RestTemplate restTemplate;
+
+    @Resource
+    private UserRepository userRepository;
 
     @Value("${weixin.secret}")
     private String SECRET;
@@ -43,8 +58,105 @@ public class UserInfoServiceImpl implements UserInfoService {
     @Value("${weixin.api.appid_end}")
     private Integer appid_end;
 
+
+    /**
+     *调用登录服务返回四种状态，
+     * 登录成功，  （返回用户ID）
+     * 因code错误登录失败，
+     * 因code已被使用登录失败，
+     * 因用户未注册登录失败
+     * ↑ 以上四种状态在常量Constant中定义
+     *
+     * @param code
+     * @return Constant.xxx 详情参照Constant中的常量
+     */
     @Override
     public Integer login(String code) {
+        WxServerResult wxServerResult =
+                requestWxServerWithCode(code);
+        Integer errCode = wxServerResult.getErrcode();
+        if(null != errCode){
+            if(errCode.equals(Constant.WX_ERROR_CODE))return Constant.LOGIN_CODE_ERROR;
+            if (errCode.equals(Constant.WX_USED_CODE))return Constant.LOGIN_CODE_USED;
+        }
+        //没有返回错误码则说明返回了session_key和openid
+        User user = userRepository.findByOpenId(wxServerResult.getOpenid());
+        if (null == user)   return Constant.LOGIN_NO_USER;
+        else{
+            //成功后还要缓存session_key和token
+            String token = MD5Util.md5(new Date().toString());
+            String session_key = wxServerResult.getSession_key();
+            if(updateSession(user.getId(),session_key,token,15))
+                return user.getId();
+            return Constant.LOGIN_SERVER_ERROR;
+        }
+    }
+
+    /**
+     *
+     * @param userId
+     * @param session_key 从微信服务器拿到的session_key
+     * @param token 系统随机生成的token
+     * @param period 有效时间 分钟
+     * @return 存入缓存后返回成功
+     */
+    @Override
+    public Boolean updateSession(Integer userId, String session_key, String token, Integer period) {
+        //要存入redis的数据有四条：
+        //既可以通过userid找到token和session_key又可以反过来通过这两个找userId
+        setDataToRedis("token" + userId,token,period);
+        setDataToRedis(token,String.valueOf(userId),period);
+        setDataToRedis("session_key" + userId,session_key,period);
+        setDataToRedis(session_key,String.valueOf(userId),period);
+        return true;
+    }
+
+    @Override
+    public String readDataFromRedis(String key) {
+        ValueOperations<String, String> valueOperations = stringRedisTemplate.opsForValue();
+        return valueOperations.get(key);
+    }
+
+    @Override
+    public void setDataToRedis(String key, String value, Integer min) {
+        ValueOperations<String, String> valueOperations = stringRedisTemplate.opsForValue();
+        valueOperations.set(key,value,min,TimeUnit.MINUTES);
+    }
+
+    @Override
+    public Integer register(String code, User user) {
+        WxServerResult wxServerResult = requestWxServerWithCode(code);
+        if(wxServerResult.getErrcode() != null && wxServerResult.getErrcode().equals(Constant.WX_ERROR_CODE))
+            return Constant.REGISTER_CODE_ERROR;
+        if(wxServerResult.getErrcode() != null && wxServerResult.getErrcode().equals(Constant.WX_USED_CODE))
+            return Constant.REGISTER_CODE_USED;
+
+        logger.info("注册：错误代码{}",wxServerResult.getErrcode());
+        logger.info("注册：openid{}",wxServerResult.getOpenid());
+        //拉取用户的session_key和openid成功
+        //检验是否注册过
+        User dbRow = userRepository.findByOpenId(wxServerResult.getOpenid());
+        if (dbRow != null) return Constant.REGISTER_ALREADY_DOWN;//早已注册过
+        //正式进行注册
+        user.setOpenId(wxServerResult.getOpenid());
+        User rs = userRepository.save(user);
+        if (rs != null) {
+            //注册成功，将用户信息写入redis，然后直接返回用户的ID
+            String token = MD5Util.md5(new Date().toString());
+            String session_key = wxServerResult.getSession_key();
+            if (updateSession(user.getId(), session_key, token, 15))
+                return user.getId();
+            return Constant.LOGIN_SERVER_ERROR;
+        }
+        return Constant.REGISTER_SERVER_ERROR;
+    }
+
+    /**
+     * 封装了请求微信服务端的代码，传入code，请求后，将结果封装成为一个WxServerResult对象返回
+     * @param code
+     * @return  微信服务器请求的结果
+     */
+    private WxServerResult requestWxServerWithCode(String code){
         StringBuilder uri = new StringBuilder();
         uri.append(API);
         //替换CODE
@@ -57,9 +169,16 @@ public class UserInfoServiceImpl implements UserInfoService {
         logger.info(uriStr);
         String strBody = getBody(restTemplate,uriStr);
         logger.info(strBody);
-        return null;
+        //到数据库查询是否存在openId为某一值的记录
+        ObjectMapper objectMapper = new ObjectMapper();
+        WxServerResult wxServerResult = null;
+        try {
+            wxServerResult = objectMapper.readValue(strBody, WxServerResult.class);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return wxServerResult;
     }
-
 
     /**
      * 该方法发送简单的get请求，并获取相应数据
@@ -73,4 +192,6 @@ public class UserInfoServiceImpl implements UserInfoService {
             return responseEntity.getBody();
         return null;
     }
+
+
 }

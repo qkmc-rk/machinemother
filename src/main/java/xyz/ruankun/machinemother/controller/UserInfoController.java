@@ -62,9 +62,9 @@ public class UserInfoController {
      * @param invitorId 邀请者ID
      * @return
      */
-    @PostMapping("")
+    @PostMapping("/register")
     @ApiOperation(value = "用户注册",notes = "传入用户信息，然后进行注册,微信小程序注册只需传入基础信息即可，重点在code")
-    public ResponseEntity regist(@ApiParam(value = "小程序的code") @RequestParam String code,
+    public ResponseEntity register(@ApiParam(value = "小程序的code") @RequestParam String code,
                                  @ApiParam(value = "拉取的微信昵称")@RequestParam String name,
                                  @ApiParam(value = "微信头像地址")@RequestParam String avator,
                                  @ApiParam(value = "邀请人的ID,扫分享码进入的小程序，则一定可以把分享者id带过来，这个非必须参数") Integer invitorId){

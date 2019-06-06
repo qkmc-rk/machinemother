@@ -1,9 +1,11 @@
 package xyz.ruankun.machinemother.repository;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import xyz.ruankun.machinemother.entity.User;
 
-import java.math.BigInteger;
+
 import java.util.List;
 
 public interface UserRepository extends JpaRepository<User, Integer> {
@@ -18,13 +20,11 @@ public interface UserRepository extends JpaRepository<User, Integer> {
 
     User findByOpenId(String openId);
 
-    List<User> findByName(String name);
+    Page<User> findByName(String name, Pageable pageable);
 
-    List<User> findByNameLike(String name);
+    Page<User> findByNameLike(String name, Pageable pageable);
 
-    List<User> findByOrderByIntegrationDesc();
-
-    List<User> findTop3ByNameLikeOrderByAwardDesc(String name);
+    Page<User> findByIntegration(double integration, Pageable pageable);
 //
 //    List<User> findTopByIntegration();
 
@@ -40,12 +40,11 @@ public interface UserRepository extends JpaRepository<User, Integer> {
 
     int deleteByInvitorId(int invitorId);
 
-    List<User> findUsersByInvitorId(int invitorId);
+    Page<User> findByInvitorId( int invitorId, Pageable pageable);
 
-    List<User> findAll();
+    Page<User> findAll(Pageable pageable);
 
     int countByInvitorId(int invitorId);
-
 
 
 }

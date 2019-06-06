@@ -4,11 +4,18 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.test.context.junit4.SpringRunner;
+import xyz.ruankun.machinemother.entity.Order;
 import xyz.ruankun.machinemother.entity.User;
+import xyz.ruankun.machinemother.repository.OrderRepository;
 import xyz.ruankun.machinemother.repository.UserRepository;
 
 import javax.annotation.Resource;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
@@ -27,13 +34,16 @@ public class TestUserInfoService {
     @Resource
     UserRepository userRepository;
 
+    @Resource
+    OrderRepository orderRepository;
+
     @Test
-    public void m1(){
+    public void m1() {
         userInfoService.login("06188Iot1NADfe0la8mt1TKPot188Ion");
     }
 
     @Test
-    public void Jason0603(){
+    public void Jason0603() {
         User user = new User();
         user.setOpenId("1234567890");
         user.setName("Rothschild");
@@ -47,43 +57,27 @@ public class TestUserInfoService {
         user.setGmtModified(new Date());
         userRepository.save(user);
 
+        PageRequest pageable = PageRequest.of(10, 4, Sort.Direction.DESC, "id");
         /**
          * 输出所有数据
          */
-        for (User user1 : userRepository.findAll()){
+        for (User user1 : userRepository.findAll(pageable)) {
             System.out.println(user1);
             System.out.println("---------------------------------------------------------------------------");
         }
-        /**
-         * 模糊查询输出
-         */
-        for (User user2: userRepository.findByNameLike("%Rothsc%")){
-            System.out.println(user2);
-            System.out.println("--------------------------------------------------------------------------");
-        }
-        /**
-         * update
-         */
-        for (User user1:userRepository.findUsersByInvitorId(1)){
-            user1.setName("赖俊");
-            userRepository.save(user1);
-        }
 
-        /**
-         * 所有结果按照积分高低倒叙
-         */
-        for (User user1: userRepository.findByOrderByIntegrationDesc()){
-            System.out.println(user1);
-        }
+        Page<User> users = userRepository.findByNameLike("%R%", pageable);
+        System.out.println(users.getTotalElements());
+        System.out.println(users.getTotalPages());
+        System.out.println(users.getNumber());
+        System.out.println(users.getSize());
+        for (User user1 : users) {
 
-        /**
-         * 按照名字模糊查询取赏金最高的前三
-         */
-        List<User> users = userRepository.findTop3ByNameLikeOrderByAwardDesc("%Roth%");
-        System.out.println(users.size());
-        for(User user1 : users) {
-            System.out.println(user1);
+            System.out.println(user1 + "================== ");
         }
+        System.out.println(users);
+
     }
+
 
 }

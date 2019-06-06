@@ -19,6 +19,11 @@ public class UserInfoController {
     @Autowired
     UserInfoService userInfoService;
 
+    /**
+     * 用户登录方法
+     * @param code 微信小程序code
+     * @return 参照代码
+     */
     @PostMapping("/token")
     @ApiOperation(value = "登录接口",notes = "传入小程序的code,进行登录,登录要做成restful API，必须跟资源联系起来，登录对应操作的是token")
     public ResponseEntity login(@ApiParam(value = "小程序code,必须传入") @RequestParam String code){
@@ -49,6 +54,14 @@ public class UserInfoController {
         return responseEntity;
     }
 
+    /**
+     * 注册API
+     * @param code 微信小程序code
+     * @param name 用户微信昵称
+     * @param avator 头像
+     * @param invitorId 邀请者ID
+     * @return
+     */
     @PostMapping("")
     @ApiOperation(value = "用户注册",notes = "传入用户信息，然后进行注册,微信小程序注册只需传入基础信息即可，重点在code")
     public ResponseEntity regist(@ApiParam(value = "小程序的code") @RequestParam String code,

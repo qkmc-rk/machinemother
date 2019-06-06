@@ -52,4 +52,5 @@ public interface Constant {
     Integer WX_USED_CODE = 40163;
     Integer WX_ERROR_CODE = 40029;
 
+
 }

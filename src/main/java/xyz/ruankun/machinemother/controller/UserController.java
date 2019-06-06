@@ -14,7 +14,7 @@ import xyz.ruankun.machinemother.vo.ResponseEntity;
 @CrossOrigin
 @RequestMapping("/user")
 @Api(value = "用户模块相关的操作由userController来实现")
-public class UserInfoController {
+public class UserController {
 
     @Autowired
     UserInfoService userInfoService;
@@ -92,5 +92,16 @@ public class UserInfoController {
             responseEntity.success(Constant.LOGIN_SUCCESS,"register and login success",token);
         }
         return responseEntity;
+    }
+
+    /**
+     * 获取所有用户信息
+     * @param page
+     * @param limit
+     * @return
+     */
+    @GetMapping("")
+    public ResponseEntity getUsers(Integer page, Integer limit){
+        return null;
     }
 }

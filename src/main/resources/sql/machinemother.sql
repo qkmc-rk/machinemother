@@ -11,11 +11,26 @@
  Target Server Version : 80015
  File Encoding         : 65001
 
- Date: 04/06/2019 00:32:48
+ Date: 07/06/2019 19:18:19
 */
 
 SET NAMES utf8mb4;
 SET FOREIGN_KEY_CHECKS = 0;
+
+-- ----------------------------
+-- Table structure for hibernate_sequence
+-- ----------------------------
+DROP TABLE IF EXISTS `hibernate_sequence`;
+CREATE TABLE `hibernate_sequence` (
+  `next_val` bigint(20) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- ----------------------------
+-- Records of hibernate_sequence
+-- ----------------------------
+BEGIN;
+INSERT INTO `hibernate_sequence` VALUES (1);
+COMMIT;
 
 -- ----------------------------
 -- Table structure for mm_ announcement
@@ -59,7 +74,7 @@ CREATE TABLE `mm_addr` (
   `gmt_create` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
   `gmt_modified` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '修改时间',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- ----------------------------
 -- Table structure for mm_admin
@@ -70,6 +85,32 @@ CREATE TABLE `mm_admin` (
   `account` varchar(255) COLLATE utf8mb4_general_ci NOT NULL COMMENT '账号',
   `password` varchar(255) COLLATE utf8mb4_general_ci NOT NULL COMMENT '密码',
   `is_lock` tinyint(2) unsigned NOT NULL COMMENT '是否锁定0/1',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=314445438 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- ----------------------------
+-- Records of mm_admin
+-- ----------------------------
+BEGIN;
+INSERT INTO `mm_admin` VALUES (314445437, 'admin', '689a7f41007215efcd7662de263812ef', 0);
+COMMIT;
+
+-- ----------------------------
+-- Table structure for mm_comment
+-- ----------------------------
+DROP TABLE IF EXISTS `mm_comment`;
+CREATE TABLE `mm_comment` (
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `itemid` bigint(20) unsigned NOT NULL COMMENT '对某个产品评论，所以需要itemid',
+  `userid` bigint(20) unsigned NOT NULL COMMENT '评论者的id',
+  `score` tinyint(2) unsigned NOT NULL COMMENT '分数，填写1-5',
+  `comment` varchar(255) COLLATE utf8mb4_general_ci NOT NULL COMMENT '评语',
+  `picture1` varchar(255) COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT '图片1',
+  `picture2` varchar(255) COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT '图片2',
+  `picture3` varchar(255) COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT '图片3',
+  `gmt_create` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '评论时间',
+  `gmt_modified` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '修改时间',
+  `is_rcmd` tinyint(2) unsigned NOT NULL DEFAULT '0' COMMENT '是否推荐上主页',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
@@ -141,6 +182,18 @@ CREATE TABLE `mm_dict_producttype` (
   `type` varchar(32) COLLATE utf8mb4_general_ci NOT NULL COMMENT '类名',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- ----------------------------
+-- Records of mm_dict_producttype
+-- ----------------------------
+BEGIN;
+INSERT INTO `mm_dict_producttype` VALUES (1, '家电维修');
+INSERT INTO `mm_dict_producttype` VALUES (2, '家电清洗');
+INSERT INTO `mm_dict_producttype` VALUES (3, '家具清洗');
+INSERT INTO `mm_dict_producttype` VALUES (4, '保洁套餐');
+INSERT INTO `mm_dict_producttype` VALUES (5, '开荒套餐');
+INSERT INTO `mm_dict_producttype` VALUES (6, '二次开荒');
+COMMIT;
 
 -- ----------------------------
 -- Table structure for mm_index_advertisement
@@ -259,6 +312,20 @@ CREATE TABLE `mm_productprops` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci COMMENT='产品规格';
 
 -- ----------------------------
+-- Table structure for mm_reply
+-- ----------------------------
+DROP TABLE IF EXISTS `mm_reply`;
+CREATE TABLE `mm_reply` (
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `adminid` bigint(20) NOT NULL COMMENT '管理员ID',
+  `commentid` bigint(20) NOT NULL COMMENT '回复哪条评论',
+  `reply` varchar(255) COLLATE utf8mb4_general_ci NOT NULL COMMENT '回复内容',
+  `gmt_create` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+  `gmt_modified` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '修改时间',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- ----------------------------
 -- Table structure for mm_sharetemplate
 -- ----------------------------
 DROP TABLE IF EXISTS `mm_sharetemplate`;
@@ -285,7 +352,14 @@ CREATE TABLE `mm_user` (
   `wxid` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT '微信号，用于提现使用',
   `gmt_modified` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci COMMENT='用户基本信息表';
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci COMMENT='用户基本信息表';
+
+-- ----------------------------
+-- Records of mm_user
+-- ----------------------------
+BEGIN;
+INSERT INTO `mm_user` VALUES (2, 'oVibi5NLksGX7bZUr8y0oyIUVMLI', '阮中华', '2019-06-04 22:56:47', 4, NULL, 'http://image.ruankun.xyz/1.png', 5.00, 5, NULL, '2019-06-04 22:56:47');
+COMMIT;
 
 -- ----------------------------
 -- Table structure for mm_wallet

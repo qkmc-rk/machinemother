@@ -12,4 +12,12 @@ public interface AdminService {
      * @return
      */
     Integer adminLogin(String account,String password);
+
+    /**
+     * 管理员与普通用户不一样，管理员没有sessionkey，只有token,所以更新session方法不一样
+     * @param userId
+     * @param token
+     * @param min
+     */
+    Boolean updateSession(String userId,String token,Integer min);
 }

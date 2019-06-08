@@ -6,18 +6,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.test.context.junit4.SpringRunner;
-import xyz.ruankun.machinemother.entity.Order;
 import xyz.ruankun.machinemother.entity.User;
-import xyz.ruankun.machinemother.repository.OrderRepository;
 import xyz.ruankun.machinemother.repository.UserRepository;
 
 import javax.annotation.Resource;
-import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.List;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
@@ -33,9 +28,6 @@ public class TestUserInfoService {
 
     @Resource
     UserRepository userRepository;
-
-    @Resource
-    OrderRepository orderRepository;
 
     @Test
     public void m1() {

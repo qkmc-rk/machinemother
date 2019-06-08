@@ -52,5 +52,10 @@ public interface Constant {
     Integer WX_USED_CODE = 40163;
     Integer WX_ERROR_CODE = 40029;
 
+    //使用aop处理时抛出了异常
+    Integer AOP_SERVER_ERROR = -4;
+
+    Integer AUTH_ERROR = 403;
+
 
 }

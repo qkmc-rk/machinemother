@@ -1,5 +1,7 @@
 package xyz.ruankun.machinemother.annotation;
 
+import xyz.ruankun.machinemother.util.constant.AuthAopConstant;
+
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
@@ -14,5 +16,7 @@ public @interface Authentication {
      *  false为跳过验证
      * @return
      */
-    boolean pass() default false;
+    boolean pass() default true;
+
+    AuthAopConstant role() default AuthAopConstant.ANON;
 }

@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.multipart.MultipartFile;
 import xyz.ruankun.machinemother.entity.Template;
@@ -20,14 +21,12 @@ import xyz.ruankun.machinemother.repository.TemplateRepository;
 import xyz.ruankun.machinemother.service.QrCodeService;
 import xyz.ruankun.machinemother.util.MD5Util;
 import xyz.ruankun.machinemother.util.QiNiuFileUtil;
-import xyz.ruankun.machinemother.util.constant.ImageType;
 import xyz.ruankun.machinemother.util.constant.WxAccessTokenReturnConstant;
 import xyz.ruankun.machinemother.vo.weixin.WxAccessToken;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -118,57 +117,68 @@ public class QrCodeServiceImpl implements QrCodeService {
     }
 
     /**
-     * 保存一个模板
+     * 保存一个模板 可以是更新进去，也可以是添加进去，如果
+     * 不传入id则是添加
      * @param img 图片二进制流
      * @return 返回保存成功
      */
     @Override
-    public Boolean putTemplate(MultipartFile img) {
+    public Boolean putTemplate(MultipartFile img, Integer... id) {
         //第一步上传到七牛云
-        InputStream inputStream = null;
-        try {
-            inputStream = img.getInputStream();
-        } catch (IOException e) {
-            e.printStackTrace();
-            logger.error("图片读取输入流错误");
-            return false;
-        }
-        String fileOriginName = img.getOriginalFilename();
-        ImageType type = getImgType(fileOriginName);
-        String tail = null;
-        switch (type){
-            case GIF:
-                tail = ".gif";
-                break;
-            case JPEG:
-                tail = ".jpeg";
-                break;
-            case JPG:
-                tail = ".jpg";
-                break;
-            case PNG:
-                tail = ".png";
-                break;
-        }
-        if (tail == null){
-            logger.error("不支持的图片格式");
-            return false;
-        }
-        String imgpath = QiNiuFileUtil.uploadToQiNiu(inputStream,MD5Util.md5(new Date().toString()) + tail);
-        if (imgpath == null){
+        String imgPath;
+        imgPath = QiNiuFileUtil.uploadImageToQiNiu(img);
+        if (imgPath == null){
             logger.info("上传到七牛云出现错误");
             return false;
         }
         //第二步，保存到数据库
         Template template = new Template();
-        template.setImgpath(imgpath);
+        template.setImgpath(imgPath);
+        if (id.length > 0){
+            template.setId(id[0]);
+            try {
+                logger.info("传入的模板ID是：{}",id);
+                template = templateRepository.saveAndFlush(template);
+            } catch (Exception e) {
+                e.printStackTrace();
+                return false;
+            }
+        }else {
+            try {
+                template = templateRepository.save(template);
+            } catch (Exception e) {
+                e.printStackTrace();
+                return false;
+            }
+        }
+        if (null == template)   return  false;
+        return true;
+    }
+
+    /**
+     * 更新嘛，看接口的注释 调用了 put方法来依赖实现
+     * @param id  ID
+     * @param img 图片二进制文件
+     * @return
+     */
+    @Override
+    public boolean update(Integer id, MultipartFile img) {
+        return putTemplate(img,id);
+    }
+
+    /**
+     * 删除一个template
+     * @param id ID
+     * @return  真假难辨
+     */
+    @Override
+    public boolean deleteOneById(Integer id) {
         try {
-            template = templateRepository.save(template);
+            templateRepository.deleteById(id);
         } catch (Exception e) {
             e.printStackTrace();
             return false;
         }
-        if (null == template)   return  false;
         return true;
     }
 
@@ -236,20 +246,4 @@ public class QrCodeServiceImpl implements QrCodeService {
         return imgUrl;
     }
 
-    /**
-     * 判断图片的格式，只支持jpg jpeg png gif
-     * @param originalImageName
-     * @return
-     */
-    ImageType getImgType(String originalImageName){
-        if (originalImageName.toLowerCase().indexOf(".jpg") > 0)
-            return ImageType.JPG;
-        if (originalImageName.toLowerCase().indexOf(".jpeg") > 0)
-            return ImageType.JPEG;
-        if (originalImageName.toLowerCase().indexOf(".png") > 0)
-            return ImageType.PNG;
-        if (originalImageName.toLowerCase().indexOf(".gif") > 0)
-            return ImageType.GIF;
-        return null;
-    }
 }

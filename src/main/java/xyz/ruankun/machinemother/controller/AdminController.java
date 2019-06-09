@@ -4,9 +4,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import xyz.ruankun.machinemother.annotation.Authentication;
 import xyz.ruankun.machinemother.service.AdminService;
 import xyz.ruankun.machinemother.service.UserInfoService;
 import xyz.ruankun.machinemother.util.Constant;
+import xyz.ruankun.machinemother.util.constant.AuthAopConstant;
 import xyz.ruankun.machinemother.vo.ResponseEntity;
 
 /**
@@ -23,7 +25,9 @@ public class AdminController {
     @Autowired
     UserInfoService userInfoService;
 
+    //拦截判断是不是管理员
     @GetMapping("/token")
+    @Authentication(pass = false,role = AuthAopConstant.ADMIN)
     public ResponseEntity login(String account,String password){
         Integer rs = adminService.adminLogin(account,password);
         ResponseEntity responseEntity = new ResponseEntity();

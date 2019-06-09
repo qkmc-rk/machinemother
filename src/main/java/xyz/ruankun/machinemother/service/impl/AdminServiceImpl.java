@@ -2,6 +2,7 @@ package xyz.ruankun.machinemother.service.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.StringRedisTemplate;
+import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.stereotype.Service;
 import xyz.ruankun.machinemother.entity.Admin;
 import xyz.ruankun.machinemother.repository.AdminRepository;
@@ -11,6 +12,7 @@ import xyz.ruankun.machinemother.util.Constant;
 import xyz.ruankun.machinemother.util.MD5Util;
 
 import java.util.Date;
+import java.util.concurrent.TimeUnit;
 
 @Service
 public class AdminServiceImpl implements AdminService {
@@ -49,6 +51,19 @@ public class AdminServiceImpl implements AdminService {
             return admin.getId();
 
         }
+    }
+
+    @Override
+    public Boolean updateSession(String userId, String token, Integer min) {
+        //更新token
+        setDataToRedis(userId,token,min);
+        setDataToRedis(token,userId,min);
+        return true;
+    }
+
+    public void setDataToRedis(String key, String value, Integer min) {
+        ValueOperations<String, String> valueOperations = stringRedisTemplate.opsForValue();
+        valueOperations.set(key,value,min, TimeUnit.MINUTES);
     }
 
 

@@ -1,6 +1,10 @@
 package xyz.ruankun.machinemother.service;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import xyz.ruankun.machinemother.entity.User;
+
+import java.util.List;
 
 /**
  * 个人信息服务
@@ -43,4 +47,26 @@ public interface UserInfoService {
      * @return
      */
     Integer register(String code, User user);
+
+    User getUser(String openId);
+
+    User getUser(int userId);
+
+    User getByWxId(String wxId);
+
+    User getByPhone(String phone);
+
+    User save(User user);
+
+    User update(User user);
+
+    Page<User> getAll(Pageable pageable);
+
+    Page<User> getByInvitor(int invitorId, Pageable pageable);
+
+    Page<User> search(String name, Pageable pageable);
+
+    int delete(String openId);
+
+    int delete(int userId);
 }

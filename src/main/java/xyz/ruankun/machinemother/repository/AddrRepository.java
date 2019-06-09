@@ -13,4 +13,13 @@ public interface AddrRepository extends JpaRepository<Addr,Integer> {
      */
     List<Addr> findAllByUserId(Integer userId);
 
+    Addr save(Addr addr);
+
+    Addr findById(int id);
+
+    int deleteByUserId(int userId);
+
+    int deleteById(int id);
+
+
 }

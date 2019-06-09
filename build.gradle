@@ -28,6 +28,10 @@ dependencies {
 	//redis后面做token存储的
 	implementation 'org.springframework.boot:spring-boot-starter-data-redis'
 	implementation 'org.springframework.boot:spring-boot-starter-mail'
+
+	//添加aop支持
+	implementation 'org.springframework.boot:spring-boot-starter-aop'
+
 	//定时任务
 	implementation 'org.springframework.boot:spring-boot-starter-quartz'
 	implementation 'org.springframework.boot:spring-boot-starter-web'
@@ -36,6 +40,8 @@ dependencies {
 	//用于发送http请求的包
 	//低于4.3版本的httpClient报错java.lang.NoClassDefFoundError
 	implementation 'org.apache.httpcomponents:httpclient:4.3.3'
+
+	implementation 'com.qiniu:qiniu-java-sdk:7.2.11'
 
 	//swagger与swagger-ui依赖引入
 	implementation 'io.springfox:springfox-swagger2:2.7.0'

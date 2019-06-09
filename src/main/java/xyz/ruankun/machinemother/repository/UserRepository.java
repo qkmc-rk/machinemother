@@ -24,19 +24,13 @@ public interface UserRepository extends JpaRepository<User, Integer> {
 
     Page<User> findByNameLike(String name, Pageable pageable);
 
-    Page<User> findByIntegration(double integration, Pageable pageable);
-//
 //    List<User> findTopByIntegration();
 
-    int deleteByOpenId(int openId);
+    int deleteByOpenId(String openId);
 
     int deleteById(int id);
 
     int deleteByName(String name);
-
-    int deleteByPhone(String phone);
-
-    int deleteByWxId(String wxId);
 
     int deleteByInvitorId(int invitorId);
 

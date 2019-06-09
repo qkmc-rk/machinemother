@@ -9,11 +9,12 @@ import com.qiniu.storage.model.DefaultPutRet;
 import com.qiniu.util.Auth;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.web.multipart.MultipartFile;
-import xyz.ruankun.machinemother.util.constant.ImageType;
 
 import java.io.IOException;
 import java.io.InputStream;
+import org.springframework.web.multipart.MultipartFile;
+import xyz.ruankun.machinemother.util.constant.ImageType;
+
 import java.util.Date;
 import java.util.Properties;
 
@@ -78,6 +79,9 @@ public class QiNiuFileUtil {
         return null;
     }
 
+    public static String getDns(){
+        return dns;
+    }
     /**
      * 传文件
      * @param inputStream
@@ -103,10 +107,6 @@ public class QiNiuFileUtil {
         }
         String tail = getTail(file.getOriginalFilename());
         return uploadToQiNiu(inputStream,MD5Util.md5(new Date().toString()) + tail);
-    }
-
-    public static String getDns(){
-        return dns;
     }
 
     /**

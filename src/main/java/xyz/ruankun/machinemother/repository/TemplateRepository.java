@@ -14,5 +14,4 @@ public interface TemplateRepository  extends JpaRepository<Template, Integer> {
      */
     List<Template> findAll();
 
-
 }

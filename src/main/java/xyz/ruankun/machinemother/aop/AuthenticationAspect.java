@@ -1,6 +1,5 @@
 package xyz.ruankun.machinemother.aop;
 
-import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.AfterReturning;
 import org.aspectj.lang.annotation.Around;
@@ -73,9 +72,6 @@ public class AuthenticationAspect {
         }else{
             logger.info("not refreshed token");
         }
-
-
-
     }
     @Around("pointcut() && @annotation(authentication)")
     public  Object interceptor(ProceedingJoinPoint proceedingJoinPoint, Authentication authentication){

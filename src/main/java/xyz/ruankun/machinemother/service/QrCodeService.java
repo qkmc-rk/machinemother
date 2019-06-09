@@ -30,7 +30,6 @@ public interface QrCodeService {
     /**
      * 将图片的url存到数据库中
      * @param img 要保存的文件
-     * @param id 如果传入参数则，参数也要插入，否则不
      * @return 是否成功
      */
     Boolean putTemplate(MultipartFile img,Integer... id);

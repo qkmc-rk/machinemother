@@ -13,7 +13,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.multipart.MultipartFile;
 import xyz.ruankun.machinemother.entity.Template;
@@ -117,12 +116,12 @@ public class QrCodeServiceImpl implements QrCodeService {
     }
 
     /**
+     * 保存一个模板
      * 保存一个模板 可以是更新进去，也可以是添加进去，如果
      * 不传入id则是添加
      * @param img 图片二进制流
      * @return 返回保存成功
      */
-    @Override
     public Boolean putTemplate(MultipartFile img, Integer... id) {
         //第一步上传到七牛云
         String imgPath;
@@ -245,5 +244,4 @@ public class QrCodeServiceImpl implements QrCodeService {
         logger.info("上传成功:" + imgUrl);
         return imgUrl;
     }
-
 }

@@ -12,6 +12,10 @@ import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.io.InputStream;
+import org.springframework.web.multipart.MultipartFile;
+import xyz.ruankun.machinemother.util.constant.ImageType;
+
+import java.util.Date;
 import java.util.Properties;
 
 /**
@@ -77,5 +81,73 @@ public class QiNiuFileUtil {
 
     public static String getDns(){
         return dns;
+    }
+    /**
+     * 传文件
+     * @param inputStream
+     * @param key
+     * @return 文件路径
+     */
+    public static String uploadFileToQiNiu(InputStream inputStream,String key){
+        return  uploadToQiNiu(inputStream,key);
+    }
+
+    /**
+     *  MD5 KEY
+     * @param file
+     * @return
+     */
+    public static String uploadImageToQiNiu(MultipartFile file){
+        InputStream inputStream = null;
+        try {
+            inputStream = file.getInputStream();
+        } catch (IOException e) {
+            e.printStackTrace();
+            return null;
+        }
+        String tail = getTail(file.getOriginalFilename());
+        return uploadToQiNiu(inputStream,MD5Util.md5(new Date().toString()) + tail);
+    }
+
+    /**
+     * 判断图片的格式，只支持jpg jpeg png gif
+     * @param originalImageName
+     * @return
+     */
+    private static ImageType getImgType(String originalImageName){
+        if (originalImageName.toLowerCase().indexOf(".jpg") > 0)
+            return ImageType.JPG;
+        if (originalImageName.toLowerCase().indexOf(".jpeg") > 0)
+            return ImageType.JPEG;
+        if (originalImageName.toLowerCase().indexOf(".png") > 0)
+            return ImageType.PNG;
+        if (originalImageName.toLowerCase().indexOf(".gif") > 0)
+            return ImageType.GIF;
+        return null;
+    }
+
+    /**
+     * 从其中拿到图片后缀
+     * @param fileOriginName 文件名
+     * @return
+     */
+    private static String getTail(String fileOriginName){
+        ImageType type = getImgType(fileOriginName);
+        String tail = null;
+        switch (type){
+            case GIF:
+                tail = ".gif";
+                break;
+            case JPEG:
+                tail = ".jpeg";
+                break;
+            case JPG:
+                tail = ".jpg";
+                break;
+            case PNG:
+                tail = ".png";
+                break;
+        }
+        return tail;
     }
 }

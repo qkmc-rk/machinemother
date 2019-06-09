@@ -1,6 +1,5 @@
 package xyz.ruankun.machinemother.aop;
 
-import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.AfterReturning;
 import org.aspectj.lang.annotation.Around;
@@ -51,31 +50,27 @@ public class AuthenticationAspect {
 
     /**
      * 与被注释方法正确返回之后执行
-     * @param joinPoint 方法执行前的参数
-     * @param result 方法返回值 后续观察，是否保存
+     //* @param joinPoint 方法执行前的参数
+     //* @param result 方法返回值 后续观察，是否保存
      */
-    @AfterReturning(returning = "result", value = "@annotation(xyz.ruankun.machinemother.annotation.Authentication)")
-    public void after(JoinPoint joinPoint, Object result) {
+    @AfterReturning(/*returning = "result",*/ value = "@annotation(xyz.ruankun.machinemother.annotation.Authentication)")
+    public void after(/*JoinPoint joinPoint, Object result*/) {
         logger.info("refreshing token");
-        Object[] args = joinPoint.getArgs();
-        for (Object arg : args) {
-            if (arg instanceof HttpServletRequest) {
-                HttpServletRequest request = (HttpServletRequest) arg;
-                String token = request.getParameter("token");
-                if (token != null) {
-                    //通过token获取id值更新token有效期
-                    int userId = Integer.valueOf(userInfoService.readDataFromRedis(token));
-                    String sessionKey = userInfoService.readDataFromRedis("session_key" + userId);
-                    if (null == sessionKey){
-                        //管理员是没有sessionkey的哟
-                        adminService.updateSession(String.valueOf(userId),token,15);
-                    }else
-                        userInfoService.updateSession(userId,sessionKey, token,15);
-                    logger.info("refreshed token");
-                }else{
-                    logger.info("not refreshed token");
-                }
-            }
+        HttpServletRequest request = ((ServletRequestAttributes)RequestContextHolder
+                .getRequestAttributes()).getRequest();
+        String token = request.getHeader("token");
+        if (token != null) {
+            //通过token获取id值更新token有效期
+            int userId = Integer.valueOf(userInfoService.readDataFromRedis(token));
+            String sessionKey = userInfoService.readDataFromRedis("session_key" + userId);
+            if (null == sessionKey){
+                //管理员是没有sessionkey的哟
+                adminService.updateSession(String.valueOf(userId),token,15);
+            }else
+                userInfoService.updateSession(userId,sessionKey, token,15);
+            logger.info("refreshed token");
+        }else{
+            logger.info("not refreshed token");
         }
     }
     @Around("pointcut() && @annotation(authentication)")

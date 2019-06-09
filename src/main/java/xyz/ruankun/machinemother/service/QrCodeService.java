@@ -32,5 +32,20 @@ public interface QrCodeService {
      * @param img 要保存的文件
      * @return 是否成功
      */
-    Boolean putTemplate(MultipartFile img);
+    Boolean putTemplate(MultipartFile img,Integer... id);
+
+    /**
+     * 更新模板图片，根据传入的ID属性更改
+     * @param id  ID
+     * @param img 图片二进制文件
+     * @return 更新是否成功
+     */
+    boolean update(Integer id, MultipartFile img);
+
+    /**
+     * 删除一个嘛
+     * @param id
+     * @return
+     */
+    boolean deleteOneById(Integer id);
 }

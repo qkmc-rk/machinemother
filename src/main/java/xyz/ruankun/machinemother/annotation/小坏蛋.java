@@ -1,23 +1,16 @@
 package xyz.ruankun.machinemother.annotation;
 
-import xyz.ruankun.machinemother.util.constant.AuthAopConstant;
-
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
+/**
+ * 这是一个没有任何价值的注解，只希望你能开心地写完代码
+ */
 @Target(value = ElementType.METHOD)
 @Retention(value = RetentionPolicy.RUNTIME)
-public @interface Authentication {
+public @interface 小坏蛋 {
 
-    /**
-     * true为启用验证
-     * false为跳过验证
-     * @return
-     *
-     */
-    boolean pass() default true;
-
-    AuthAopConstant role() default AuthAopConstant.ANON;
+    boolean 真的吗() default false;
 }

@@ -19,6 +19,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping(value = "/addr")
+@Api(value = "与用户地址相关的API")
 public class AddrController {
 
     @Autowired

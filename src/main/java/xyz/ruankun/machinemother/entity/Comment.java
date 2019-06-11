@@ -8,40 +8,47 @@ import java.util.Date;
 
 @Entity
 @Table(name = "mm_comment")
-@DynamicUpdate
 @DynamicInsert
+@DynamicUpdate
 public class Comment {
-
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
+    @Column
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer id;
-
-    @Column(name = "itemid")
+    @Column
     private Integer itemId;
-
-    @Column(name = "userid")
+    @Column
     private Integer userId;
+    //1星-5星
+    @Column
     private Integer score;
+    @Column
     private String comment;
+    @Column
     private String picture1;
+    @Column
     private String picture2;
+    @Column
     private String picture3;
+    @Column(name = "gmt_create")
     private Date gmtCreate;
+    @Column(name = "gmt_modified")
     private Date gmtModified;
+    @Column(name = "is_rcmd")
     private Boolean isRcmd;
 
-    public Comment() {
+    public Comment(Integer itemId) {
+        this.itemId = itemId;
     }
 
-    public Comment(Integer itemId, Integer userId, Integer score, String comment, /*String picture1, String picture2, String picture3,*/ Date gmtCreate, Date gmtModified, Boolean isRcmd) {
+    public Comment(Integer itemId, Integer userId, Integer score, String comment, String picture1, String picture2, String picture3, Date gmtCreate, Date gmtModified, Boolean isRcmd) {
         this.itemId = itemId;
         this.userId = userId;
         this.score = score;
         this.comment = comment;
-//        this.picture1 = picture1;
-//        this.picture2 = picture2;
-//        this.picture3 = picture3;
+        this.picture1 = picture1;
+        this.picture2 = picture2;
+        this.picture3 = picture3;
         this.gmtCreate = gmtCreate;
         this.gmtModified = gmtModified;
         this.isRcmd = isRcmd;

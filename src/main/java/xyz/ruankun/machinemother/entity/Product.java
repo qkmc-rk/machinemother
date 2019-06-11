@@ -1,21 +1,31 @@
 package xyz.ruankun.machinemother.entity;
 
+import org.hibernate.annotations.DynamicInsert;
+import org.hibernate.annotations.DynamicUpdate;
+
 import javax.persistence.*;
 import java.sql.Date;
 
 @Entity
 @Table(name = "mm_product")
+@DynamicInsert
+@DynamicUpdate
 public class Product {
 
     @Id
+    @Column
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
     @Column(name = "typeid")
     private Integer typeId;
+    @Column
     private String title;
+    @Column
     private String content;
+    @Column(name = "gmt_create")
     private Date gmtCreate;
+    @Column(name = "gmt_modified")
     private Date gmtModefied;
 
     public Product() {

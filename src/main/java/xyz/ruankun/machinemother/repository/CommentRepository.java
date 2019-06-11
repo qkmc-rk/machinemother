@@ -23,5 +23,4 @@ public interface CommentRepository extends JpaRepository<Comment, Integer> {
 
     List<Comment> findByIsRcmd(Boolean isRcmd);
 
-
 }

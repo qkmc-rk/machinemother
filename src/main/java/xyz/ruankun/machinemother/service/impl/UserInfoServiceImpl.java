@@ -257,11 +257,8 @@ public class UserInfoServiceImpl implements UserInfoService {
 
     @Override
     public User update(User user) {
-        User check = getUser(user.getOpenId());
-        if(check != null){
-            return userRepository.save(user);
-        }
-        return null;
+        user.setGmtModified(new Date());
+        return userRepository.save(user);
     }
 
     /*-------------Jason-------------*/

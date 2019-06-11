@@ -26,6 +26,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.converter.StringHttpMessageConverter;
 import org.springframework.web.client.RestTemplate;
+import xyz.ruankun.machinemother.vo.ResponseEntity;
 
 import java.nio.charset.StandardCharsets;
 
@@ -45,5 +46,11 @@ public class RestConfiguration {
         RestTemplate restTemplate = builder.build();
         restTemplate.getMessageConverters().set(1,new StringHttpMessageConverter(StandardCharsets.UTF_8));
         return restTemplate;
+    }
+
+    //注入responseEntity Bean
+    @Bean
+    public ResponseEntity responseEntity(){
+        return new ResponseEntity();
     }
 }

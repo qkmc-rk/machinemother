@@ -1,12 +1,9 @@
 package xyz.ruankun.machinemother.service.impl;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import xyz.ruankun.machinemother.entity.Addr;
-import xyz.ruankun.machinemother.entity.User;
 import xyz.ruankun.machinemother.repository.AddrRepository;
 import xyz.ruankun.machinemother.service.AddrService;
-import xyz.ruankun.machinemother.service.UserInfoService;
 
 import javax.annotation.Resource;
 import java.util.List;

@@ -12,5 +12,4 @@ public class MachinemotherApplicationTests {
 	@Test
 	public void contextLoads() {
 	}
-
 }

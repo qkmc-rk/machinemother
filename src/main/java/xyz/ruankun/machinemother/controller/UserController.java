@@ -11,6 +11,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.web.bind.annotation.*;
 import xyz.ruankun.machinemother.annotation.Authentication;
 import xyz.ruankun.machinemother.entity.User;
+import xyz.ruankun.machinemother.repository.UserRepository;
 import xyz.ruankun.machinemother.service.UserInfoService;
 import xyz.ruankun.machinemother.util.Constant;
 import xyz.ruankun.machinemother.util.code.UserCode;
@@ -117,9 +118,9 @@ public class UserController {
     @GetMapping(value = {"", "/all", "/"})
     @Authentication(role = AuthAopConstant.ADMIN)
     @ApiOperation(value = "获取所有用户信息", notes = "传入请求的用户所需的相关分页数据，page取值范围为(0,length-1),默认按照id排序")
-    public ResponseEntity getUsers(@ApiParam(value = "页号") @RequestParam(value = "page", defaultValue = "0") int page, @RequestParam(value = "size") int size,
+    public ResponseEntity getUsers(@ApiParam(value = "页号") @RequestParam(value = "page", defaultValue = "0") int page, @RequestParam(value = "size") Integer size,
                                    @ApiParam(value = "排序所需的列名") @RequestParam(value = "column", required = false, defaultValue = "id") String column,
-                                   @ApiParam(value = "排序方式") @RequestParam(value = "sort", required = false, defaultValue = "0") int sort) {
+                                   @ApiParam(value = "排序方式") @RequestParam(value = "sort", required = false, defaultValue = "true") Boolean sort) {
         ResponseEntity responseEntity = new ResponseEntity();
         Pageable pageable = pageable(page, size, column, sort);
         Page<User> users = userInfoService.getAll(pageable);
@@ -132,13 +133,15 @@ public class UserController {
     }
 
     @PostMapping("/{userId}")
-    @Authentication(role = AuthAopConstant.USER)
-    @ApiOperation(value = "更新用户数据", notes = "仅可更新手机号，名称")
+    @Authentication(role = AuthAopConstant.ADMIN)
+    @ApiOperation(value = "更新用户数据")
     public ResponseEntity updateUser(User user, @PathVariable(value = "userId") int userId) {
         ResponseEntity responseEntity = new ResponseEntity();
         if (userId != user.getId()) {
-            responseEntity.error(UserCode.ERROR_PARAMS, "请检查参数是否正确！", null);
+            responseEntity.error(UserCode.ERROR_PARAMS, UserCode.INVALID_DATA, null);
         } else {
+
+            //todo 同下微信号问题
             user.setGmtModified(new Date());
             user = userInfoService.update(user);
             if (user == null) {
@@ -151,7 +154,7 @@ public class UserController {
     }
 
     @GetMapping(value = "/{userId}")
-    @Authentication(role = AuthAopConstant.USER)
+    @Authentication(role = AuthAopConstant.ADMIN)
     @ApiOperation(value = "获取用户数据")
     public ResponseEntity getUser(@PathVariable(value = "userId") int userId) {
         ResponseEntity responseEntity = new ResponseEntity();
@@ -161,6 +164,55 @@ public class UserController {
         } else {
             responseEntity.success(UserCode.SUCCESS_OPERATION, UserCode.SUCCESS_MSG, user);
         }
+        return responseEntity;
+    }
+
+    @PostMapping(value = "/userInfo")
+    @Authentication(role = AuthAopConstant.USER)
+    @ApiOperation(value = "更新用户数据", notes = "仅可更新用户名， 手机号，以及微信id(微信id仅可更新一次，若表内不为空，则不可操作)")
+    public ResponseEntity update(User user, @RequestHeader(value = "token") String token) {
+        ResponseEntity responseEntity = new ResponseEntity();
+        try {
+            int userId = Integer.valueOf(userInfoService.readDataFromRedis(token));
+            //保证能够字符串与整数能够正确转型
+            if (userId != user.getId()) {
+                responseEntity.error(UserCode.ERROR_DATA, UserCode.INVALID_DATA, null);
+            } else {
+                User check = userInfoService.getUser(userId);
+                //todo 是否需要添加微信号的一次修改机会
+                    user = userInfoService.update(user);
+                    responseEntity.success(UserCode.SUCCESS_OPERATION, UserCode.SUCCESS_MSG, user);
+//                } else {
+                    //
+//                    responseEntity.error(UserCode.INVALID_OPERATION, UserCode.INVALID_MSG, null);
+//                }
+            }
+        } catch (Exception e) {
+            responseEntity.error(UserCode.ERROR_PARAMS, UserCode.INVALID_DATA, null);
+            e.printStackTrace();
+        }
+
+        return responseEntity;
+    }
+
+    @GetMapping(value = "/userInfo")
+    @Authentication(role = AuthAopConstant.USER)
+    @ApiOperation(value = "获取用户自身数据")
+    public ResponseEntity getUser(@RequestHeader(value = "token") String token) {
+        ResponseEntity responseEntity = new ResponseEntity();
+        try {
+            int userId = Integer.valueOf(userInfoService.readDataFromRedis(token));
+            User user = userInfoService.getUser(userId);
+            if (user == null) {
+                responseEntity.error(UserCode.ERROR_DATA, UserCode.LOST_DATA, null);
+            } else {
+                responseEntity.success(UserCode.SUCCESS_OPERATION, UserCode.SUCCESS_MSG, null);
+            }
+        } catch (Exception e) {
+            responseEntity.error(UserCode.ERROR_PARAMS, UserCode.INVALID_DATA, null);
+            e.printStackTrace();
+        }
+
         return responseEntity;
     }
 
@@ -178,7 +230,7 @@ public class UserController {
             if (result < 0) {
                 responseEntity.error(UserCode.INVALID_OPERATION, UserCode.INVALID_DATA, null);
             } else {
-                responseEntity.success(UserCode.SUCCESS_OPERATION, UserCode.SUCCESS_MSG, user);
+                responseEntity.success(UserCode.SUCCESS_OPERATION, UserCode.SUCCESS_MSG, null);
             }
         }
         return responseEntity;
@@ -245,11 +297,12 @@ public class UserController {
         return responseEntity;
     }
 
-    private Pageable pageable(int page, int size, String column, int sort) {
+    private Pageable pageable(int page, int size, String column, Boolean sort) {
         if (column == null) {
             return PageRequest.of(page, size);
         } else {
-            if (sort == 1) {
+            //如果sort为真则从小到大
+            if (sort) {
                 return PageRequest.of(page, size, Sort.Direction.ASC, column);
             } else {
                 return PageRequest.of(page, size, Sort.Direction.DESC, column);

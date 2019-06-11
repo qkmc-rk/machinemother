@@ -15,3 +15,9 @@
 - 完成了HomeController的内容,意味着主页相关里面特有的接口已经写完了
 - 发现一种新的代码重构方式：类里相同代码抽象成共有方法，类间抽象为类
 - 革命刚刚开始,同志不要停止下来.
+
+### 6月11日阮
+- 完成评论回复的内容一大半,包含repo entity service controller
+- 很多新写的代码没有测试，等这一部分完成，每一个模块都需要测试一下 
+- 修改使用HttpServletRequest获取header的地方使用@RequstHeader
+- 修改个别细节

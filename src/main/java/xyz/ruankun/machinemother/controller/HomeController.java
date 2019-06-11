@@ -13,8 +13,6 @@ import xyz.ruankun.machinemother.service.HomeService;
 import xyz.ruankun.machinemother.util.constant.AuthAopConstant;
 import xyz.ruankun.machinemother.vo.ResponseEntity;
 
-import java.util.List;
-
 /**
  * 主要控制小程序主页面的一些内容和管理。
  *
@@ -63,7 +61,7 @@ public class HomeController {
 
     @PutMapping("/adv")
     @Authentication(role = AuthAopConstant.ADMIN)
-    public ResponseEntity addOneAdvertisement(Advertisement advertisement){
+    public ResponseEntity addOneAdvertisement(@RequestBody Advertisement advertisement){
         //数据校验省略
         return getDataResult(homeService.putAdvertisement(advertisement));
     }

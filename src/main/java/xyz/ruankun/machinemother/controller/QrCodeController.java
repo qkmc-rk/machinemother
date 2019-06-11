@@ -34,9 +34,8 @@ public class QrCodeController {
     @GetMapping("")
     @Authentication(role = AuthAopConstant.USER)
     @ApiOperation(value = "[user]获取小程序码",notes = "必须是登录用户才行，因为返回的小程序码需要带上用户的ID，小程序码唯一")
-    public ResponseEntity getQrCode(HttpServletRequest request){
+    public ResponseEntity getQrCode(@RequestHeader String token){
         ResponseEntity<String> responseEntity = new ResponseEntity<>();
-        String token = request.getHeader("token");
         //鉴权那个地方才刚刚做了token存在验证，这么短时间token不可能丢失吧？
         Integer userId = Integer.parseInt(userInfoService.readDataFromRedis(token));
         String qrcodeurl = qrCodeService.getQrCodeUrl(userId);

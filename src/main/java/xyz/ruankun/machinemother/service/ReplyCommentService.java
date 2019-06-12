@@ -13,4 +13,10 @@ public interface ReplyCommentService {
     Reply putReply(Reply reply);
 
     List<Comment> getAllComent();
+
+    List<Reply> getAllReplyOfOneComment(Integer commentId);
+
+    List<Comment> getCommentByRcmd(Boolean rcmd);
+
+    boolean setCommentWithRecommend(Integer commentId, Boolean recommend);
 }

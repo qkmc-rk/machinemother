@@ -21,3 +21,9 @@
 - 很多新写的代码没有测试，等这一部分完成，每一个模块都需要测试一下 
 - 修改使用HttpServletRequest获取header的地方使用@RequstHeader
 - 修改个别细节
+
+
+### 6月12日阮
+- 删除数据库表comment中的多余字段user_id  item_id
+- 完成comment reply的api
+- 完成API的说明书写

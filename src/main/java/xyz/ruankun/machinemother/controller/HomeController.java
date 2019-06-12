@@ -1,6 +1,7 @@
 package xyz.ruankun.machinemother.controller;
 
 import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -30,24 +31,28 @@ public class HomeController {
 
     @GetMapping("/banner")
     @Authentication(pass = false)
+    @ApiOperation(value = "获取主页banner",notes = "获取主页的banner，有图片地址和该图片指向的详细那个产品")
     public ResponseEntity getBanners(){
         return getDataResult(homeService.getAllVisibleBanner());
     }
 
     @PutMapping("/banner")
     @Authentication(role = AuthAopConstant.ADMIN)
+    @ApiOperation(value = "管理员增加一个banner")
     public ResponseEntity putBanner(@RequestParam Integer productId,@RequestParam MultipartFile image){
         return getTrueOrFalseResult(homeService.putBanner(productId, image));
     }
 
     @DeleteMapping("/banner/{id}")
     @Authentication(role = AuthAopConstant.ADMIN)
+    @ApiOperation(value = "删除一个banner，管理员操作")
     public ResponseEntity deleteBanner(@PathVariable Integer id){
         return getTrueOrFalseResult(homeService.deleteBanner(id));
     }
 
     @PostMapping("/banner/{id}")
     @Authentication(role = AuthAopConstant.ADMIN)
+    @ApiOperation(value = "管理员操作,修改一个banner")
     public ResponseEntity alterBanner(@PathVariable Integer id,@RequestBody Banner banner){
         banner.setId(id);   //看似不起作用的一点至关重要，万一前台数据不对，后台不考虑这个问题，后果就很严重
         return getTrueOrFalseResult(homeService.alterBanner(id,banner));
@@ -55,12 +60,14 @@ public class HomeController {
 
     @GetMapping("/adv")
     @Authentication(pass = false)
+    @ApiOperation(value = "匿名操作,获取广告")
     public ResponseEntity getAllAdv(){
         return  getDataResult(homeService.getAllVisibleAdv());
     }
 
     @PutMapping("/adv")
     @Authentication(role = AuthAopConstant.ADMIN)
+    @ApiOperation(value = "管理员操作,增加一个广告")
     public ResponseEntity addOneAdvertisement(@RequestBody Advertisement advertisement){
         //数据校验省略
         return getDataResult(homeService.putAdvertisement(advertisement));
@@ -68,12 +75,14 @@ public class HomeController {
 
     @DeleteMapping("/adv/{id}")
     @Authentication(role = AuthAopConstant.ADMIN)
+    @ApiOperation(value = "管理员操作,删除操作")
     public ResponseEntity deleteAdv(@PathVariable Integer id){
         return getTrueOrFalseResult(homeService.deleteAdv(id));
     }
 
     @PostMapping("/adv/{id}")
     @Authentication(role = AuthAopConstant.ADMIN)
+    @ApiOperation(value = "管理员操作,修改一个广告")
     public ResponseEntity alterAdv(@PathVariable Integer id, @RequestBody Advertisement advertisement){
         advertisement.setId(id);
         return getDataResult(homeService.alterAdv(advertisement));
@@ -81,18 +90,22 @@ public class HomeController {
 
     @GetMapping("/recommend")
     @Authentication(pass = false)
+    @ApiOperation(value = "获取推荐，有详情查看返回数据的格式")
     public ResponseEntity getRecommend(){
         return getDataResult(homeService.getAllRecommend());
     }
 
     @PutMapping("/recommend")
     @Authentication(role = AuthAopConstant.ADMIN)
+    @ApiOperation(value = "管理员操作,推荐一个产品")
     public ResponseEntity putRecommend(@RequestBody Recommend recommend){
         //省略数据校验
         return getDataResult(homeService.putRecommend(recommend));
     }
 
     @DeleteMapping("/recommend/{id}")
+    @Authentication(role = AuthAopConstant.ADMIN)
+    @ApiOperation(value = "管理员操作,删除一个推荐")
     public ResponseEntity deleteRecommend(@PathVariable Integer id){
         return getTrueOrFalseResult(homeService.deleteRecommend(id));
     }

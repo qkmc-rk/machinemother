@@ -48,4 +48,41 @@ public class ReplyCommentServiceImpl implements ReplyCommentService {
         }
 
     }
+
+    @Override
+    public List<Reply> getAllReplyOfOneComment(Integer commentId) {
+        try {
+            return replyRepository.findAllByCommentId(commentId);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    @Override
+    public List<Comment> getCommentByRcmd(Boolean rcmd) {
+        try {
+            return commentRepository.findByIsRcmd(rcmd);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+
+    }
+
+    @Override
+    public boolean setCommentWithRecommend(Integer commentId, Boolean recommend) {
+
+        try {
+            Comment comment = commentRepository.findById(commentId).get();
+            comment.setRcmd(recommend);
+            commentRepository.saveAndFlush(comment);
+            return true;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+
+
+    }
 }

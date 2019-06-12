@@ -48,6 +48,7 @@ public class ReplyCommentController {
     }
 
     @GetMapping("/comment")
+    @ApiOperation(value = "获取评论,如果没有token就是匿名，有就是管理员或者用户")
     public ResponseEntity getComment(@RequestHeader String token){
 
         if (token == null) return getTrueOrFalseResult(false);
@@ -65,6 +66,26 @@ public class ReplyCommentController {
         }
         return getDataResult(comments);
     }
+
+    @GetMapping("/comment/{commentId}/reply")
+    @ApiOperation(value = "获取某条评论的回复")
+    public ResponseEntity getReplyOfOneComment(@PathVariable Integer commentId){
+        return getDataResult(replyCommentService.getAllReplyOfOneComment(commentId));
+    }
+
+    @GetMapping("/comment/recommend")
+    @ApiOperation(value = "获取推荐的评论(推荐是指显示在主页的下方)")
+    public ResponseEntity getRecommendComment(){
+        return getDataResult(replyCommentService.getCommentByRcmd(true));
+    }
+
+    @PostMapping("/comment/{commentId}/recommend")
+    @Authentication(role = AuthAopConstant.ADMIN)
+    @ApiOperation(value = "管理员操作,修改某条评论，是否推荐这条评论显示在主页上")
+    public ResponseEntity setCommentToRecommend(@PathVariable Integer commentId, Boolean recommend){
+        return getTrueOrFalseResult(replyCommentService.setCommentWithRecommend(commentId, recommend));
+    }
+
 
     /**
      * 代码这个东西浓缩就是精华

@@ -22,7 +22,7 @@ public class TestCommentService {
     CommentService commentService;
     @Test
     public void test1(){
-        Comment comment = new Comment(1, 1,0,"this is comment",  new Date(), new Date(), false);
+        Comment comment = new Comment();
         commentService.add(comment);
     }
 }

@@ -22,13 +22,6 @@ public class Template {
     @Column
     private String imgpath;
 
-    public Template() {
-    }
-
-    public Template(String imgpath) {
-        this.imgpath = imgpath;
-    }
-
     public Integer getId() {
         return id;
     }

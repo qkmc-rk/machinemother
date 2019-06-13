@@ -7,6 +7,6 @@ import java.util.List;
 
 public interface AdvertisementRepository extends JpaRepository<Advertisement,Integer> {
 
-    List<Advertisement> findAllByIsVisible();
+    List<Advertisement> findAllByIsVisible(Boolean isVisible);
 
 }

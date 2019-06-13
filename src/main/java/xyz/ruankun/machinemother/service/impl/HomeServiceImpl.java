@@ -86,7 +86,7 @@ public class HomeServiceImpl implements HomeService {
     @Override
     public List<Advertisement> getAllVisibleAdv() {
         try {
-            return advertisementRepository.findAllByIsVisible();
+            return advertisementRepository.findAllByIsVisible(true);
         } catch (Exception e) {
             e.printStackTrace();
             logger.error("查询所有Adv发生了错误");

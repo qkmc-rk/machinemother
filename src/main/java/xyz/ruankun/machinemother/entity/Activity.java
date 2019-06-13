@@ -1,29 +1,20 @@
 package xyz.ruankun.machinemother.entity;
 
-import org.hibernate.annotations.DynamicInsert;
-import org.hibernate.annotations.DynamicUpdate;
-
 import javax.persistence.*;
 import java.util.Date;
 
 @Entity
-@Table(name = "mm_index_recommend")
-@DynamicUpdate
-@DynamicInsert
-public class Recommend {
-
-    @Column
+@Table(name = "mm_activity")
+public class Activity {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer id;
-    @Column(name = "productid")
-    private Integer productId;
-    @Column(name = "imagesrc")
-    private String imageSrc;
-    @Column(name = "gmt_create")
+    private Date start;
+    private Date end;
     private Date gmtCreate;
-    @Column(name = "gmt_modified")
     private Date gmtModified;
+    private String content;
+    private String title;
 
     public Integer getId() {
         return id;
@@ -33,20 +24,20 @@ public class Recommend {
         this.id = id;
     }
 
-    public Integer getProductId() {
-        return productId;
+    public Date getStart() {
+        return start;
     }
 
-    public void setProductId(Integer productId) {
-        this.productId = productId;
+    public void setStart(Date start) {
+        this.start = start;
     }
 
-    public String getImageSrc() {
-        return imageSrc;
+    public Date getEnd() {
+        return end;
     }
 
-    public void setImageSrc(String imageSrc) {
-        this.imageSrc = imageSrc;
+    public void setEnd(Date end) {
+        this.end = end;
     }
 
     public Date getGmtCreate() {
@@ -63,5 +54,21 @@ public class Recommend {
 
     public void setGmtModified(Date gmtModified) {
         this.gmtModified = gmtModified;
+    }
+
+    public String getContent() {
+        return content;
+    }
+
+    public void setContent(String content) {
+        this.content = content;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
     }
 }

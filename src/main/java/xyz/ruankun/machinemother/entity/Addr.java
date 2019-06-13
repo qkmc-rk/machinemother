@@ -38,19 +38,6 @@ public class Addr {
     @Column(name = "gmt_modified")
     private Date gmtModefied;
 
-    public Addr() {
-    }
-
-    public Addr(Integer userId, String country, String province, String city, String detail, Date gmtCreate, Date gmtModefied) {
-        this.userId = userId;
-        this.country = country;
-        this.province = province;
-        this.city = city;
-        this.detail = detail;
-        this.gmtCreate = gmtCreate;
-        this.gmtModefied = gmtModefied;
-    }
-
     public Integer getId() {
         return id;
     }

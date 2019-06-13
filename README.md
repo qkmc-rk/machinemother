@@ -27,3 +27,8 @@
 - 删除数据库表comment中的多余字段user_id  item_id
 - 完成comment reply的api
 - 完成API的说明书写
+
+### 6月13日阮
+- 完成所有entity的书写
+- 完成所有repository的书写
+- 测试完成：数据库与entity对应的默认字段

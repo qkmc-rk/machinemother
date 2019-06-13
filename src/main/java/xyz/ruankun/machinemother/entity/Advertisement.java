@@ -27,19 +27,6 @@ public class Advertisement {
     @Column(name = "is_visible")
     private Boolean isVisible;
 
-    public Advertisement(Integer id) {
-        this.id = id;
-    }
-
-    public Advertisement(Integer id, String imageSrc, Integer productId, Date gmtCreate, Date gmtModified, Boolean isVisible) {
-        this.id = id;
-        this.imageSrc = imageSrc;
-        this.productId = productId;
-        this.gmtCreate = gmtCreate;
-        this.gmtModified = gmtModified;
-        this.isVisible = isVisible;
-    }
-
     public Integer getId() {
         return id;
     }

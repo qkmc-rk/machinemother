@@ -26,18 +26,6 @@ public class Reply {
     @Column(name = "gmt_modified")
     private Date gmtModified;
 
-    public Reply(Integer adminId) {
-        this.adminId = adminId;
-    }
-
-    public Reply(Integer adminId, Integer commentId, String reply, Date gmtCreate, Date gmtModified) {
-        this.adminId = adminId;
-        this.commentId = commentId;
-        this.reply = reply;
-        this.gmtCreate = gmtCreate;
-        this.gmtModified = gmtModified;
-    }
-
     public Integer getId() {
         return id;
     }

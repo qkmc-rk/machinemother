@@ -1,36 +1,27 @@
 package xyz.ruankun.machinemother.entity;
 
-import org.hibernate.annotations.DynamicInsert;
-import org.hibernate.annotations.DynamicUpdate;
-
 import javax.persistence.*;
 import java.util.Date;
 
 @Entity
-@Table(name = "mm_index_banner")
-@DynamicUpdate
-@DynamicInsert
-public class Banner {
-
+@Table(name = "mm_item")
+public class Item {
     @Id
-    @Column
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer id;
-
-    @Column(name = "imagesrc")
-    private String imageSrc;
-
     @Column(name = "productid")
     private Integer productId;
+    @Column(name = "producttypeid")
+    private Integer productTypeId;
 
-    @Column(name = "gmt_create")
+    private Integer quantity;
+    @Column(name = "orderid")
+    private String orderId;
     private Date gmtCreate;
-
-    @Column(name = "gmt_modified")
     private Date gmtModified;
+    @Column(name = "userid")
+    private Integer userId;
 
-    @Column(name = "is_visible")
-    private Boolean isVisible;
 
     public Integer getId() {
         return id;
@@ -40,20 +31,36 @@ public class Banner {
         this.id = id;
     }
 
-    public String getImageSrc() {
-        return imageSrc;
-    }
-
-    public void setImageSrc(String imageSrc) {
-        this.imageSrc = imageSrc;
-    }
-
     public Integer getProductId() {
         return productId;
     }
 
     public void setProductId(Integer productId) {
         this.productId = productId;
+    }
+
+    public Integer getProductTypeId() {
+        return productTypeId;
+    }
+
+    public void setProductTypeId(Integer productTypeId) {
+        this.productTypeId = productTypeId;
+    }
+
+    public Integer getQuantity() {
+        return quantity;
+    }
+
+    public void setQuantity(Integer quantity) {
+        this.quantity = quantity;
+    }
+
+    public String getOrderId() {
+        return orderId;
+    }
+
+    public void setOrderId(String orderId) {
+        this.orderId = orderId;
     }
 
     public Date getGmtCreate() {
@@ -72,11 +79,11 @@ public class Banner {
         this.gmtModified = gmtModified;
     }
 
-    public Boolean getVisible() {
-        return isVisible;
+    public Integer getUserId() {
+        return userId;
     }
 
-    public void setVisible(Boolean visible) {
-        isVisible = visible;
+    public void setUserId(Integer userId) {
+        this.userId = userId;
     }
 }

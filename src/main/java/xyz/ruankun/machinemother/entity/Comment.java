@@ -37,23 +37,6 @@ public class Comment {
     @Column(name = "is_rcmd")
     private Boolean isRcmd;
 
-    public Comment(Integer itemId) {
-        this.itemId = itemId;
-    }
-
-    public Comment(Integer itemId, Integer userId, Integer score, String comment, String picture1, String picture2, String picture3, Date gmtCreate, Date gmtModified, Boolean isRcmd) {
-        this.itemId = itemId;
-        this.userId = userId;
-        this.score = score;
-        this.comment = comment;
-        this.picture1 = picture1;
-        this.picture2 = picture2;
-        this.picture3 = picture3;
-        this.gmtCreate = gmtCreate;
-        this.gmtModified = gmtModified;
-        this.isRcmd = isRcmd;
-    }
-
     public Integer getId() {
         return id;
     }

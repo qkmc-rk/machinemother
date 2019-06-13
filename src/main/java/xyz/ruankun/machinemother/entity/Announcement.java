@@ -4,29 +4,25 @@ import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 
 import javax.persistence.*;
-import java.sql.Date;
+import java.util.Date;
 
 @Entity
-@Table(name = "mm_product")
-@DynamicInsert
+@Table(name = "mm_announcement")
 @DynamicUpdate
-public class Product {
+@DynamicInsert
+public class Announcement {
 
     @Id
-    @Column
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer id;
 
-    @Column(name = "typeid")
-    private Integer typeId;
-    @Column
     private String title;
-    @Column
+
     private String content;
-    @Column(name = "gmt_create")
+
     private Date gmtCreate;
-    @Column(name = "gmt_modified")
-    private Date gmtModefied;
+
+    private Date gmtModified;
 
     public Integer getId() {
         return id;
@@ -34,14 +30,6 @@ public class Product {
 
     public void setId(Integer id) {
         this.id = id;
-    }
-
-    public Integer getTypeId() {
-        return typeId;
-    }
-
-    public void setTypeId(Integer typeId) {
-        this.typeId = typeId;
     }
 
     public String getTitle() {
@@ -68,11 +56,11 @@ public class Product {
         this.gmtCreate = gmtCreate;
     }
 
-    public Date getGmtModefied() {
-        return gmtModefied;
+    public Date getGmtModified() {
+        return gmtModified;
     }
 
-    public void setGmtModefied(Date gmtModefied) {
-        this.gmtModefied = gmtModefied;
+    public void setGmtModified(Date gmtModified) {
+        this.gmtModified = gmtModified;
     }
 }

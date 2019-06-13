@@ -3,6 +3,7 @@ package xyz.ruankun.machinemother.repository;
 import org.springframework.data.jpa.repository.JpaRepository;
 import xyz.ruankun.machinemother.entity.Product;
 
+import java.util.Date;
 import java.util.List;
 
 public interface ProductRepository extends JpaRepository<Product, Integer> {
@@ -17,6 +18,6 @@ public interface ProductRepository extends JpaRepository<Product, Integer> {
     List<Product> findByTitleLike(String title);
 
     //查看新品
-    List<Product> getAllOrderByGmtCreate();
+    List<Product> getAllOrderByGmtCreate(Date gmtCreate);
 
 }

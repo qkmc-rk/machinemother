@@ -25,16 +25,6 @@ public class Admin {
     @Column(name = "is_lock")
     private Integer isLock;
 
-    public Admin(Integer id, String account, String password, Integer isLock) {
-        this.id = id;
-        this.account = account;
-        this.password = password;
-        this.isLock = isLock;
-    }
-
-    public Admin() {
-    }
-
     public Integer getId() {
         return id;
     }

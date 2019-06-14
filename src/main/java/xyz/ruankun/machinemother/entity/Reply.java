@@ -15,9 +15,9 @@ public class Reply {
     @Column
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer id;
-    @Column
+    @Column(name = "adminid")
     private Integer adminId;
-    @Column
+    @Column(name = "commentid")
     private Integer commentId;
     @Column
     private String reply;

@@ -47,7 +47,6 @@ public class QrCodeController {
     }
 
     @GetMapping("/template")
-    @Authentication(pass = false)
     @ApiOperation(value = "获取所有小程序模板信息，前端自由加载所需图片",notes = "必须是登录用户才行，因为返回的小程序码需要带上用户的ID，小程序码唯一")
     public ResponseEntity getTemplate(){
         ResponseEntity<List<Template>>  responseEntity = new ResponseEntity<>();

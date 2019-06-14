@@ -10,12 +10,21 @@ public class OrderSecret {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer id;
     private String secret;
+    private Integer orderid;
     @Column(name = "userid")
     private Integer userId;
     private Boolean isUsed;
     private String employee;
     private Date gmtCreate;
     private Date gmtModified;
+
+    public Integer getOrderid() {
+        return orderid;
+    }
+
+    public void setOrderid(Integer orderid) {
+        this.orderid = orderid;
+    }
 
     public Integer getId() {
         return id;

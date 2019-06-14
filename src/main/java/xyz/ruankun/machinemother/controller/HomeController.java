@@ -30,7 +30,6 @@ public class HomeController {
 
 
     @GetMapping("/banner")
-    @Authentication(pass = false)
     @ApiOperation(value = "获取主页banner",notes = "获取主页的banner，有图片地址和该图片指向的详细那个产品")
     public ResponseEntity getBanners(){
         return getDataResult(homeService.getAllVisibleBanner());
@@ -59,7 +58,6 @@ public class HomeController {
     }
 
     @GetMapping("/adv")
-    @Authentication(pass = false)
     @ApiOperation(value = "匿名操作,获取广告")
     public ResponseEntity getAllAdv(){
         return  getDataResult(homeService.getAllVisibleAdv());
@@ -89,7 +87,6 @@ public class HomeController {
     }
 
     @GetMapping("/recommend")
-    @Authentication(pass = false)
     @ApiOperation(value = "获取推荐，有详情查看返回数据的格式")
     public ResponseEntity getRecommend(){
         return getDataResult(homeService.getAllRecommend());

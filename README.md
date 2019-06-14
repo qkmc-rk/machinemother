@@ -36,3 +36,6 @@
 ### 6月14日阮
 - 稍微完善产品API的文档
 - 调整了一下reply entity的内容
+- 在responseEntity中引入timestamp
+> 小BUG：Authentication(pass=false)不传入token会抛出异常
+- 明日将金融服务的提现和支付两个想办法搞定

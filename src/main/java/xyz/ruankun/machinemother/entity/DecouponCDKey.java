@@ -1,6 +1,8 @@
 package xyz.ruankun.machinemother.entity;
 
 import com.sun.org.apache.xpath.internal.operations.Bool;
+import org.hibernate.annotations.DynamicInsert;
+import org.hibernate.annotations.DynamicUpdate;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
@@ -8,6 +10,8 @@ import java.util.Date;
 
 @Entity
 @Table(name = "mm_decouponcdkey")
+@DynamicInsert
+@DynamicUpdate
 public class DecouponCDKey {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -19,6 +23,7 @@ public class DecouponCDKey {
     private boolean isPast;
     private BigDecimal min;
     private BigDecimal worth;
+
 
     public Integer getId() {
         return id;

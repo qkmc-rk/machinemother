@@ -48,4 +48,15 @@ public class MD5Util {
 
         return false;
     }
+
+    public static String randStr() {
+        return randomStr();
+    }
+
+    private static String randomStr(){
+        StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.append((int)(Math.random()*1000000000));
+        return stringBuilder.toString();
+    }
+
 }

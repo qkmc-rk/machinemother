@@ -32,3 +32,7 @@
 - 完成所有entity的书写
 - 完成所有repository的书写
 - 测试完成：数据库与entity对应的默认字段
+
+### 6月14日阮
+- 稍微完善产品API的文档
+- 调整了一下reply entity的内容

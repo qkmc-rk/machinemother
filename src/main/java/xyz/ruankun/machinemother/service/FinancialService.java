@@ -2,7 +2,9 @@ package xyz.ruankun.machinemother.service;
 
 import xyz.ruankun.machinemother.entity.*;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
+import java.util.Map;
 
 public interface FinancialService {
 
@@ -56,4 +58,6 @@ public interface FinancialService {
     Decoupon giveDecouponToUser(Integer userid, Decoupon decoupon);
 
     List<Decoupon> giveDecouponToAllUser(Decoupon decoupon);
+
+    Map<String, String> getPrepayInfo(Integer orderid, Integer userid, HttpServletRequest request);
 }

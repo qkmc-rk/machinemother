@@ -3,6 +3,8 @@ package xyz.ruankun.machinemother.vo;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import xyz.ruankun.machinemother.util.Constant;
 
+import java.util.Date;
+
 public class ResponseEntity<T> {
 
     @JsonProperty("status")
@@ -11,6 +13,9 @@ public class ResponseEntity<T> {
     private String message;
     @JsonProperty("data")
     private T data;
+
+    @JsonProperty("timestamp")
+    private Date timestamp = new Date();
 
     public  void success(T data){
         this.status = Constant.SUCCESS_CODE;

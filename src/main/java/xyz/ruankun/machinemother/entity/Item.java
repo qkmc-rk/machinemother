@@ -11,12 +11,12 @@ public class Item {
     private Integer id;
     @Column(name = "productid")
     private Integer productId;
-    @Column(name = "producttypeid")
-    private Integer productTypeId;
+    @Column(name = "productpropsid")
+    private Integer productPropsId;  //由producttypeid改为 productPropsId
 
     private Integer quantity;
     @Column(name = "orderid")
-    private String orderId;
+    private String orderId; //注意一下这里的orderid不是order的id，是ordernumber，设计缺陷，不想改了
     private Date gmtCreate;
     private Date gmtModified;
     @Column(name = "userid")
@@ -39,12 +39,12 @@ public class Item {
         this.productId = productId;
     }
 
-    public Integer getProductTypeId() {
-        return productTypeId;
+    public Integer getProductPropsId() {
+        return productPropsId;
     }
 
-    public void setProductTypeId(Integer productTypeId) {
-        this.productTypeId = productTypeId;
+    public void setProductPropsId(Integer productTypeId) {
+        this.productPropsId = productTypeId;
     }
 
     public Integer getQuantity() {

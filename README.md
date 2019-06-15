@@ -36,3 +36,16 @@
 ### 6月14日阮
 - 稍微完善产品API的文档
 - 调整了一下reply entity的内容
+- 在responseEntity中引入timestamp
+> 小BUG：Authentication(pass=false)不传入token会抛出异常
+- 明日将金融服务的提现和支付两个想办法搞定
+
+### 6月15日阮
+- 交作业交作业交作业，重要的事情说三遍
+- 修改order表：增加四个字段，判断是否使用优惠券，积分等
+- 修改item表，把字段producttypeid改为productpropsid
+- 新增WePayUtil，小程序支付需要使用的工具类
+- 新增WxResponsCode文件，好像没啥大作用
+- 修改配置文件，增加小程序支付所需要的配置信息
+- 增加微信小程序支付接口接入，但回调还没有实现
+- 更新sql文件 main/resources/sql/

@@ -19,7 +19,7 @@ public class FinancialServiceImpl implements FinancialService {
 
     @Value("${weixin.appid}")
     private String appid;
-    @Value("${weixin.openid}")
+//    @Value("${weixin.openid}")
     private String openid;
     @Value("${weixin.mch_id}")
     private String mch_id;

@@ -1,6 +1,7 @@
 package xyz.ruankun.machinemother.entity;
 
 import javax.persistence.*;
+import java.math.BigDecimal;
 import java.util.Date;
 
 @Entity
@@ -13,10 +14,61 @@ public class Order {
     private Integer userId;
     @Column(name = "ordernumber")
     private String orderNumber;
+    private BigDecimal amount;
     private Date gmtCreate;
     private Date gmtModified;
     private Boolean isPaid;
     private Boolean isFinished;
+
+    //添加
+    @Column(name = "is_usedecoupon")
+    private Boolean isUseDecoupon;
+    @Column(name = "is_usecredit")
+    private Boolean isUseCredit;
+    @Column(name = "decouponid")
+    private Integer decouponId;
+    @Column(name = "credit")
+    private BigDecimal credit;
+
+    public Boolean getUseDecoupon() {
+        return isUseDecoupon;
+    }
+
+    public void setUseDecoupon(Boolean useDecoupon) {
+        isUseDecoupon = useDecoupon;
+    }
+
+    public Boolean getUseCredit() {
+        return isUseCredit;
+    }
+
+    public void setUseCredit(Boolean useCredit) {
+        isUseCredit = useCredit;
+    }
+
+    public Integer getDecouponId() {
+        return decouponId;
+    }
+
+    public void setDecouponId(Integer decouponId) {
+        this.decouponId = decouponId;
+    }
+
+    public BigDecimal getCredit() {
+        return credit;
+    }
+
+    public void setCredit(BigDecimal credit) {
+        this.credit = credit;
+    }
+
+    public BigDecimal getAmount() {
+        return amount;
+    }
+
+    public void setAmount(BigDecimal amount) {
+        this.amount = amount;
+    }
 
     public Integer getId() {
         return id;

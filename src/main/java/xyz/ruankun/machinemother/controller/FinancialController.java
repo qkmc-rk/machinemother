@@ -4,13 +4,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import xyz.ruankun.machinemother.annotation.Authentication;
 import xyz.ruankun.machinemother.entity.Decoupon;
-import xyz.ruankun.machinemother.entity.DecouponCDKey;
 import xyz.ruankun.machinemother.service.FinancialService;
 import xyz.ruankun.machinemother.service.UserInfoService;
+import xyz.ruankun.machinemother.util.Constant;
+import xyz.ruankun.machinemother.util.WxResponseCode;
 import xyz.ruankun.machinemother.util.constant.AuthAopConstant;
 import xyz.ruankun.machinemother.vo.ResponseEntity;
 
-import java.util.List;
+import javax.servlet.http.HttpServletRequest;
+import java.util.Map;
 
 @RestController
 public class FinancialController {
@@ -114,6 +116,24 @@ public class FinancialController {
     public ResponseEntity giveDecouponToAllUser(@RequestBody Decoupon decoupon){
         return ControllerUtil.getDataResult(financialService.giveDecouponToAllUser(decoupon));
     }
+
+    //用户通过订单获取预支付信息
+    @GetMapping("/order/{orderid}/prepay")
+    public ResponseEntity getPrepay(@RequestHeader("token")String token, @PathVariable Integer orderid, HttpServletRequest request){
+        ResponseEntity responseEntity = new ResponseEntity();
+        Integer userid = Integer.parseInt(userInfoService.readDataFromRedis(token));
+        Map<String,String> map = financialService.getPrepayInfo(orderid, userid,request);
+        //这里返回的内容有三种情况：返回null,返回一个key为"error"的,返回一个成功的数据。
+        if (map == null)
+            responseEntity.error(WxResponseCode.ORDER_CHECKOUT_FAIL,"订单交易信息校验出错,联系管理员",null);
+        if (map.get("error") != null)
+            responseEntity.error(Constant.FAILURE_CODE,"",map);
+        //成功了
+        responseEntity.success(map);
+        return responseEntity;
+    }
+    //用户支付完成后的回调地址
+    //@PostMapping("/prepay/callback")
 
 
 }

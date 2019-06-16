@@ -4,4 +4,8 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import xyz.ruankun.machinemother.entity.DictProductType;
 
 public interface DictProductTypeRepository extends JpaRepository<DictProductType, Integer> {
+
+    DictProductType findByType(String type);
+
+    DictProductType findById(int id);
 }

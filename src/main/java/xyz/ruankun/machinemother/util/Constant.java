@@ -57,5 +57,8 @@ public interface Constant {
 
     Integer AUTH_ERROR = 403;
 
+    //product 操作
+    Integer PRODUCT_ERROR = -1;
+    Integer PRODUCT_SUCCESS = 1;
 
 }

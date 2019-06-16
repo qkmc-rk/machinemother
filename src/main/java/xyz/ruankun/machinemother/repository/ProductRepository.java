@@ -20,4 +20,8 @@ public interface ProductRepository extends JpaRepository<Product, Integer> {
     //查看新品
     List<Product> getAllOrderByGmtCreate(Date gmtCreate);
 
+    List<Product> findAll();
+
+    int deleteById(int id);
+
 }

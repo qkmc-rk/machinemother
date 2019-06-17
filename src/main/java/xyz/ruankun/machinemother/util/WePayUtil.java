@@ -30,7 +30,10 @@ import java.util.*;
  */
 public class WePayUtil {
 
-        /**
+
+
+
+    /**
          * 获取随机字符串 (采用截取8位当前日期数  + 4位随机整数)
          * @return
          */
@@ -573,7 +576,24 @@ public class WePayUtil {
     }
 
 
-
-
-
+    public static final String NOTIFY_SUCCESS = "<xml>\n" +
+            "  <return_code><![CDATA[SUCCESS]]></return_code>\n" +
+            "  <return_msg><![CDATA[OK]]></return_msg>\n" +
+            "</xml>";
+    public static final String NOTIFY_FAIL_SERVER_ERROR = "<xml>\n" +
+            "  <return_code><![CDATA[FAIL]]></return_code>\n" +
+            "  <return_msg><![CDATA[internal error occured!]]></return_msg>\n" +
+            "</xml>";
+    public static final String NOTIFY_FAIL_IO_ERROR = "<xml>\n" +
+            "  <return_code><![CDATA[FAIL]]></return_code>\n" +
+            "  <return_msg><![CDATA[IO EXCEPTION,输入流有问题]]></return_msg>\n" +
+            "</xml>";
+    public static final String NOTIFY_FAIL_WRONG_RETURN_CODE = "<xml>\n" +
+            "  <return_code><![CDATA[FAIL]]></return_code>\n" +
+            "  <return_msg><![无效的或者错误的return_code]]></return_msg>\n" +
+            "</xml>";
+    public static final String NOTIFY_FAIL_UNKNOWN_DATA = "<xml>\n" +
+            "  <return_code><![CDATA[FAIL]]></return_code>\n" +
+            "  <return_msg><![无法验证数据的合法性，请重新尝试]]></return_msg>\n" +
+            "</xml>";
     }

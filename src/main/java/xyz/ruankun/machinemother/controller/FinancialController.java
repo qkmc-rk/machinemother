@@ -7,6 +7,7 @@ import xyz.ruankun.machinemother.entity.Decoupon;
 import xyz.ruankun.machinemother.service.FinancialService;
 import xyz.ruankun.machinemother.service.UserInfoService;
 import xyz.ruankun.machinemother.util.Constant;
+import xyz.ruankun.machinemother.util.WePayUtil;
 import xyz.ruankun.machinemother.util.WxResponseCode;
 import xyz.ruankun.machinemother.util.constant.AuthAopConstant;
 import xyz.ruankun.machinemother.vo.ResponseEntity;
@@ -133,7 +134,17 @@ public class FinancialController {
         return responseEntity;
     }
     //用户支付完成后的回调地址
-    //@PostMapping("/prepay/callback")
+    @PostMapping("/order/prepay/notify")
+    public String wxNotify(HttpServletRequest request){
+        String rs = null;
+        try {
+            rs = financialService.orderNotify(request);
+        } catch (Exception e) {
+            e.printStackTrace();
+            rs = WePayUtil.NOTIFY_FAIL_IO_ERROR;
+        }
+        return rs;
+    }
 
 
 }

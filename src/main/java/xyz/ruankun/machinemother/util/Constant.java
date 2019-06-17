@@ -61,4 +61,9 @@ public interface Constant {
     Integer PRODUCT_ERROR = -1;
     Integer PRODUCT_SUCCESS = 1;
 
+    //字符转换操作
+    Integer FORMAT_SUCCESS = 1;
+    Integer FORMAT_ERROR = -1;
+
+    //
 }

@@ -1,6 +1,8 @@
 package xyz.ruankun.machinemother.service.impl;
 
 import io.swagger.models.auth.In;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -11,16 +13,21 @@ import xyz.ruankun.machinemother.util.MD5Util;
 import xyz.ruankun.machinemother.util.WePayUtil;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.BufferedOutputStream;
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
 import java.math.BigDecimal;
 import java.util.*;
 
 @Service
 public class FinancialServiceImpl implements FinancialService {
+    private Logger logger = LoggerFactory.getLogger(FinancialServiceImpl.class);
 
     @Value("${weixin.appid}")
     private String appid;
-    @Value("${weixin.openid}")
-    private String openid;
+    //@Value("${weixin.openid}")
+    //private String openid;
     @Value("${weixin.mch_id}")
     private String mch_id;
     @Value("${weixin.notify_url}")
@@ -306,7 +313,15 @@ public class FinancialServiceImpl implements FinancialService {
         packageParams.put("spbill_create_ip", spbill_create_ip);
         packageParams.put("notify_url", notify_url);//支付成功后的回调地址
         packageParams.put("trade_type", tradetype);//支付方式
-        packageParams.put("openid", openid + "");//用户的openID，自己获取
+        User user = null;
+        try {
+            user = userRepository.findById(userid).get();
+        } catch (Exception e) {
+            e.printStackTrace();
+            //获取用户时出现了问题，无法进行相关交易
+            rs.put("error","获取用户信息时出现了问题，无法完成交易");
+        }
+        packageParams.put("openid", user.getOpenId() + "");//用户的openID，自己获取
 
         String prestr = WePayUtil.createLinkString(packageParams);
         String mysign =WePayUtil.sign(prestr,key,"utf-8");
@@ -352,6 +367,61 @@ public class FinancialServiceImpl implements FinancialService {
 
         response.put("appid",appid);
         return response;
+    }
+
+    @Override
+    public String orderNotify(HttpServletRequest request) throws Exception {
+        logger.info("回调函数开始执行...");
+        BufferedReader br = new BufferedReader(new InputStreamReader(request.getInputStream()));
+        String line = null;
+        StringBuilder sb = new StringBuilder();
+        while ((line = br.readLine()) != null) {
+            sb.append(line);
+        }
+        br.close();
+
+        //sb为微信返回的xml
+        String notityXml = sb.toString();
+        logger.info("回调获得的数据：" + notityXml);
+        String resXml = "";
+        Map map = WePayUtil.xmlToMap(notityXml);
+        String returnCode = (String) map.get("return_code");
+        if ("SUCCESS".equals(returnCode)) {
+            //如果微信发来的sign没有问题就会执行用户的业务逻辑代码
+            if(WePayUtil.verifyWeixinNotify(map,key)){
+                //重复回调是什么鬼？暂时不予考虑
+                //拿到订单号，然后把对应订单标记为已完成状态。
+                String orderNumber = (String) map.get("out_trade_no");
+
+                Order order = null;
+                try {
+                    order = orderRepository.findByOrderNumber(orderNumber);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    //通知微信服务器没有该订单，业务出现错误
+                    resXml = WePayUtil.NOTIFY_FAIL_SERVER_ERROR;
+                    logger.error(resXml);
+                }
+                if (order != null) order.setPaid(true);
+                Order order2 = orderRepository.saveAndFlush(order);
+                if (order2 != null && order2.getPaid()){
+                    //通知微信回调业务已经完成成功
+                    resXml = WePayUtil.NOTIFY_SUCCESS;
+                    logger.error(resXml);
+                }else{
+                    //通知微信服务器回调遇到错误(保存订单状态时遇到错误)，业务出现错误
+                    resXml = WePayUtil.NOTIFY_FAIL_SERVER_ERROR;
+                    logger.error(resXml);
+                }
+
+            }else {
+                resXml = WePayUtil.NOTIFY_FAIL_UNKNOWN_DATA;
+                logger.error(resXml);
+            }
+        }else{
+            resXml = WePayUtil.NOTIFY_FAIL_WRONG_RETURN_CODE;
+        }
+        return resXml;
     }
 
     /**

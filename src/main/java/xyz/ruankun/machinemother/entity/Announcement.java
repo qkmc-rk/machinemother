@@ -6,6 +6,9 @@ import org.hibernate.annotations.DynamicUpdate;
 import javax.persistence.*;
 import java.util.Date;
 
+/**
+ *  这是notice
+ */
 @Entity
 @Table(name = "mm_announcement")
 @DynamicUpdate

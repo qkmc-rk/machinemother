@@ -79,7 +79,7 @@ public class AuthenticationAspect {
         boolean pass = authentication.pass();
         //要验证权限
         AuthAopConstant role = authentication.role();
-        if(pass && role != AuthAopConstant.ANON){
+        if(pass && !role.equals(AuthAopConstant.ANON)){ // ！-> 不等于
             //通过拿到的role,我们可以知道能处理这个请求的角色是什么
             //如果是匿名者，直接放行，如果是用户，就需要用户的权限才行，管理员则需要管理员的角色才行
             //规定一致，token放在header中

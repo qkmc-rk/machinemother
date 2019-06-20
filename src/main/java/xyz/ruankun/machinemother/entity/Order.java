@@ -29,6 +29,13 @@ public class Order {
     private Integer decouponId;
     @Column(name = "credit")
     private BigDecimal credit;
+    private Integer addrId;
+    public Integer getAddrId() {
+        return addrId;
+    }
+    public void setAddrId(Integer addrId) {
+        this.addrId = addrId;
+    }
 
     public Boolean getUseDecoupon() {
         return isUseDecoupon;

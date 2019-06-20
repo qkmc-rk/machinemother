@@ -71,7 +71,7 @@ public class ProductServiceImpl implements ProductService {
         }else{
             try {
                 productRepository.deleteById(id);
-                productPropsRepository.deleteByProductId(id);
+                productPropsRepository.deleteAllByProductId(id);
                 return true;
             }catch (Exception e){
                 e.printStackTrace();
@@ -92,7 +92,7 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public List<Product> getProducts(int typeId) {
+    public List<Product> getProductsByTypeId(int typeId) {
         return productRepository.findByTypeId(typeId);
     }
 

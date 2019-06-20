@@ -84,7 +84,7 @@ public class ProductController {
         if (dictProductType == null) {
             responseEntity.error(Constant.PRODUCT_ERROR, "无效数据", null);
         } else {
-            List<Product> products = productService.getProducts(id);
+            List<Product> products = productService.getProductsByTypeId(id);
             if (products.size() == 0) {
                 responseEntity.error(Constant.PRODUCT_ERROR, "无效数据", null);
             } else {

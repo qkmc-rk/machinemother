@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 import xyz.ruankun.machinemother.entity.Comment;
+import xyz.ruankun.machinemother.service.impl.EcomServiceImpl;
 
 import java.util.Date;
 
@@ -20,9 +21,16 @@ public class TestCommentService {
 
     @Autowired
     CommentService commentService;
+    @Autowired
+    EcomService ecomService;
     @Test
     public void test1(){
         Comment comment = new Comment();
         commentService.add(comment);
     }
+//    @Test
+//    public void main(){
+//        EcomServiceImpl ecomService = new EcomServiceImpl();
+//        System.out.println(ecomService.orderNumberGenerator());
+//    }
 }

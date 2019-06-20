@@ -16,7 +16,7 @@ public interface ProductService {
 
     List<Product> getProducts();
 
-    List<Product> getProducts(int typeId);
+    List<Product> getProductsByTypeId(int typeId);
 
     List<ProductProps> getProps(int id);
 

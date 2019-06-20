@@ -7,7 +7,7 @@ import java.util.List;
 
 public interface ProductPropsRepository extends JpaRepository<ProductProps, Integer> {
 
-    int deleteByProductId(int productId);
+    int deleteAllByProductId(int productId);
 
     List<ProductProps> findByProductId(int productId);
 }

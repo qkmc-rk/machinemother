@@ -1,10 +1,15 @@
 package xyz.ruankun.machinemother.entity;
 
+import org.hibernate.annotations.DynamicInsert;
+import org.hibernate.annotations.DynamicUpdate;
+
 import javax.persistence.*;
 import java.util.Date;
 
 @Entity
 @Table(name = "mm_item")
+@DynamicInsert
+@DynamicUpdate
 public class Item {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)

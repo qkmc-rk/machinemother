@@ -2,7 +2,7 @@ package xyz.ruankun.machinemother.util;
 
 public interface Constant {
 
-    public final static Integer SUCCESS_CODE = 1;
+    Integer SUCCESS_CODE = 1;
     //public final static is default
     Integer FAILURE_CODE = -1;
 

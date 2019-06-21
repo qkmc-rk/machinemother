@@ -11,4 +11,10 @@ public interface OrderSecretRepository extends JpaRepository<OrderSecret, Intege
     OrderSecret findByUserIdAndOrderid(Integer userid, Integer orderid);
 
     OrderSecret findByUserId(Integer userId);
+
+    OrderSecret findByOrderid(Integer orderId);
+
+    int deleteByOrderid(int orderid);
+
+    int deleteByUserId(int userId);
 }

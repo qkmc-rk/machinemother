@@ -20,8 +20,8 @@ public class Item {
     private Integer productPropsId;  //由producttypeid改为 productPropsId
 
     private Integer quantity;
-    @Column(name = "orderid")
-    private String orderId; //注意一下这里的orderid不是order的id，是ordernumber，设计缺陷，不想改了
+    @Column(name = "orderid")      //通过column 映射，改一下变量名就好了
+    private String orderNumber; //注意一下这里的orderid不是order的id，是ordernumber，设计缺陷，不想改了
     private Date gmtCreate;
     private Date gmtModified;
     @Column(name = "userid")
@@ -60,12 +60,12 @@ public class Item {
         this.quantity = quantity;
     }
 
-    public String getOrderId() {
-        return orderId;
+    public String getOrderNumber() {
+        return orderNumber;
     }
 
-    public void setOrderId(String orderId) {
-        this.orderId = orderId;
+    public void setOrderNumber(String orderNumber) {
+        this.orderNumber = orderNumber;
     }
 
     public Date getGmtCreate() {

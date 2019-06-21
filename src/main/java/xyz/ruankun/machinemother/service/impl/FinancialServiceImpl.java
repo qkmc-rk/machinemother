@@ -252,7 +252,7 @@ public class FinancialServiceImpl implements FinancialService {
         }
         //拿到和订单相关的所有信息
         String orderNum = order.getOrderNumber();//订单号
-        List<Item> items = itemRepository.findAllByOrderId(orderNum);//订单里面的所有物品
+        List<Item> items = itemRepository.findAllByOrderNumber(orderNum);//订单里面的所有物品
         BigDecimal amountYuan = order.getAmount(); //订单总金额
         //通过item拿到订单总金额，且算出金额优惠部分，然后跟之前算的比较，如果数字不一样则出错(这一步没什么用，为了保证数据的安全性)
         List<Integer> ids = new ArrayList<>();

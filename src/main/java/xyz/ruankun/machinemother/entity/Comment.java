@@ -15,10 +15,12 @@ public class Comment {
     @Column
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer id;
-    @Column
+    @Column(name = "itemid")//itemId不指定会被转会为item_id
     private Integer itemId;
-    @Column
+    @Column(name = "userid")//userId不指定会被转化为user_id
     private Integer userId;
+    @Transient
+    private String username;
     //1星-5星
     @Column
     private Integer score;

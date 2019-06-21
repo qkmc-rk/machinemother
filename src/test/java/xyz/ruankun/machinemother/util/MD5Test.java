@@ -13,4 +13,10 @@ public class MD5Test {
     public void m1(){
         System.out.println("密码是： + " + MD5Util.md5("admin"));//盐 ：machinemother
     }
+
+    @Test
+    public void m2(){
+        System.out.println(MD5Util.md5("Jason"));
+    }
+
 }

@@ -6,6 +6,7 @@ import xyz.ruankun.machinemother.entity.Comment;
 
 import java.util.List;
 
+@Deprecated
 public interface CommentService {
 
     Comment add(Comment comment);

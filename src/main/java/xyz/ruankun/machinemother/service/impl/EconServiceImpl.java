@@ -112,7 +112,7 @@ public class EconServiceImpl implements EconService {
         orderSecret.setUsed(false);
         orderSecret.setUserId(userId);
         orderSecretRepository.save(orderSecret);
-
+        itemRepository.saveAll(items);
         return order;
     }
 

@@ -33,4 +33,14 @@ public class TestCommentService {
 //        EcomServiceImpl ecomService = new EcomServiceImpl();
 //        System.out.println(ecomService.orderNumberGenerator());
 //    }
+    @Test
+    public void labelTest(){
+        label1: {
+        System.out.println("hello");
+        if (true){
+            break label1;
+        }
+        System.out.println("world");
+        }
+    }
 }

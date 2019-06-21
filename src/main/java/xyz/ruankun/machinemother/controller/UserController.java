@@ -11,7 +11,6 @@ import org.springframework.data.domain.Sort;
 import org.springframework.web.bind.annotation.*;
 import xyz.ruankun.machinemother.annotation.Authentication;
 import xyz.ruankun.machinemother.entity.User;
-import xyz.ruankun.machinemother.repository.UserRepository;
 import xyz.ruankun.machinemother.service.UserInfoService;
 import xyz.ruankun.machinemother.util.Constant;
 import xyz.ruankun.machinemother.util.code.UserCode;
@@ -140,8 +139,6 @@ public class UserController {
         if (userId != user.getId()) {
             responseEntity.error(UserCode.ERROR_PARAMS, UserCode.INVALID_DATA, null);
         } else {
-
-            //todo 同下微信号问题
             user.setGmtModified(new Date());
             user = userInfoService.update(user);
             if (user == null) {
@@ -178,8 +175,7 @@ public class UserController {
             if (userId != user.getId()) {
                 responseEntity.error(UserCode.ERROR_DATA, UserCode.INVALID_DATA, null);
             } else {
-                User check = userInfoService.getUser(userId);
-                //todo 是否需要添加微信号的一次修改机会
+//                User check = userInfoService.getUser(userId);
                     user = userInfoService.update(user);
                     responseEntity.success(UserCode.SUCCESS_OPERATION, UserCode.SUCCESS_MSG, user);
 //                } else {

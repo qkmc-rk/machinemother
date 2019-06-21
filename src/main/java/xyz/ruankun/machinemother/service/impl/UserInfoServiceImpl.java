@@ -11,6 +11,8 @@ import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestTemplate;
 import xyz.ruankun.machinemother.entity.User;
 import xyz.ruankun.machinemother.repository.UserRepository;
@@ -197,7 +199,6 @@ public class UserInfoServiceImpl implements UserInfoService {
         return null;
     }
 
-    /*  -------Jason------- */
     @Override
     public User getUser(String openId) {
         return userRepository.findByOpenId(openId);
@@ -251,6 +252,7 @@ public class UserInfoServiceImpl implements UserInfoService {
     }
 
     @Override
+    @Transactional
     public User save(User user) {
         return userRepository.save(user);
     }
@@ -261,5 +263,4 @@ public class UserInfoServiceImpl implements UserInfoService {
         return userRepository.save(user);
     }
 
-    /*-------------Jason-------------*/
 }

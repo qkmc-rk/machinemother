@@ -150,8 +150,7 @@ public class QrCodeServiceImpl implements QrCodeService {
                 return false;
             }
         }
-        if (null == template)   return  false;
-        return true;
+        return null != template;
     }
 
     /**

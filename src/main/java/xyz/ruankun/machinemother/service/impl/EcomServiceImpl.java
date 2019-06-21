@@ -121,12 +121,12 @@ public class EcomServiceImpl implements EcomService {
         //生成订单号然后注入
         order.setOrderNumber(orderNumberGenerator());
         //找出所有item（该userid的item，并且item是没有订单号的）
-        items = itemRepository.findAllByUserIdAndOrderIdIsNull(userId);
+        items = itemRepository.findByUserIdAndOrderNumberIsNull(userId);
         //将所有item的orderId设置为xx，（再次声明，orderId不是order的Id，是orderNumber，小失误，小失误）
         //算出订单没有减免前的总金额，转换成分
         for (Item i :
                 items) {
-            i.setOrderId(order.getOrderNumber());
+            i.setOrderNumber(order.getOrderNumber());
             amount.add(productPropsRepository.findById(i.getProductPropsId()).get().getPrice());
         }
         amountFen = (int)(amount.floatValue()*100);

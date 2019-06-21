@@ -7,4 +7,11 @@ import java.util.List;
 
 public interface ItemRepository extends JpaRepository<Item, Integer> {
     List<Item> findAllByOrderId(String orderid);
+
+    /**
+     * 新的购物车物品
+     * @param userId
+     * @return
+     */
+    List<Item> findAllByUserIdAndOrderIdIsNull(Integer userId);
 }

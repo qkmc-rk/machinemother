@@ -5,10 +5,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestHeader;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import xyz.ruankun.machinemother.annotation.小坏蛋;
 import xyz.ruankun.machinemother.service.UserInfoService;
@@ -22,6 +19,7 @@ import xyz.ruankun.machinemother.vo.ResponseEntity;
  */
 @Controller
 @RequestMapping("/upload")
+@CrossOrigin
 @Api(value = "一切上传文件的接口都靠这个老几实现了")
 public class FileController {
 
@@ -29,7 +27,7 @@ public class FileController {
     UserInfoService userInfoService;
 
     @PutMapping("/image")
-    @ApiOperation("上传图片，不是图片的话就会返回不想得到的喔")
+    @ApiOperation("[匿名]上传图片，不是图片的话就会返回不想得到的喔")
     public ResponseEntity uploadFile(@RequestHeader String token, @RequestParam MultipartFile image){
         if (userInfoService.readDataFromRedis(token) == null ||userInfoService.readDataFromRedis(token).equals(""))
             return getTrueOrFalseResult(false);

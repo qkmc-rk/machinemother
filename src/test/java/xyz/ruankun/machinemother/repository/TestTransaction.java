@@ -35,7 +35,7 @@ public class TestTransaction {
 
     @Test
     public void ad() {
-        all();
+        //all();
     }
 
 

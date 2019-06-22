@@ -1,5 +1,7 @@
 package xyz.ruankun.machinemother.controller;
 
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import xyz.ruankun.machinemother.annotation.Authentication;
@@ -20,6 +22,8 @@ import java.util.Map;
  * 男女之间也可以“交流”
  */
 @RestController
+@CrossOrigin
+@Api(value = "电商相关接口，订单购物车等，同econController")
 public class EcomController {
     @Autowired
     EcomService ecomService;
@@ -29,6 +33,7 @@ public class EcomController {
     //将产品加入购物车,需要三个参数。Item就是cart的意思
     @PutMapping("/item")
     @Authentication(role = AuthAopConstant.USER)
+    @ApiOperation(value = "[用户]加入一个东东到购物车")
     public ResponseEntity addToItem(@RequestHeader("token") String token,
                                     @RequestParam Integer productId,
                                     @RequestParam Integer number,
@@ -46,6 +51,7 @@ public class EcomController {
     //增加或者减少购物车里面的内容，需要判断，如果item的数量为0，直接删除
     @PostMapping("item/{id}")
     @Authentication(role = AuthAopConstant.USER)
+    @ApiOperation(value = "[用户]增加或者减少一个购物车物品的数量，减少到0会自动删除")
     public ResponseEntity changeItemNumber(@PathVariable Integer id,
                                            @RequestParam Boolean up,
                                            @RequestHeader("tokem") String token){
@@ -58,6 +64,7 @@ public class EcomController {
     //生成订单，用户参数，以及订单折扣参数等，多重(多次)校验数据
     @PutMapping("/order")
     @Authentication(role = AuthAopConstant.USER)
+    @ApiOperation(value = "[用户]下订单，此处下单是将购物车中的所有服务下单")
     public ResponseEntity makeOrder(@RequestHeader("token") String token,
                                         @RequestParam Integer decouponId,
                                         @RequestParam Boolean useCredit,

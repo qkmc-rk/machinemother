@@ -19,6 +19,7 @@ import java.util.Date;
 import java.util.List;
 
 @RestController
+@CrossOrigin
 @RequestMapping(value = "/addr")
 @Api(value = "与用户地址相关的API")
 public class AddrController {
@@ -31,7 +32,7 @@ public class AddrController {
 
     @GetMapping(value = {"", "/"})
     @Authentication(role = AuthAopConstant.USER)
-    @ApiOperation(value = "获取制定获取的所有收货地址信息", notes = "确保传入的是有效的用户id值")
+    @ApiOperation(value = "[用户]获取制定获取的所有收货地址信息", notes = "确保传入的是有效的用户id值")
     public ResponseEntity getUserAddrs(@RequestParam(value = "userId") int userId) {
         User user = userInfoService.getUser(userId);
         ResponseEntity responseEntity = new ResponseEntity();
@@ -46,7 +47,7 @@ public class AddrController {
 
     @GetMapping(value = "/{addrId}")
     @Authentication(role = AuthAopConstant.USER)
-    @ApiOperation(value = "查看指定地址的详细信息", notes = "返回单个地址")
+    @ApiOperation(value = "[用户]查看指定地址的详细信息", notes = "返回单个地址")
     public ResponseEntity getAddr(@PathVariable(value = "addrId") int addrId) {
         ResponseEntity responseEntity = new ResponseEntity();
         Addr addr = addrService.getAddr(addrId);
@@ -60,8 +61,8 @@ public class AddrController {
 
     @PostMapping(value = {"", "/"})
     @Authentication(role = AuthAopConstant.USER)
-    @ApiOperation(value = "增加用户接口信息")
-    public ResponseEntity add(Addr addr) {
+    @ApiOperation(value = "[用户]增加用户接口信息")
+    public ResponseEntity add(@RequestBody Addr addr) {
         ResponseEntity responseEntity = new ResponseEntity();
         User user = userInfoService.getUser(addr.getUserId());
         if (user == null) {
@@ -87,7 +88,7 @@ public class AddrController {
 
     @DeleteMapping(value = "/{addrId}")
     @Authentication(role = AuthAopConstant.USER)
-    @ApiOperation(value = "删除某条地址数据")
+    @ApiOperation(value = "[用户]删除某条地址数据")
     public ResponseEntity delete(@PathVariable(value = "addrId") int addrId) {
         Addr addr = addrService.getAddr(addrId);
         ResponseEntity responseEntity = new ResponseEntity();

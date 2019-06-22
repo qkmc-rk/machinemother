@@ -1,5 +1,7 @@
 package xyz.ruankun.machinemother.controller;
 
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.apache.tomcat.util.bcel.Const;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -16,6 +18,8 @@ import java.util.List;
 
 @RestController
 @RequestMapping(value = "/product")
+@Api(value = "服务产品相关的所有API")
+@CrossOrigin
 public class ProductController {
 
     @Autowired
@@ -26,6 +30,7 @@ public class ProductController {
 
     @PutMapping(value = {"", "/"})
     @Authentication(role = AuthAopConstant.ADMIN)
+    @ApiOperation(value = "[管理员]增加一个服务产品，同时要增加这个产品的各类参数信息")
     public ResponseEntity addProduct(Product product, @RequestParam(value = "productProps") List<ProductProps> productProps) {
 
         Boolean result = productService.addProduct(product, productProps);
@@ -39,6 +44,7 @@ public class ProductController {
 
     @DeleteMapping(value = "/{id}")
     @Authentication(role = AuthAopConstant.ADMIN)
+    @ApiOperation(value = "[管理员]删除某产品")
     public ResponseEntity delete(@PathVariable(value = "id") Integer id) {
         Boolean result = productService.deleteProduct(id);
         if (result) {
@@ -51,6 +57,7 @@ public class ProductController {
 
     @PostMapping(value = "/{id}")
     @Authentication(role = AuthAopConstant.ADMIN)
+    @ApiOperation(value = "[管理员]修改某产品")
     public ResponseEntity update(@PathVariable(value = "id") Integer id, Product product) {
         if (id != product.getId()) {
             responseEntity.error(Constant.PRODUCT_ERROR, "错误数据", null);
@@ -67,6 +74,7 @@ public class ProductController {
 
     @GetMapping(value = {"", "/"})
     @Authentication(pass = false)       //所有用户类型都可调用，但是对于出匿名外的用户还需进行token更新
+    @ApiOperation(value = "[匿名]获取所有服务产品信息")
     public ResponseEntity getAll() {
         List<Product> products = productService.getProducts();
         if (products.size() == 0) {
@@ -79,6 +87,7 @@ public class ProductController {
 
     @GetMapping(value = "/type/{id}")
     @Authentication(pass = false)       //所有用户类型都可调用，但是对于出匿名外的用户还需进行token更新
+    @ApiOperation(value = "[匿名]根据类型的id获取某个类型的所有产品")
     public ResponseEntity getProducts(@PathVariable(value = "id") Integer id) {
         DictProductType dictProductType = productService.getProductType(id);
         if (dictProductType == null) {
@@ -96,6 +105,7 @@ public class ProductController {
 
     @GetMapping(value = "/{id}/props")
     @Authentication(pass = false)       //所有用户类型都可调用，但是对于出匿名外的用户还需进行token更新
+    @ApiOperation(value = "[匿名]获取某产品的所有可选属性，列表")
     public ResponseEntity getProps(@PathVariable(value = "id") Integer id) {
         List<ProductProps> props = productService.getProps(id);
         if (props.size() == 0) {
@@ -108,6 +118,7 @@ public class ProductController {
 
     @GetMapping(value = "/{id}")
     @Authentication(pass = false)       //所有用户类型都可调用，但是对于出匿名外的用户还需进行token更新
+    @ApiOperation(value = "[匿名]获取某个产品 的详细信息")
     public ResponseEntity getProduct(@PathVariable(value = "id") Integer id) {
         Product product = productService.getProduct(id);
         if (product == null) {
@@ -120,6 +131,7 @@ public class ProductController {
 
     @GetMapping(value = "/type")
     @Authentication(pass = false)       //所有用户类型都可调用，但是对于出匿名外的用户还需进行token更新
+    @ApiOperation(value = "[匿名]获取产品类型列表")
     public ResponseEntity getType() {
         List<DictProductType> types = productService.getTypes();
         if (types.size() == 0) {

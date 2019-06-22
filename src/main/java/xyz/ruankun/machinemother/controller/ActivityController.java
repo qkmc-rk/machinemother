@@ -1,5 +1,7 @@
 package xyz.ruankun.machinemother.controller;
 
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import xyz.ruankun.machinemother.annotation.Authentication;
@@ -16,6 +18,8 @@ import java.util.List;
 import java.util.Map;
 
 @RestController
+@CrossOrigin
+@Api(value = "活动控制器")
 public class ActivityController {
 
     @Autowired
@@ -26,6 +30,7 @@ public class ActivityController {
 
     @GetMapping(value = "/notice")
     @Authentication(role = AuthAopConstant.ADMIN)   //管理员可以选择是否传参数
+    @ApiOperation(value = "[管理员]管理员获取所有公告")
     public ResponseEntity getNotices(@RequestParam(value = "start", required = false) String start,
                                      @RequestParam(value = "end", required = false) String end) {
         List<Announcement> notices = null;
@@ -56,6 +61,7 @@ public class ActivityController {
 
     @PostMapping(value = "/notice")
     @Authentication(role = AuthAopConstant.USER)    //用户必须传入指定日期范围
+    @ApiOperation(value = "[用户]用户获取所有公告")
     public ResponseEntity getNotice(@RequestParam(value = "start") String start, @RequestParam(value = "end") String end) {
         //根据传入的时间范围获取notice信息
         Map<String, Date> map = DateUtil.parse(start, end);
@@ -73,6 +79,7 @@ public class ActivityController {
 
     @PutMapping(value = "/notice")
     @Authentication(role = AuthAopConstant.ADMIN)
+    @ApiOperation(value = "[管理员]管理员增加一条公告")
     public ResponseEntity addNotice(Announcement announcement) {
         Boolean result = activityService.addNotice(announcement);
         if (result) {
@@ -85,6 +92,7 @@ public class ActivityController {
 
     @DeleteMapping(value = "/notice/{id}")
     @Authentication(role = AuthAopConstant.ADMIN)
+    @ApiOperation(value = "[管理员]管理员删除一条公告")
     public ResponseEntity deleteNotice(@PathVariable(value = "id") Integer id) {
         Boolean result = activityService.deleteNotice(id);
         if (result) {
@@ -97,6 +105,7 @@ public class ActivityController {
 
     @PostMapping(value = "/activity")
     @Authentication(role = AuthAopConstant.USER)//todo 有待斟酌
+    @ApiOperation(value = "[用户]获取活动信息，是否连同过期的一同获取")
     public ResponseEntity getActivities(@RequestParam(value = "timeout",defaultValue = "true")Boolean timeout) {
         List<Activity> activities = null;
         if(timeout){
@@ -118,6 +127,7 @@ public class ActivityController {
 
     @GetMapping(value = "/activity")
     @Authentication(role = AuthAopConstant.ADMIN)
+    @ApiOperation(value = "[管理员]管理员获取所有的活动信息")
     public ResponseEntity getActivity() {
         List<Activity> activities = activityService.getActivities();
         if(activities== null ){
@@ -130,6 +140,7 @@ public class ActivityController {
 
     @PutMapping(value = "/activity")
     @Authentication(role = AuthAopConstant.ADMIN)
+    @ApiOperation(value = "[管理员]管理员发布一条活动")
     public ResponseEntity addActivity(Activity activity) {
         if (activityService.addActivity(activity)) {
             responseEntity.success(activity);
@@ -141,6 +152,7 @@ public class ActivityController {
 
     @DeleteMapping(value = "/activity/{id}")
     @Authentication(role = AuthAopConstant.ADMIN)
+    @ApiOperation(value = "[管理员]删除一条活动")
     public ResponseEntity delete(@PathVariable(value = "id") Integer id) {
         Boolean result = activityService.deleteActivity(id);
         if (result) {

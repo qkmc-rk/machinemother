@@ -23,11 +23,11 @@ public class TestCommentService {
     CommentService commentService;
     @Autowired
     EcomService ecomService;
-    @Test
-    public void test1(){
-        Comment comment = new Comment();
-        commentService.add(comment);
-    }
+//    @Test
+//    public void test1(){
+//        Comment comment = new Comment();
+//        commentService.add(comment);
+//    }
 //    @Test
 //    public void main(){
 //        EcomServiceImpl ecomService = new EcomServiceImpl();

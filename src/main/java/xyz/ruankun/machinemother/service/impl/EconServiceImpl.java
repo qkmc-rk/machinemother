@@ -241,6 +241,41 @@ public class EconServiceImpl implements EconService {
         return orderSecretRepository.findByOrderid(orderId);
     }
 
+    /**
+     * 这是一个事务级的操作
+     * @param orderSecret
+     * @param orderId
+     * @return
+     */
+    @Override
+    @Transactional
+    public Boolean confirmOrder(String orderSecret, Integer orderId) {
+
+        OrderSecret orderSecret1 = null;
+        try {
+            orderSecret1= getSecretByOrder(orderId);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+        if (orderSecret1.getSecret().equals(orderSecret)){
+            orderSecret1.setUsed(true);
+            Order order = null;
+            try {
+                order = orderRepository.findById(orderId).get();
+            } catch (Exception e) {
+                e.printStackTrace();
+                return false;
+            }
+            order.setFinished(true);//完成订单
+            //事务操作
+            orderRepository.saveAndFlush(order);
+            orderSecretRepository.saveAndFlush(orderSecret1);
+            return true;
+        }else
+            return false;
+    }
+
     @Override
     public List<Item> getItemsUsed(int userId, String orderNumber) {
         return itemRepository.findByUserIdAndOrderNumber(userId, orderNumber);

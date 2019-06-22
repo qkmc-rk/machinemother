@@ -20,6 +20,7 @@ import java.util.List;
  * 该controller控制评论与回复等内容
  */
 @RestController
+@CrossOrigin
 @Api(value = "评论与回复的控制器")
 public class ReplyCommentController {
 
@@ -30,7 +31,7 @@ public class ReplyCommentController {
 
     @RequestMapping("/item/{itemId}/comment")
     @Authentication(role = AuthAopConstant.USER)
-    @ApiOperation(value = "新增一条评论")
+    @ApiOperation(value = "[用户]新增一条评论")
     public ResponseEntity putCommentToItem(@RequestHeader String token, @PathVariable Integer itemId, @RequestBody Comment comment){
         comment.setItemId(itemId);
         comment.setUserId(Integer.parseInt(userInfoService.readDataFromRedis(token)));
@@ -40,7 +41,7 @@ public class ReplyCommentController {
 
     @PutMapping("/comment/{commentId}/{reply}")
     @Authentication(role = AuthAopConstant.ADMIN)
-    @ApiOperation(value = "管理员回复一条评论")
+    @ApiOperation(value = "[管理员]回复一条评论")
     public ResponseEntity reply(@RequestBody Reply reply,@PathVariable Integer commentId,@RequestHeader String token) {
         Integer adminId = Integer.parseInt(userInfoService.readDataFromRedis(token));
         reply.setAdminId(adminId);
@@ -48,7 +49,7 @@ public class ReplyCommentController {
     }
 
     @GetMapping("/comment")
-    @ApiOperation(value = "获取评论,如果没有token就是匿名，有就是管理员或者用户")
+    @ApiOperation(value = "【匿名】获取评论,如果没有token就是匿名，有就是管理员或者用户")
     public ResponseEntity getComment(@RequestHeader String token){
 
         if (token == null) return getTrueOrFalseResult(false);
@@ -68,20 +69,20 @@ public class ReplyCommentController {
     }
 
     @GetMapping("/comment/{commentId}/reply")
-    @ApiOperation(value = "获取某条评论的回复")
+    @ApiOperation(value = "【匿名】获取某条评论的回复")
     public ResponseEntity getReplyOfOneComment(@PathVariable Integer commentId){
         return getDataResult(replyCommentService.getAllReplyOfOneComment(commentId));
     }
 
     @GetMapping("/comment/recommend")
-    @ApiOperation(value = "获取推荐的评论(推荐是指显示在主页的下方)")
+    @ApiOperation(value = "【匿名】取推荐的评论(推荐是指显示在主页的下方)")
     public ResponseEntity getRecommendComment(){
         return getDataResult(replyCommentService.getCommentByRcmd(true));
     }
 
     @PostMapping("/comment/{commentId}/recommend")
     @Authentication(role = AuthAopConstant.ADMIN)
-    @ApiOperation(value = "管理员操作,修改某条评论，是否推荐这条评论显示在主页上")
+    @ApiOperation(value = "[管理员]管理员操作,修改某条评论，是否推荐这条评论显示在主页上")
     public ResponseEntity setCommentToRecommend(@PathVariable Integer commentId, Boolean recommend){
         return getTrueOrFalseResult(replyCommentService.setCommentWithRecommend(commentId, recommend));
     }

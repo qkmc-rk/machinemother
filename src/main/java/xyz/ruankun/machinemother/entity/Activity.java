@@ -2,7 +2,7 @@ package xyz.ruankun.machinemother.entity;
 
 import javax.persistence.*;
 import java.util.Date;
-
+//测试
 @Entity
 @Table(name = "mm_activity")
 public class Activity {

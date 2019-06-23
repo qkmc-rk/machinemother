@@ -71,3 +71,4 @@
 - 增加所有controller跨域支持
 ### 6月23日
 - 测试jenkins webhook
+- 测试jenkins webhook2

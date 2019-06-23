@@ -69,3 +69,5 @@
 
 ### 6月22日
 - 增加所有controller跨域支持
+### 6月23日
+- 测试jenkins webhook

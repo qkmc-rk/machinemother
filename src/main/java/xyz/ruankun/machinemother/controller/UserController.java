@@ -293,6 +293,11 @@ public class UserController {
         return responseEntity;
     }
 
+    @GetMapping("/test")
+    public String test(){
+        return "test1";
+    }
+
     private Pageable pageable(int page, int size, String column, Boolean sort) {
         if (column == null) {
             return PageRequest.of(page, size);

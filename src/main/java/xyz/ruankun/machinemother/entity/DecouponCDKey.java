@@ -1,8 +1,10 @@
 package xyz.ruankun.machinemother.entity;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.sun.org.apache.xpath.internal.operations.Bool;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
@@ -18,6 +20,8 @@ public class DecouponCDKey {
     private Integer id;
     private String cdkey;
     private Date gmtCreate;
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date gmtPast;
     private Boolean isExchanged;
     private boolean isPast;

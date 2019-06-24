@@ -31,7 +31,7 @@ public class ProductController {
     @PutMapping(value = {"", "/"})
     @Authentication(role = AuthAopConstant.ADMIN)
     @ApiOperation(value = "[管理员]增加一个服务产品，同时要增加这个产品的各类参数信息")
-    public ResponseEntity addProduct(Product product, @RequestParam(value = "productProps") List<ProductProps> productProps) {
+    public ResponseEntity addProduct(@RequestBody Product product, @RequestBody List<ProductProps> productProps) {
 
         Boolean result = productService.addProduct(product, productProps);
         if (result) {

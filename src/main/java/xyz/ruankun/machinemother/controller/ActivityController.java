@@ -2,6 +2,7 @@ package xyz.ruankun.machinemother.controller;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import xyz.ruankun.machinemother.annotation.Authentication;
@@ -80,7 +81,7 @@ public class ActivityController {
     @PutMapping(value = "/notice")
     @Authentication(role = AuthAopConstant.ADMIN)
     @ApiOperation(value = "[管理员]管理员增加一条公告")
-    public ResponseEntity addNotice(Announcement announcement) {
+    public ResponseEntity addNotice(@RequestBody Announcement announcement) {
         Boolean result = activityService.addNotice(announcement);
         if (result) {
             responseEntity.success(announcement);
@@ -141,7 +142,7 @@ public class ActivityController {
     @PutMapping(value = "/activity")
     @Authentication(role = AuthAopConstant.ADMIN)
     @ApiOperation(value = "[管理员]管理员发布一条活动")
-    public ResponseEntity addActivity(Activity activity) {
+    public ResponseEntity addActivity(@ApiParam(name = "application/json 只传必要的值") @RequestBody Activity activity) {
         if (activityService.addActivity(activity)) {
             responseEntity.success(activity);
         } else {

@@ -74,3 +74,7 @@
 - 测试jenkins webhook2
 - 测试jenkins webhook3
 - 测试jenkins webhook
+
+### 6月24日
+- 对所有除创建时间和修改时间的时间字段加上注解@DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")  @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+- 对所有需要添加@RequestBody的地方添加@requestBody

@@ -59,7 +59,7 @@ public class AddrController {
         return responseEntity;
     }
 
-    @PostMapping(value = {"", "/"})
+    @PostMapping(value = "")
     @Authentication(role = AuthAopConstant.USER)
     @ApiOperation(value = "[用户]增加用户接口信息")
     public ResponseEntity add(@RequestBody Addr addr) {

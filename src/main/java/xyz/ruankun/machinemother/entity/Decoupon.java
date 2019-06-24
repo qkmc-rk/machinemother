@@ -1,5 +1,8 @@
 package xyz.ruankun.machinemother.entity;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import org.springframework.format.annotation.DateTimeFormat;
+
 import javax.persistence.*;
 import java.math.BigDecimal;
 import java.util.Date;
@@ -14,6 +17,8 @@ public class Decoupon {
     @Column(name = "userid")
     private Integer userId;
     private Date gmtCreate;
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date gmtPast;
     private Boolean isUsed;
     private Boolean isPast;

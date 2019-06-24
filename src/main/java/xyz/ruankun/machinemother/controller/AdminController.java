@@ -32,7 +32,6 @@ public class AdminController {
 
     //拦截判断是不是管理员
     @GetMapping("/token")
-    @Authentication(pass = false,role = AuthAopConstant.ADMIN)
     @ApiOperation(value = "[管理员]管理员登录",notes = "说白了就是管理员获取token令牌，有效期15分钟，每次请求会刷新缓存时间")
     public ResponseEntity login(String account,String password){
         Integer rs = adminService.adminLogin(account,password);

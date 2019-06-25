@@ -64,6 +64,4 @@ public interface Constant {
     //字符转换操作
     Integer FORMAT_SUCCESS = 1;
     Integer FORMAT_ERROR = -1;
-
-    //
 }

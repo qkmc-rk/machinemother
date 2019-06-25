@@ -36,7 +36,7 @@ public class User implements Serializable {
     private Double award;
 
     @Column(name = "integration")
-    private Double integration;
+    private Integer integration;
     @Column(name = "wxid")
     private String wxId;
     //修改by mrruan
@@ -107,11 +107,11 @@ public class User implements Serializable {
         this.award = award;
     }
 
-    public Double getIntegration() {
+    public Integer getIntegration() {
         return integration;
     }
 
-    public void setIntegration(Double integration) {
+    public void setIntegration(Integer integration) {
         this.integration = integration;
     }
 

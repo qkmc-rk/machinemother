@@ -124,27 +124,27 @@ public class UserController {
         Pageable pageable = pageable(page, size, column, sort);
         Page<User> users = userInfoService.getAll(pageable);
         if (users.getTotalPages() < page) {
-            responseEntity.error(UserCode.ERROR_PARAMS, UserCode.INVALID_DATA, null);
+//            responseEntity.error(UserCode.ERROR_PARAMS, UserCode.INVALID_DATA, null);
+            responseEntity.serverError();
         } else {
-            responseEntity.success(UserCode.SUCCESS_OPERATION, UserCode.SUCCESS_MSG, users);
+            responseEntity.success(users);
         }
         return responseEntity;
     }
 
     @PostMapping("/{userId}")
-    @Authentication(role = AuthAopConstant.ADMIN)
+//    @Authentication(role = AuthAopConstant.ADMIN)
     @ApiOperation(value = "[管理员]更新用户数据")
     public ResponseEntity updateUser(User user, @PathVariable(value = "userId") int userId) {
         ResponseEntity responseEntity = new ResponseEntity();
         if (userId != user.getId()) {
-            responseEntity.error(UserCode.ERROR_PARAMS, UserCode.INVALID_DATA, null);
+            responseEntity.serverError();
         } else {
-            user.setGmtModified(new Date());
             user = userInfoService.update(user);
             if (user == null) {
-                responseEntity.error(UserCode.NO_EXIST, UserCode.NO_SUCH_USER, null);
+                responseEntity.serverError();
             } else {
-                responseEntity.success(UserCode.SUCCESS_OPERATION, UserCode.SUCCESS_MSG, user);
+                responseEntity.success(user);
             }
         }
         return responseEntity;
@@ -157,9 +157,10 @@ public class UserController {
         ResponseEntity responseEntity = new ResponseEntity();
         User user = userInfoService.getUser(userId);
         if (user == null) {
-            responseEntity.error(UserCode.NO_EXIST, UserCode.NO_SUCH_USER, null);
+//            responseEntity.error(UserCode.NO_EXIST, UserCode.NO_SUCH_USER, null);
+            responseEntity.serverError();
         } else {
-            responseEntity.success(UserCode.SUCCESS_OPERATION, UserCode.SUCCESS_MSG, user);
+            responseEntity.success(user);
         }
         return responseEntity;
     }
@@ -173,18 +174,20 @@ public class UserController {
             int userId = Integer.valueOf(userInfoService.readDataFromRedis(token));
             //保证能够字符串与整数能够正确转型
             if (userId != user.getId()) {
-                responseEntity.error(UserCode.ERROR_DATA, UserCode.INVALID_DATA, null);
+//                responseEntity.error(UserCode.ERROR_DATA, UserCode.INVALID_DATA, null);
+                responseEntity.serverError();
             } else {
 //                User check = userInfoService.getUser(userId);
                     user = userInfoService.update(user);
-                    responseEntity.success(UserCode.SUCCESS_OPERATION, UserCode.SUCCESS_MSG, user);
+                    responseEntity.success(user);
 //                } else {
                     //
 //                    responseEntity.error(UserCode.INVALID_OPERATION, UserCode.INVALID_MSG, null);
 //                }
             }
         } catch (Exception e) {
-            responseEntity.error(UserCode.ERROR_PARAMS, UserCode.INVALID_DATA, null);
+//            responseEntity.error(UserCode.ERROR_PARAMS, UserCode.INVALID_DATA, null);
+            responseEntity.serverError();
             e.printStackTrace();
         }
 
@@ -200,12 +203,14 @@ public class UserController {
             int userId = Integer.valueOf(userInfoService.readDataFromRedis(token));
             User user = userInfoService.getUser(userId);
             if (user == null) {
-                responseEntity.error(UserCode.ERROR_DATA, UserCode.LOST_DATA, null);
+//                responseEntity.error(UserCode.ERROR_DATA, UserCode.LOST_DATA, null);
+                responseEntity.serverError();
             } else {
-                responseEntity.success(UserCode.SUCCESS_OPERATION, UserCode.SUCCESS_MSG, null);
+                responseEntity.success(null);
             }
         } catch (Exception e) {
-            responseEntity.error(UserCode.ERROR_PARAMS, UserCode.INVALID_DATA, null);
+//            responseEntity.error(UserCode.ERROR_PARAMS, UserCode.INVALID_DATA, null);
+            responseEntity.serverError();
             e.printStackTrace();
         }
 
@@ -220,13 +225,15 @@ public class UserController {
         ResponseEntity responseEntity = new ResponseEntity();
 
         if (user == null) {
-            responseEntity.error(UserCode.NO_EXIST, UserCode.NO_SUCH_USER, null);
+//            responseEntity.error(UserCode.NO_EXIST, UserCode.NO_SUCH_USER, null);
+            responseEntity.serverError();
         } else {
             int result = userInfoService.delete(userId);
             if (result < 0) {
-                responseEntity.error(UserCode.INVALID_OPERATION, UserCode.INVALID_DATA, null);
+//                responseEntity.error(UserCode.INVALID_OPERATION, UserCode.INVALID_DATA, null);
+                responseEntity.serverError();
             } else {
-                responseEntity.success(UserCode.SUCCESS_OPERATION, UserCode.SUCCESS_MSG, null);
+                responseEntity.success(null);
             }
         }
         return responseEntity;
@@ -235,18 +242,20 @@ public class UserController {
     @PostMapping(value = "/{userId}/award")
     @Authentication(role = AuthAopConstant.ADMIN)
     @ApiOperation(value = "[管理员]更新用户佣金获得额度", notes = "所传入的佣金金额不能小于0")
-    public ResponseEntity updateAward(@RequestParam(value = "award") double award, @PathVariable(value = "userId") int userId) {
+    public ResponseEntity updateAward(@RequestParam(value = "award") Double award, @PathVariable(value = "userId") int userId) {
         User user = userInfoService.getUser(userId);
         ResponseEntity responseEntity = new ResponseEntity();
         if (user == null) {
-            responseEntity.error(UserCode.NO_EXIST, UserCode.NO_SUCH_USER, null);
+//            responseEntity.error(UserCode.NO_EXIST, UserCode.NO_SUCH_USER, null);
+            responseEntity.serverError();
         } else {
             if (award < 0) {
-                responseEntity.error(UserCode.ERROR_PARAMS, UserCode.INVALID_DATA, null);
+//                responseEntity.error(UserCode.ERROR_PARAMS, UserCode.INVALID_DATA, null);
+                responseEntity.serverError();
             } else {
                 user.setAward(award);
                 userInfoService.update(user);
-                responseEntity.success(UserCode.SUCCESS_OPERATION, UserCode.SUCCESS_MSG, null);
+                responseEntity.success(null);
             }
         }
         return responseEntity;
@@ -255,18 +264,20 @@ public class UserController {
     @PostMapping(value = "/{userId}/integration")
     @Authentication(role = AuthAopConstant.ADMIN)
     @ApiOperation(value = "[管理员]更新用户获得积分的额度", notes = "所传入的积分数据不能小于0")
-    public ResponseEntity updateIntegration(@RequestParam(value = "integration") double integration, @RequestParam("userId") int userId) {
+    public ResponseEntity updateIntegration(@RequestParam(value = "integration") Integer integration, @RequestParam("userId") int userId) {
         ResponseEntity responseEntity = new ResponseEntity();
         if (integration < 0) {
-            responseEntity.error(UserCode.ERROR_PARAMS, UserCode.INVALID_DATA, null);
+//            responseEntity.error(UserCode.ERROR_PARAMS, UserCode.INVALID_DATA, null);
+            responseEntity.serverError();
         } else {
             User user = userInfoService.getUser(userId);
             if (user == null) {
-                responseEntity.error(UserCode.NO_EXIST, UserCode.NO_SUCH_USER, null);
+//                responseEntity.error(UserCode.NO_EXIST, UserCode.NO_SUCH_USER, null);
+                responseEntity.serverError();
             } else {
                 user.setIntegration(integration);
                 userInfoService.update(user);
-                responseEntity.success(UserCode.SUCCESS_OPERATION, UserCode.SUCCESS_MSG, null);
+                responseEntity.success( null);
             }
         }
         return responseEntity;
@@ -279,15 +290,18 @@ public class UserController {
         ResponseEntity responseEntity = new ResponseEntity();
         User user = userInfoService.getUser(userId);
         if (user == null) {
-            responseEntity.error(UserCode.NO_EXIST, UserCode.NO_SUCH_USER, null);
+//            responseEntity.error(UserCode.NO_EXIST, UserCode.NO_SUCH_USER, null);
+            responseEntity.serverError();
         } else {
+
             if (user.getWxId() != null) {
-                responseEntity.error(UserCode.ERROR_PARAMS, UserCode.INVALID_DATA, null);
+//                responseEntity.error(UserCode.ERROR_PARAMS, UserCode.INVALID_DATA, null);
+                responseEntity.serverError();
             } else {
                 user.setWxId(wxId);
                 user.setGmtModified(new Date());
                 userInfoService.update(user);
-                responseEntity.success(UserCode.SUCCESS_OPERATION, UserCode.SUCCESS_MSG, null);
+                responseEntity.success(null);
             }
         }
         return responseEntity;

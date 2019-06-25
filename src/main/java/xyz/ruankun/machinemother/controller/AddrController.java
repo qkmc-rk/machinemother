@@ -37,10 +37,11 @@ public class AddrController {
         User user = userInfoService.getUser(userId);
         ResponseEntity responseEntity = new ResponseEntity();
         if (user == null) {
-            responseEntity.error(UserCode.NO_EXIST, UserCode.NO_SUCH_USER, null);
+//            responseEntity.error(UserCode.NO_EXIST, UserCode.NO_SUCH_USER, null);
+           responseEntity.serverError();
         } else {
             List<Addr> addrs = addrService.myAddr(userId);
-            responseEntity.success(AddrCode.SUCCESS_OPERATION, AddrCode.SUCCESS_MSG, addrs);
+            responseEntity.success( addrs);
         }
         return responseEntity;
     }
@@ -52,9 +53,10 @@ public class AddrController {
         ResponseEntity responseEntity = new ResponseEntity();
         Addr addr = addrService.getAddr(addrId);
         if (addr == null) {
-            responseEntity.error(AddrCode.NO_EXIST, AddrCode.NO_SUCH_Addr, null);
+//            responseEntity.error(AddrCode.NO_EXIST, AddrCode.NO_SUCH_Addr, null);
+            responseEntity.serverError();
         } else {
-            responseEntity.success(AddrCode.SUCCESS_OPERATION, AddrCode.SUCCESS_MSG, addr);
+            responseEntity.success( addr);
         }
         return responseEntity;
     }
@@ -66,20 +68,23 @@ public class AddrController {
         ResponseEntity responseEntity = new ResponseEntity();
         User user = userInfoService.getUser(addr.getUserId());
         if (user == null) {
-            responseEntity.error(UserCode.NO_EXIST, UserCode.NO_SUCH_USER, null);
+//            responseEntity.error(UserCode.NO_EXIST, UserCode.NO_SUCH_USER, null);
+            responseEntity.serverError();
         } else {
             List<Addr> addrs = addrService.myAddr(addr.getUserId());
             //单个用户最多只能拥有5条地址数据
             if (addrs.size() > 4) {
-                responseEntity.error(AddrCode.INVALID_OPERATION, AddrCode.INVALID_MSG, null);
+//                responseEntity.error(AddrCode.INVALID_OPERATION, AddrCode.INVALID_MSG, null);
+                responseEntity.serverError();
             } else {
                 addr.setGmtCreate(new Date());
                 addr.setGmtModefied(new Date());
                 addr = addrService.add(addr);
                 if (addr == null) {
-                    responseEntity.error(AddrCode.INVALID_OPERATION, AddrCode.INVALID_MSG, null);
+//                    responseEntity.error(AddrCode.INVALID_OPERATION, AddrCode.INVALID_MSG, null);
+                    responseEntity.serverError();
                 } else {
-                    responseEntity.success(AddrCode.SUCCESS_OPERATION, AddrCode.SUCCESS_MSG, addr);
+                    responseEntity.success( addr);
                 }
             }
         }
@@ -93,13 +98,15 @@ public class AddrController {
         Addr addr = addrService.getAddr(addrId);
         ResponseEntity responseEntity = new ResponseEntity();
         if (addr == null) {
-            responseEntity.error(AddrCode.NO_EXIST, AddrCode.NO_SUCH_Addr, null);
+//            responseEntity.error(AddrCode.NO_EXIST, AddrCode.NO_SUCH_Addr, null);
+            responseEntity.serverError();
         } else {
             int result = addrService.delete(addrId);
             if (result < 0) {
-                responseEntity.success(AddrCode.SUCCESS_OPERATION, AddrCode.SUCCESS_MSG, null);
+                responseEntity.success( null);
             } else {
-                responseEntity.error(AddrCode.INVALID_OPERATION, AddrCode.INVALID_MSG, null);
+//                responseEntity.error(AddrCode.INVALID_OPERATION, AddrCode.INVALID_MSG, null);
+                responseEntity.serverError();
             }
         }
         return responseEntity;

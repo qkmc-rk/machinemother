@@ -4,7 +4,7 @@ import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 
 import javax.persistence.*;
-import java.sql.Date;
+import java.util.Date;
 
 @Entity
 @Table(name = "mm_product")

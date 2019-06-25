@@ -4,8 +4,10 @@ import org.springframework.stereotype.Service;
 import xyz.ruankun.machinemother.entity.Addr;
 import xyz.ruankun.machinemother.repository.AddrRepository;
 import xyz.ruankun.machinemother.service.AddrService;
+import xyz.ruankun.machinemother.util.EntityUtil;
 
 import javax.annotation.Resource;
+import java.util.Date;
 import java.util.List;
 
 @Service
@@ -17,9 +19,13 @@ public class AddrServiceImpl implements AddrService {
     @Override
     public Addr update(Addr addr) {
         Addr check = getAddr(addr.getId());
-        if(check == null)
+        if (check == null)
             return null;
-        return addrRepository.save(addr);
+        else {
+            addr.setGmtModefied(new Date());
+            EntityUtil.update(addr, check);     //更新数据
+            return addrRepository.save(addr);
+        }
     }
 
     @Override
@@ -40,7 +46,7 @@ public class AddrServiceImpl implements AddrService {
     @Override
     public int delete(int id) {
         Addr addr = getAddr(id);
-        if(addr == null)
+        if (addr == null)
             return -1;
         return addrRepository.deleteById(id);
     }

@@ -18,6 +18,7 @@ import xyz.ruankun.machinemother.entity.User;
 import xyz.ruankun.machinemother.repository.UserRepository;
 import xyz.ruankun.machinemother.service.UserInfoService;
 import xyz.ruankun.machinemother.util.Constant;
+import xyz.ruankun.machinemother.util.EntityUtil;
 import xyz.ruankun.machinemother.util.MD5Util;
 import xyz.ruankun.machinemother.vo.weixin.WxServerResult;
 
@@ -259,8 +260,15 @@ public class UserInfoServiceImpl implements UserInfoService {
 
     @Override
     public User update(User user) {
-        user.setGmtModified(new Date());
-        return userRepository.save(user);
+        User check = getUser(user.getId());
+        if(check == null){
+            return null;
+        }else {
+            EntityUtil.update(user, check);
+            user.setGmtModified(new Date());
+            System.out.println(user);
+            return userRepository.save(user);
+        }
     }
 
 }

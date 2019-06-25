@@ -8,8 +8,10 @@ import xyz.ruankun.machinemother.repository.DictProductTypeRepository;
 import xyz.ruankun.machinemother.repository.ProductPropsRepository;
 import xyz.ruankun.machinemother.repository.ProductRepository;
 import xyz.ruankun.machinemother.service.ProductService;
+import xyz.ruankun.machinemother.util.EntityUtil;
 
 import javax.annotation.Resource;
+import java.util.Date;
 import java.util.List;
 
 @Service
@@ -46,10 +48,13 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public Boolean updateProduct(Product product) {
-        if(getProduct(product.getId()) == null){
+        Product check = getProduct(product.getId());
+        if(check == null){
             return false;
         }else{
             try {
+                product.setGmtModefied(new Date());
+                EntityUtil.update(product, check );
                 productRepository.save(product);
                 return true;
             }catch (Exception e){

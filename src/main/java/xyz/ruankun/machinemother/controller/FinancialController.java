@@ -169,7 +169,7 @@ public class FinancialController {
 
     //用户提现相关的API
     //1.用户发起提现    2.管理员查询提现记录   3.用户查询自己的提现记录   4.管理员确认提现   5.管理员拒绝提现
-
+    //  1.commission/withdraw   2.
 
 
 }

@@ -73,7 +73,6 @@ public class ProductController {
     }
 
     @GetMapping(value = {"", "/"})
-    @Authentication(pass = false)       //所有用户类型都可调用，但是对于出匿名外的用户还需进行token更新
     @ApiOperation(value = "[匿名]获取所有服务产品信息")
     public ResponseEntity getAll() {
         List<Product> products = productService.getProducts();
@@ -86,7 +85,6 @@ public class ProductController {
     }
 
     @GetMapping(value = "/type/{id}")
-    @Authentication(pass = false)       //所有用户类型都可调用，但是对于出匿名外的用户还需进行token更新
     @ApiOperation(value = "[匿名]根据类型的id获取某个类型的所有产品")
     public ResponseEntity getProducts(@PathVariable(value = "id") Integer id) {
         DictProductType dictProductType = productService.getProductType(id);
@@ -104,7 +102,6 @@ public class ProductController {
     }
 
     @GetMapping(value = "/{id}/props")
-    @Authentication(pass = false)       //所有用户类型都可调用，但是对于出匿名外的用户还需进行token更新
     @ApiOperation(value = "[匿名]获取某产品的所有可选属性，列表")
     public ResponseEntity getProps(@PathVariable(value = "id") Integer id) {
         List<ProductProps> props = productService.getProps(id);
@@ -117,7 +114,6 @@ public class ProductController {
     }
 
     @GetMapping(value = "/{id}")
-    @Authentication(pass = false)       //所有用户类型都可调用，但是对于出匿名外的用户还需进行token更新
     @ApiOperation(value = "[匿名]获取某个产品 的详细信息")
     public ResponseEntity getProduct(@PathVariable(value = "id") Integer id) {
         Product product = productService.getProduct(id);
@@ -130,7 +126,6 @@ public class ProductController {
     }
 
     @GetMapping(value = "/type")
-    @Authentication(pass = false)       //所有用户类型都可调用，但是对于出匿名外的用户还需进行token更新
     @ApiOperation(value = "[匿名]获取产品类型列表")
     public ResponseEntity getType() {
         List<DictProductType> types = productService.getTypes();

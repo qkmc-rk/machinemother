@@ -18,7 +18,7 @@ import java.util.Date;
 @SpringBootTest
 public class TestUserInfoService {
 
-    private final Double integration = 5.5;
+    private final Integer integration = 5;
 
     private final int invitor = 1234567890;
     private final Double award = 10.00;
@@ -42,7 +42,7 @@ public class TestUserInfoService {
         user.setGmtCreate(new Date());
         user.setIntegration(integration);
         user.setInvitorId(invitor);
-        user.setAward(integration);
+        user.setAward(6.0);
         user.setAvator("/image/Rothschild");
         user.setPhone("12345654321");
         user.setWxId("Rothschild");

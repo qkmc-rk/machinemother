@@ -78,3 +78,7 @@
 ### 6月24日
 - 对所有除创建时间和修改时间的时间字段加上注解@DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")  @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
 - 对所有需要添加@RequestBody的地方添加@requestBody
+
+### 6月26日
+- weixin.notify_url=https://www.ruankun.xyz/machinemother/order/prepay/notify
+- 修改register接口，invitorid修改为requestParam

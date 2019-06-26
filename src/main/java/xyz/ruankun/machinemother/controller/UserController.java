@@ -78,7 +78,7 @@ public class UserController {
     public ResponseEntity register(@ApiParam(value = "小程序的code") @RequestParam String code,
                                    @ApiParam(value = "拉取的微信昵称") @RequestParam String name,
                                    @ApiParam(value = "微信头像地址") @RequestParam String avator,
-                                   @ApiParam(value = "邀请人的ID,扫分享码进入的小程序，则一定可以把分享者id带过来，这个非必须参数") Integer invitorId) {
+                                   @ApiParam(value = "邀请人的ID,扫分享码进入的小程序，则一定可以把分享者id带过来，这个非必须参数")@RequestParam(required = false) Integer invitorId) {
         //将数据传入userInfoService进行注册
         User user = new User();
         user.setAvator(avator);

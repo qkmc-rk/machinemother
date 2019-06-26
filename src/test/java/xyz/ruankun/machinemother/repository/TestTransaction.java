@@ -48,7 +48,7 @@ public class TestTransaction {
         user.setAvator("Jason`s avator");
         user.setWxId("Jason");
         user.setInvitorId(0);
-        user.setIntegration(101.33);
+        user.setIntegration(103);
         user.setName("Jason");
         user.setPhone("234567897654");
         user.setOpenId("JasonJason");

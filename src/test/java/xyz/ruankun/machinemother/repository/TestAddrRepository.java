@@ -18,7 +18,6 @@ public class TestAddrRepository {
 
     @Test
     public void m1(){
-//        List<Addr> addrs = addrRepository.findAllByUserId(1);
-//        System.out.println(addrs.get(0).getDetail());
+        System.out.println(Integer.valueOf(""));
     }
 }

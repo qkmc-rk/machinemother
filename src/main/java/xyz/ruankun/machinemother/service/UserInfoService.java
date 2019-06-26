@@ -50,7 +50,7 @@ public interface UserInfoService {
 
     User getUser(String openId);
 
-    User getUser(int userId);
+    User getUser(Integer userId);
 
     User getByWxId(String wxId);
 
@@ -68,5 +68,5 @@ public interface UserInfoService {
 
     int delete(String openId);
 
-    int delete(int userId);
+    Integer delete(Integer userId);
 }

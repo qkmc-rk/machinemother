@@ -59,7 +59,6 @@ public class AuthenticationAspect {
         HttpServletRequest request = ((ServletRequestAttributes)RequestContextHolder
                 .getRequestAttributes()).getRequest();
         String token = request.getHeader("token");
-        logger.info("after return token:" + token + ",token value: " + userInfoService.readDataFromRedis(token));
         if (token != null && userInfoService.readDataFromRedis(token) != null) {
             //通过token获取id值更新token有效期
             int userId = Integer.valueOf(userInfoService.readDataFromRedis(token));
@@ -87,6 +86,13 @@ public class AuthenticationAspect {
             HttpServletRequest request = ((ServletRequestAttributes)RequestContextHolder
                     .getRequestAttributes()).getRequest();
             String token = request.getHeader("token");
+            if(token == null){
+                //请求时没有token
+                //权限错误，返回错误
+                ResponseEntity responseEntity = new ResponseEntity();
+                responseEntity.success(Constant.AUTH_ERROR, "permission denied,forbidden access", null);
+                return responseEntity;
+            }
             AuthAopConstant realRole = authenticate(token);
             if (realRole == role) {
                 //权限正确，去访问吧
@@ -95,7 +101,7 @@ public class AuthenticationAspect {
                 } catch (Throwable throwable) {
                     throwable.printStackTrace();
                     ResponseEntity responseEntity = new ResponseEntity();
-                    responseEntity.success(Constant.AOP_SERVER_ERROR, "", null);
+                    responseEntity.success(Constant.AOP_SERVER_ERROR, "AOP_SERVER_ERROR", null);
                     return responseEntity;
                 }
             }else{

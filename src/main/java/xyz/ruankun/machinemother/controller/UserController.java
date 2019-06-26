@@ -135,10 +135,11 @@ public class UserController {
     @PostMapping("/{userId}")
     @Authentication(role = AuthAopConstant.ADMIN)
     @ApiOperation(value = "[管理员]更新用户数据")
-    public ResponseEntity updateUser(@RequestBody User user, @PathVariable(value = "userId") int userId) {
+    public ResponseEntity updateUser(@RequestBody User user, @PathVariable(value = "userId") Integer userId) {
         ResponseEntity responseEntity = new ResponseEntity();
-        if (userId != user.getId()) {
-            responseEntity.serverError();
+        System.out.println("已经调用修改用户方法");
+        if (!userId.equals(user.getId())) {
+            responseEntity.error(Constant.AUTH_ERROR,"userId is not equal",null);
         } else {
             user = userInfoService.update(user);
             if (user == null) {
@@ -169,13 +170,22 @@ public class UserController {
     @Authentication(role = AuthAopConstant.USER)
     @ApiOperation(value = "[用户]更新用户数据", notes = "仅可更新用户名， 手机号，以及微信id(微信id仅可更新一次，若表内不为空，则不可操作)")
     public ResponseEntity update(@RequestBody User user, @RequestHeader(value = "token") String token) {
+
+        //去除敏感信息
+        user.setInvitorId(null);
+        user.setOpenId(null);
+        user.setAward(null);
+        user.setGmtCreate(null);
+        user.setGmtModified(null);
+        user.setIntegration(null);
+
         ResponseEntity responseEntity = new ResponseEntity();
         try {
             int userId = Integer.valueOf(userInfoService.readDataFromRedis(token));
             //保证能够字符串与整数能够正确转型
             if (userId != user.getId()) {
 //                responseEntity.error(UserCode.ERROR_DATA, UserCode.INVALID_DATA, null);
-                responseEntity.serverError();
+                responseEntity.error(Constant.AUTH_ERROR,"userId is not equal",null);
             } else {
 //                User check = userInfoService.getUser(userId);
                     user = userInfoService.update(user);
@@ -202,38 +212,35 @@ public class UserController {
         try {
             int userId = Integer.valueOf(userInfoService.readDataFromRedis(token));
             User user = userInfoService.getUser(userId);
+            user.setOpenId(null);
             if (user == null) {
 //                responseEntity.error(UserCode.ERROR_DATA, UserCode.LOST_DATA, null);
                 responseEntity.serverError();
             } else {
-                responseEntity.success(null);
+                responseEntity.success(user); //之前怎么会填写null呢
             }
         } catch (Exception e) {
 //            responseEntity.error(UserCode.ERROR_PARAMS, UserCode.INVALID_DATA, null);
             responseEntity.serverError();
             e.printStackTrace();
         }
-
         return responseEntity;
     }
 
     @DeleteMapping(value = "/{userId}")
     @Authentication(role = AuthAopConstant.ADMIN)
     @ApiOperation(value = "[管理员]删除指定用户数据")
-    public ResponseEntity delete(@PathVariable(value = "userId") int userId) {
-        User user = userInfoService.getUser(userId);
+    public ResponseEntity delete(@PathVariable(value = "userId") Integer userId) {
         ResponseEntity responseEntity = new ResponseEntity();
-
+        User user = userInfoService.getUser(userId);
         if (user == null) {
-//            responseEntity.error(UserCode.NO_EXIST, UserCode.NO_SUCH_USER, null);
-            responseEntity.serverError();
+            responseEntity.error(Constant.FAILURE_CODE,"user doesn't exist",null);
         } else {
-            int result = userInfoService.delete(userId);
-            if (result < 0) {
-//                responseEntity.error(UserCode.INVALID_OPERATION, UserCode.INVALID_DATA, null);
-                responseEntity.serverError();
+            Integer rs = userInfoService.delete(userId);
+            if (rs.intValue() < 0) {
+                responseEntity.error(Constant.FAILURE_CODE,"delete failed", null);
             } else {
-                responseEntity.success(null);
+                responseEntity.success("delete successfully");
             }
         }
         return responseEntity;
@@ -246,12 +253,12 @@ public class UserController {
         User user = userInfoService.getUser(userId);
         ResponseEntity responseEntity = new ResponseEntity();
         if (user == null) {
-//            responseEntity.error(UserCode.NO_EXIST, UserCode.NO_SUCH_USER, null);
-            responseEntity.serverError();
+            responseEntity.error(UserCode.NO_EXIST, UserCode.NO_SUCH_USER, null);
+            //responseEntity.serverError();
         } else {
             if (award < 0) {
-//                responseEntity.error(UserCode.ERROR_PARAMS, UserCode.INVALID_DATA, null);
-                responseEntity.serverError();
+                responseEntity.error(UserCode.ERROR_PARAMS, UserCode.INVALID_DATA, null);
+                //responseEntity.serverError();
             } else {
                 user.setAward(award);
                 userInfoService.update(user);
@@ -264,16 +271,16 @@ public class UserController {
     @PostMapping(value = "/{userId}/integration")
     @Authentication(role = AuthAopConstant.ADMIN)
     @ApiOperation(value = "[管理员]更新用户获得积分的额度", notes = "所传入的积分数据不能小于0")
-    public ResponseEntity updateIntegration(@RequestParam(value = "integration") Integer integration, @RequestParam("userId") int userId) {
+    public ResponseEntity updateIntegration(@RequestParam(value = "integration") Integer integration, @PathVariable("userId") int userId) {
         ResponseEntity responseEntity = new ResponseEntity();
         if (integration < 0) {
-//            responseEntity.error(UserCode.ERROR_PARAMS, UserCode.INVALID_DATA, null);
-            responseEntity.serverError();
+            responseEntity.error(UserCode.ERROR_PARAMS, UserCode.INVALID_DATA, null);
+            //responseEntity.serverError();
         } else {
             User user = userInfoService.getUser(userId);
             if (user == null) {
-//                responseEntity.error(UserCode.NO_EXIST, UserCode.NO_SUCH_USER, null);
-                responseEntity.serverError();
+                responseEntity.error(UserCode.NO_EXIST, UserCode.NO_SUCH_USER, null);
+                //responseEntity.serverError();
             } else {
                 user.setIntegration(integration);
                 userInfoService.update(user);
@@ -290,13 +297,13 @@ public class UserController {
         ResponseEntity responseEntity = new ResponseEntity();
         User user = userInfoService.getUser(userId);
         if (user == null) {
-//            responseEntity.error(UserCode.NO_EXIST, UserCode.NO_SUCH_USER, null);
-            responseEntity.serverError();
+            responseEntity.error(UserCode.NO_EXIST, UserCode.NO_SUCH_USER, null);
+            //responseEntity.serverError();
         } else {
 
             if (user.getWxId() != null) {
-//                responseEntity.error(UserCode.ERROR_PARAMS, UserCode.INVALID_DATA, null);
-                responseEntity.serverError();
+                responseEntity.error(UserCode.ERROR_PARAMS, UserCode.INVALID_DATA, null);
+                //responseEntity.serverError();
             } else {
                 user.setWxId(wxId);
                 user.setGmtModified(new Date());

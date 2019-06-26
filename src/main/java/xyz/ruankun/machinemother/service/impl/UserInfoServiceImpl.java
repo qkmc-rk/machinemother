@@ -15,7 +15,10 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestTemplate;
 import xyz.ruankun.machinemother.entity.User;
+import xyz.ruankun.machinemother.entity.Wallet;
 import xyz.ruankun.machinemother.repository.UserRepository;
+import xyz.ruankun.machinemother.repository.WalletRepository;
+import xyz.ruankun.machinemother.service.FinancialService;
 import xyz.ruankun.machinemother.service.UserInfoService;
 import xyz.ruankun.machinemother.util.Constant;
 import xyz.ruankun.machinemother.util.EntityUtil;
@@ -24,6 +27,7 @@ import xyz.ruankun.machinemother.vo.weixin.WxServerResult;
 
 import javax.annotation.Resource;
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
@@ -41,6 +45,9 @@ public class UserInfoServiceImpl implements UserInfoService {
 
     @Resource
     private UserRepository userRepository;
+
+    @Autowired
+    WalletRepository walletRepository;
 
     @Value("${weixin.secret}")
     private String SECRET;
@@ -129,6 +136,7 @@ public class UserInfoServiceImpl implements UserInfoService {
     }
 
     @Override
+    @Transactional
     public Integer register(String code, User user) {
         WxServerResult wxServerResult = requestWxServerWithCode(code);
         if (wxServerResult.getErrcode() != null && wxServerResult.getErrcode().equals(Constant.WX_ERROR_CODE))
@@ -146,7 +154,18 @@ public class UserInfoServiceImpl implements UserInfoService {
         user.setOpenId(wxServerResult.getOpenid());
         User rs = userRepository.save(user);
         if (rs != null) {
-            //注册成功，将用户信息写入redis，然后直接返回用户的ID
+            //注册成功，生成钱包信息，将用户信息写入redis，然后直接返回用户的ID
+            Wallet wallet = new Wallet();
+            wallet.setCredit(0);wallet.setCommission(new BigDecimal(0));wallet.setUserId(rs.getId());
+            //保存wallet
+            try {
+                walletRepository.save(wallet);
+            } catch (Exception e) {
+                e.printStackTrace();
+                userRepository.deleteById(rs.getId());
+                return Constant.REGISTER_SERVER_ERROR;
+            }
+
             String token = MD5Util.md5(new Date().toString());
             String session_key = wxServerResult.getSession_key();
             if (updateSession(user.getId(), session_key, token, 15))
@@ -206,8 +225,11 @@ public class UserInfoServiceImpl implements UserInfoService {
     }
 
     @Override
-    public User getUser(int userId) {
-        return userRepository.findById(userId);
+    public User getUser(Integer userId) {
+        if (userId != null)
+            return userRepository.findById(userId.intValue());
+        else
+            return null;
     }
 
     @Override
@@ -245,11 +267,17 @@ public class UserInfoServiceImpl implements UserInfoService {
     }
 
     @Override
-    public int delete(int userId) {
+    public Integer delete(Integer userId) {
         User user = getUser(userId);
         if( user == null)
             return -1;
-        return userRepository.deleteById(userId);
+        try {
+            userRepository.deleteById(userId);
+            return 1;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return -1;
+        }
     }
 
     @Override
@@ -260,13 +288,15 @@ public class UserInfoServiceImpl implements UserInfoService {
 
     @Override
     public User update(User user) {
+        logger.info("要修改的user的参数：" + user.toString());
         User check = getUser(user.getId());
         if(check == null){
             return null;
         }else {
             EntityUtil.update(user, check);
+            logger.info("修改后的user的参数：" + user.toString());
             user.setGmtModified(new Date());
-            System.out.println(user);
+            System.out.println(" ????? " + user);
             return userRepository.save(user);
         }
     }

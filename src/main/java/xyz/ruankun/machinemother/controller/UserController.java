@@ -133,9 +133,9 @@ public class UserController {
     }
 
     @PostMapping("/{userId}")
-//    @Authentication(role = AuthAopConstant.ADMIN)
+    @Authentication(role = AuthAopConstant.ADMIN)
     @ApiOperation(value = "[管理员]更新用户数据")
-    public ResponseEntity updateUser(User user, @PathVariable(value = "userId") int userId) {
+    public ResponseEntity updateUser(@RequestBody User user, @PathVariable(value = "userId") int userId) {
         ResponseEntity responseEntity = new ResponseEntity();
         if (userId != user.getId()) {
             responseEntity.serverError();
@@ -168,7 +168,7 @@ public class UserController {
     @PostMapping(value = "/userInfo")
     @Authentication(role = AuthAopConstant.USER)
     @ApiOperation(value = "[用户]更新用户数据", notes = "仅可更新用户名， 手机号，以及微信id(微信id仅可更新一次，若表内不为空，则不可操作)")
-    public ResponseEntity update(User user, @RequestHeader(value = "token") String token) {
+    public ResponseEntity update(@RequestBody User user, @RequestHeader(value = "token") String token) {
         ResponseEntity responseEntity = new ResponseEntity();
         try {
             int userId = Integer.valueOf(userInfoService.readDataFromRedis(token));

@@ -82,3 +82,4 @@
 ### 6月26日
 - weixin.notify_url=https://www.ruankun.xyz/machinemother/order/prepay/notify
 - 修改register接口，invitorid修改为requestParam
+- FIX 后台token错误时返回没有验证就会出现http 500错误

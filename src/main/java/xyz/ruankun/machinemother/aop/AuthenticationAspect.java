@@ -60,7 +60,7 @@ public class AuthenticationAspect {
                 .getRequestAttributes()).getRequest();
         String token = request.getHeader("token");
         logger.info("after return token:" + token + ",token value: " + userInfoService.readDataFromRedis(token));
-        if (token != null) {
+        if (token != null && userInfoService.readDataFromRedis(token) != null) {
             //通过token获取id值更新token有效期
             int userId = Integer.valueOf(userInfoService.readDataFromRedis(token));
             String sessionKey = userInfoService.readDataFromRedis("session_key" + userId);

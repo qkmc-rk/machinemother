@@ -63,4 +63,16 @@ public interface FinancialService {
     Map<String, String> getPrepayInfo(Integer orderid, Integer userid, HttpServletRequest request);
 
     String orderNotify(HttpServletRequest request) throws Exception;
+
+    WithDraw getWithDraw(Integer id);
+
+    List<WithDraw> getWithDraws(Integer userId);
+
+    List<WithDraw> getWithDraws();
+
+    Boolean addWithDraw(WithDraw withDraw);
+
+    Boolean deleteWithDraw(Integer id);
+
+    Boolean updateWithDraw(Integer id, Boolean option);
 }

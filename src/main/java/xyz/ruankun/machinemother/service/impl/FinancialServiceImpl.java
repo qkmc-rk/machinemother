@@ -6,12 +6,14 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import xyz.ruankun.machinemother.entity.*;
 import xyz.ruankun.machinemother.repository.*;
 import xyz.ruankun.machinemother.service.FinancialService;
 import xyz.ruankun.machinemother.util.MD5Util;
 import xyz.ruankun.machinemother.util.WePayUtil;
 
+import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.BufferedOutputStream;
@@ -37,7 +39,7 @@ public class FinancialServiceImpl implements FinancialService {
     @Value("${weixin.signtype}")
     private String signtype;
     @Value("${weixin.key}")
-    private  String key;
+    private String key;
     @Value("${weixin.pay_url}")
     private String url;
 
@@ -63,6 +65,8 @@ public class FinancialServiceImpl implements FinancialService {
     ProductPropsRepository productPropsRepository;
     @Autowired
     ProductRepository productRepository;
+    @Resource
+    WithDrawRepository withDrawRepository;
 
     @Override
     public Wallet selectWallet(Integer userId) {
@@ -97,7 +101,7 @@ public class FinancialServiceImpl implements FinancialService {
     @Override
     public OrderSecret GetSecretByOrderIdAndUserId(Integer orderid, Integer userid) {
         try {
-            return orderSecretRepository.findByUserIdAndOrderid(userid,orderid);
+            return orderSecretRepository.findByUserIdAndOrderid(userid, orderid);
         } catch (Exception e) {
             e.printStackTrace();
             return null;
@@ -105,7 +109,7 @@ public class FinancialServiceImpl implements FinancialService {
     }
 
     @Override
-    public boolean confirmOrder(Integer orderid,String secret) {
+    public boolean confirmOrder(Integer orderid, String secret) {
         Order order;
         OrderSecret orderSecret;
         try {
@@ -115,7 +119,7 @@ public class FinancialServiceImpl implements FinancialService {
             e.printStackTrace();
             return false;
         }
-        if (orderSecret.getSecret() != null && orderSecret.getSecret().equals(secret)){
+        if (orderSecret.getSecret() != null && orderSecret.getSecret().equals(secret)) {
             //可以的
             order.setFinished(true);
             try {
@@ -124,7 +128,7 @@ public class FinancialServiceImpl implements FinancialService {
                 e.printStackTrace();
                 return false;
             }
-        }else{
+        } else {
             return false;
         }
         return false;
@@ -136,7 +140,7 @@ public class FinancialServiceImpl implements FinancialService {
             return decouponRepository.findAllByUserId(userid);
         } catch (Exception e) {
             e.printStackTrace();
-            return  null;
+            return null;
         }
     }
 
@@ -151,9 +155,9 @@ public class FinancialServiceImpl implements FinancialService {
             return null;
         }
         //是否使用过
-        if (decouponCDKey.getExchanged())return null;
+        if (decouponCDKey.getExchanged()) return null;
         //是否过期
-        if (decouponCDKey.getGmtPast().getTime() < new Date().getTime()){
+        if (decouponCDKey.getGmtPast().getTime() < new Date().getTime()) {
             //过期了，不能再兑换了
             decouponCDKey.setPast(true);
             decouponCDKeyRepository.saveAndFlush(decouponCDKey);
@@ -161,7 +165,7 @@ public class FinancialServiceImpl implements FinancialService {
         }
         //未过期
         decouponCDKey.setExchanged(true);
-        Decoupon decoupon = getDecouponWithDecouponCDKey(decouponCDKey,userid);
+        Decoupon decoupon = getDecouponWithDecouponCDKey(decouponCDKey, userid);
         //同时保存到数据库
         try {
             decouponCDKeyRepository.saveAndFlush(decouponCDKey);
@@ -176,10 +180,10 @@ public class FinancialServiceImpl implements FinancialService {
     public List<DecouponCDKey> generateDecouponCDKey(Integer totalNum, Decoupon decoupon) {
         List<DecouponCDKey> decouponCDKeys = new ArrayList<>();
         DecouponCDKey decouponCDKey;
-        do{
+        do {
             decouponCDKeys.add(getDecouponCDKeyWithDecoupon(decoupon));
 
-        }while(--totalNum > 0);
+        } while (--totalNum > 0);
         //存数据库
         try {
             return decouponCDKeyRepository.saveAll(decouponCDKeys);
@@ -203,7 +207,7 @@ public class FinancialServiceImpl implements FinancialService {
     @Override
     public Decoupon giveDecouponToUser(Integer userid, Decoupon decoupon) {
         try {
-            Decoupon decoupon1 = decouponCopy(decoupon,userid);
+            Decoupon decoupon1 = decouponCopy(decoupon, userid);
             return decouponRepository.save(decoupon1);
 
         } catch (Exception e) {
@@ -218,10 +222,10 @@ public class FinancialServiceImpl implements FinancialService {
         List<User> users = userRepository.findAll();
         List<Decoupon> decoupons = new ArrayList<>();
         Decoupon decoupon1;
-        for (User u:
-             users) {
+        for (User u :
+                users) {
             //每个用户都生成一个Decoupon
-            decoupon1 = decouponCopy(decoupon,u.getId());
+            decoupon1 = decouponCopy(decoupon, u.getId());
             decoupons.add(decoupon1);
             //清空
             decoupon1 = null;
@@ -237,18 +241,18 @@ public class FinancialServiceImpl implements FinancialService {
 
     @Override
     public Map<String, String> getPrepayInfo(Integer orderid, Integer userid, HttpServletRequest request) {
-        Map<String,String> rs = new HashMap<>();
+        Map<String, String> rs = new HashMap<>();
         //确认订单是否符合用户
-        if(!orderRepository.findById(orderid).isPresent()){
+        if (!orderRepository.findById(orderid).isPresent()) {
             //订单没有
-            rs.put("error","错误,没有找到符合的订单");
+            rs.put("error", "错误,没有找到符合的订单");
         }
         Order order = orderRepository.findById(orderid).get();
-        if (userid.intValue() != order.getUserId().intValue()){
-            rs.put("error","错误,订单存在，但不是该用户的订单");
+        if (userid.intValue() != order.getUserId().intValue()) {
+            rs.put("error", "错误,订单存在，但不是该用户的订单");
         }
-        if (order.getPaid()){
-            rs.put("error","错误,订单已经支付，无法再次支付");
+        if (order.getPaid()) {
+            rs.put("error", "错误,订单已经支付，无法再次支付");
         }
         //拿到和订单相关的所有信息
         String orderNum = order.getOrderNumber();//订单号
@@ -270,19 +274,19 @@ public class FinancialServiceImpl implements FinancialService {
         //拿去优惠券和积分
         BigDecimal credit = order.getCredit();  //积分
         Decoupon decoupon = null;
-        if (!decouponRepository.findById(order.getDecouponId()).isPresent()){
-            rs.put("error","错误,订单所使用的优惠券信息有误，无效订单");
+        if (!decouponRepository.findById(order.getDecouponId()).isPresent()) {
+            rs.put("error", "错误,订单所使用的优惠券信息有误，无效订单");
         }
-        decoupon=decouponRepository.findById(order.getDecouponId()).get();
-        if (originAmount.compareTo(decoupon.getMin()) > 0){
-            rs.put("error","错误,所使用的优惠券明显不符合要求,订单支付拉起失败");
+        decoupon = decouponRepository.findById(order.getDecouponId()).get();
+        if (originAmount.compareTo(decoupon.getMin()) > 0) {
+            rs.put("error", "错误,所使用的优惠券明显不符合要求,订单支付拉起失败");
         }
         BigDecimal decouponAmount = decoupon.getWorth();
         //把所有金额全部转换成分
-        Integer originAmountFen = (int)originAmount.floatValue()*100;
-        Integer newOriginAmountFen = (int)(order.getAmount().floatValue()*100 + credit.floatValue() + decouponAmount.floatValue()*100);
-        if (originAmountFen.intValue() != newOriginAmountFen.intValue()){
-            rs.put("error","订单金额有误，无法下单！");
+        Integer originAmountFen = (int) originAmount.floatValue() * 100;
+        Integer newOriginAmountFen = (int) (order.getAmount().floatValue() * 100 + credit.floatValue() + decouponAmount.floatValue() * 100);
+        if (originAmountFen.intValue() != newOriginAmountFen.intValue()) {
+            rs.put("error", "订单金额有误，无法下单！");
         }
 
         /*-----------------------分割线-------------------------*/
@@ -291,8 +295,8 @@ public class FinancialServiceImpl implements FinancialService {
         //商品名称
         String body = "机器妈服务-";
         List<Integer> ids2 = new ArrayList<>();
-        for (Item i:
-             items) {
+        for (Item i :
+                items) {
             ids2.add(i.getProductId());
         }
         List<Product> products = productRepository.findAllById(ids2);
@@ -309,7 +313,7 @@ public class FinancialServiceImpl implements FinancialService {
         packageParams.put("nonce_str", nonce_str);
         packageParams.put("body", body);
         packageParams.put("out_trade_no", orderNum + "");//商户订单号,自己的订单ID
-        packageParams.put("total_fee", (int)(amountYuan.floatValue()*100) + "");//支付金额，这边需要转成字符串类型，否则后面的签名会失败
+        packageParams.put("total_fee", (int) (amountYuan.floatValue() * 100) + "");//支付金额，这边需要转成字符串类型，否则后面的签名会失败
         packageParams.put("spbill_create_ip", spbill_create_ip);
         packageParams.put("notify_url", notify_url);//支付成功后的回调地址
         packageParams.put("trade_type", tradetype);//支付方式
@@ -319,14 +323,14 @@ public class FinancialServiceImpl implements FinancialService {
         } catch (Exception e) {
             e.printStackTrace();
             //获取用户时出现了问题，无法进行相关交易
-            rs.put("error","获取用户信息时出现了问题，无法完成交易");
+            rs.put("error", "获取用户信息时出现了问题，无法完成交易");
         }
         packageParams.put("openid", user.getOpenId() + "");//用户的openID，自己获取
 
         String prestr = WePayUtil.createLinkString(packageParams);
-        String mysign =WePayUtil.sign(prestr,key,"utf-8");
+        String mysign = WePayUtil.sign(prestr, key, "utf-8");
 
-        packageParams.put("sign",mysign);
+        packageParams.put("sign", mysign);
         String xml = null;
         Map map = null;
 
@@ -334,11 +338,11 @@ public class FinancialServiceImpl implements FinancialService {
             xml = WePayUtil.mapToXml(packageParams);
         } catch (Exception e) {
             e.printStackTrace();
-            rs.put("error","生成数据时抛出异常");
+            rs.put("error", "生成数据时抛出异常");
             return null;
         }
         //调用统一下单地址
-        String result = WePayUtil.httpRequest(url,"POST",xml);
+        String result = WePayUtil.httpRequest(url, "POST", xml);
         try {
             map = WePayUtil.xmlToMap(result);
         } catch (Exception e) {
@@ -365,7 +369,7 @@ public class FinancialServiceImpl implements FinancialService {
             response.put("paySign", paySign);
         }
 
-        response.put("appid",appid);
+        response.put("appid", appid);
         return response;
     }
 
@@ -388,7 +392,7 @@ public class FinancialServiceImpl implements FinancialService {
         String returnCode = (String) map.get("return_code");
         if ("SUCCESS".equals(returnCode)) {
             //如果微信发来的sign没有问题就会执行用户的业务逻辑代码
-            if(WePayUtil.verifyWeixinNotify(map,key)){
+            if (WePayUtil.verifyWeixinNotify(map, key)) {
                 //重复回调是什么鬼？暂时不予考虑
                 //拿到订单号，然后把对应订单标记为已完成状态。
                 String orderNumber = (String) map.get("out_trade_no");
@@ -404,33 +408,147 @@ public class FinancialServiceImpl implements FinancialService {
                 }
                 if (order != null) order.setPaid(true);
                 Order order2 = orderRepository.saveAndFlush(order);
-                if (order2 != null && order2.getPaid()){
+                if (order2 != null && order2.getPaid()) {
                     //通知微信回调业务已经完成成功
                     resXml = WePayUtil.NOTIFY_SUCCESS;
                     logger.error(resXml);
-                }else{
+                } else {
                     //通知微信服务器回调遇到错误(保存订单状态时遇到错误)，业务出现错误
                     resXml = WePayUtil.NOTIFY_FAIL_SERVER_ERROR;
                     logger.error(resXml);
                 }
 
-            }else {
+            } else {
                 resXml = WePayUtil.NOTIFY_FAIL_UNKNOWN_DATA;
                 logger.error(resXml);
             }
-        }else{
+        } else {
             resXml = WePayUtil.NOTIFY_FAIL_WRONG_RETURN_CODE;
         }
         return resXml;
+    }
+
+    @Override
+    public WithDraw getWithDraw(Integer id) {
+        return withDrawRepository.getOne(id);
+    }
+
+    @Override
+    public List<WithDraw> getWithDraws(Integer userId) {
+        return withDrawRepository.findByUserid(userId);
+    }
+
+    @Override
+    public List<WithDraw> getWithDraws() {
+        return withDrawRepository.findAll();
+    }
+
+    /**
+     * 提交提现则先扣除wallet中的部分金额
+     *
+     * @param withDraw
+     * @return
+     */
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public Boolean addWithDraw(WithDraw withDraw) {
+        Wallet wallet = selectWallet(withDraw.getUserid());
+        if (wallet == null) {
+            return false;
+        } else {
+            BigDecimal commission = wallet.getCommission().subtract(withDraw.getAmount());
+            //若wallet中的余额不足以支持此次提现，则返回失败
+            if (commission.doubleValue() < 0) {
+                return false;
+            } else {
+                //满足则将wallet数据减少
+                wallet.setCommission(commission);
+                wallet.setGmtModified(new Date());
+                withDraw.setGmtCreate(new Date());
+                try {
+                    walletRepository.save(wallet);      //若后续提现失败则需重新添加
+                    withDrawRepository.save(withDraw);
+                    return true;
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    return false;
+                }
+            }
+        }
+    }
+
+    @Override
+    public Boolean deleteWithDraw(Integer id) {
+        try {
+            return withDrawRepository.deleteById(id.intValue());
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    /**
+     * 若为真则说明提现成功， 反则失败，为wallet添加回相应的提现金额
+     *
+     * @param id
+     * @param option
+     * @return
+     */
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public Boolean updateWithDraw(Integer id, Boolean option) {
+        WithDraw withDraw = getWithDraw(id);
+        if (withDraw == null) {
+            return false;
+        } else {
+            withDraw.setGmtModified(new Date());
+            if (option) {
+                //确认则创建佣金使用记录，本应与佣金扣除时创建该记录数据，但为设置外键，无法更具提现记录查找佣金记录
+                withDraw.setConfirm(true);
+                CommissionRecord record = new CommissionRecord();
+                record.setAmount(withDraw.getAmount());
+                record.setGmtCreate(new Date());
+                record.setSave(false);
+                record.setUserId(withDraw.getUserid());
+                try {
+                    commissionRecordRepository.save(record);
+                    withDrawRepository.save(withDraw);
+                    return true;
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    return false;
+                }
+            } else {
+                //拒绝则不生成佣金使用记录，且归还原先提现请求时扣除的佣金金额
+                try {
+                    Wallet wallet = selectWallet(withDraw.getUserid());
+                    if (wallet == null) {
+                        return false;
+                    } else {
+                        BigDecimal commission = wallet.getCommission().add(withDraw.getAmount());
+                        wallet.setCommission(commission);
+                        wallet.setGmtModified(new Date());
+                        withDraw.setFailed(true);
+                        withDrawRepository.save(withDraw);
+                        walletRepository.save(wallet);
+                        return true;
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    return false;
+                }
+            }
+        }
     }
 
     /**
      * 用于把复制对象
      * 这是一种低效率的方法，
      * 可以使用cglib的属性复制器
+     *
      * @param decouponCDKey
      */
-    private Decoupon getDecouponWithDecouponCDKey(DecouponCDKey decouponCDKey,Integer userid){
+    private Decoupon getDecouponWithDecouponCDKey(DecouponCDKey decouponCDKey, Integer userid) {
         Decoupon decoupon = new Decoupon();
         decoupon.setFromexchange(true);
         decoupon.setMin(decouponCDKey.getMin());
@@ -440,7 +558,8 @@ public class FinancialServiceImpl implements FinancialService {
         decoupon.setWorth(decouponCDKey.getWorth());
         return decoupon;
     }
-    private DecouponCDKey getDecouponCDKeyWithDecoupon(Decoupon decoupon){
+
+    private DecouponCDKey getDecouponCDKeyWithDecoupon(Decoupon decoupon) {
         DecouponCDKey decouponCDKey = new DecouponCDKey();
         decouponCDKey.setCdkey(MD5Util.md5(MD5Util.randStr()));
         decouponCDKey.setExchanged(false);
@@ -452,7 +571,7 @@ public class FinancialServiceImpl implements FinancialService {
         return decouponCDKey;
     }
 
-    private Decoupon decouponCopy(Decoupon decoupon,Integer userid){
+    private Decoupon decouponCopy(Decoupon decoupon, Integer userid) {
         Decoupon decoupon1 = new Decoupon();
         decoupon1.setWorth(decoupon.getWorth());
         decoupon1.setUserid(userid);
@@ -469,7 +588,7 @@ public class FinancialServiceImpl implements FinancialService {
     //获取IP
     private String getIpAddr(HttpServletRequest request) {
         String ip = request.getHeader("X-Forwarded-For");
-        if (ip != null && !ip.equals("")  && !"unKnown".equalsIgnoreCase(ip)) {
+        if (ip != null && !ip.equals("") && !"unKnown".equalsIgnoreCase(ip)) {
             //多次反向代理后会有多个ip值，第一个ip才是真实ip
             int index = ip.indexOf(",");
             if (index != -1) {
@@ -479,9 +598,11 @@ public class FinancialServiceImpl implements FinancialService {
             }
         }
         ip = request.getHeader("X-Real-IP");
-        if (ip != null && !ip.equals("")  && !"unKnown".equalsIgnoreCase(ip)) {
+        if (ip != null && !ip.equals("") && !"unKnown".equalsIgnoreCase(ip)) {
             return ip;
         }
         return request.getRemoteAddr();
     }
+
+
 }

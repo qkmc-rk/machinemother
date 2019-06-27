@@ -11,7 +11,6 @@ import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestTemplate;
 import xyz.ruankun.machinemother.entity.User;
@@ -29,7 +28,6 @@ import javax.annotation.Resource;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.Date;
-import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 @Service
@@ -261,7 +259,7 @@ public class UserInfoServiceImpl implements UserInfoService {
     @Override
     public int delete(String openId) {
         User user = getUser(openId);
-        if(user == null)
+        if (user == null)
             return -1;
         return userRepository.deleteByOpenId(openId);
     }
@@ -269,7 +267,7 @@ public class UserInfoServiceImpl implements UserInfoService {
     @Override
     public Integer delete(Integer userId) {
         User user = getUser(userId);
-        if( user == null)
+        if (user == null)
             return -1;
         try {
             userRepository.deleteById(userId);

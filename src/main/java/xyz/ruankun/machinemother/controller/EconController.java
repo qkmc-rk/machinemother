@@ -17,10 +17,8 @@ import xyz.ruankun.machinemother.service.UserInfoService;
 import xyz.ruankun.machinemother.util.constant.AuthAopConstant;
 import xyz.ruankun.machinemother.vo.ResponseEntity;
 
-import javax.validation.constraints.AssertFalse;
 import java.util.Date;
 import java.util.List;
-import java.util.Map;
 
 @RestController
 @CrossOrigin
@@ -156,7 +154,7 @@ public class EconController {
     @GetMapping(value = "/user/{userId}/orders")
     @Authentication(role = AuthAopConstant.ADMIN)
     @ApiOperation(value = "[管理员]通过用户id查询所有order")
-    public ResponseEntity getOrders(@PathVariable(value = "userId") Integer userId) {
+    public ResponseEntity getOrder(@PathVariable(value = "userId") Integer userId) {
         List<Order> orders = econService.getOrders(userId);
         return ControllerUtil.getDataResult(orders);
     }

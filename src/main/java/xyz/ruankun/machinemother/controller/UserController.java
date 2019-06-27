@@ -237,7 +237,7 @@ public class UserController {
             responseEntity.error(Constant.FAILURE_CODE,"user doesn't exist",null);
         } else {
             Integer rs = userInfoService.delete(userId);
-            if (rs.intValue() < 0) {
+            if (rs < 0) {
                 responseEntity.error(Constant.FAILURE_CODE,"delete failed", null);
             } else {
                 responseEntity.success("delete successfully");

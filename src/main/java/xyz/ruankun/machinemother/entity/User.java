@@ -131,20 +131,4 @@ public class User implements Serializable {
         this.gmtModified = gmtModified;
     }
 
-    @Override
-    public String toString() {
-        return "User{" +
-                "id=" + id +
-                ", openId=" + openId +
-                ", name='" + name + '\'' +
-                ", gmtCreate=" + gmtCreate +
-                ", invitorId=" + invitorId +
-                ", phone='" + phone + '\'' +
-                ", avator='" + avator + '\'' +
-                ", award=" + award +
-                ", integration=" + integration +
-                ", wxId='" + wxId + '\'' +
-                ", gmtModified=" + gmtModified +
-                '}';
-    }
 }

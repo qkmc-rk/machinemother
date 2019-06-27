@@ -34,7 +34,7 @@ public interface UserRepository extends JpaRepository<User, Integer> {
 
     int deleteByInvitorId(int invitorId);
 
-    Page<User> findByInvitorId( int invitorId, Pageable pageable);
+    Page<User> findByInvitorId(int invitorId, Pageable pageable);
 
     Page<User> findAll(Pageable pageable);
 

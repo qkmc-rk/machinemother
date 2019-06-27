@@ -43,7 +43,7 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public Product getProduct(int id) {
-        return productRepository.getOne(id);
+        return productRepository.findById(id);
     }
 
     @Override
@@ -53,7 +53,7 @@ public class ProductServiceImpl implements ProductService {
             return false;
         }else{
             try {
-                product.setGmtModefied(new Date());
+                product.setGmtModified(new Date());
                 EntityUtil.update(product, check );
                 productRepository.save(product);
                 return true;

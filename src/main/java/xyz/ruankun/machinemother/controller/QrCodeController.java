@@ -13,7 +13,6 @@ import xyz.ruankun.machinemother.util.Constant;
 import xyz.ruankun.machinemother.util.constant.AuthAopConstant;
 import xyz.ruankun.machinemother.vo.ResponseEntity;
 
-import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 @RestController

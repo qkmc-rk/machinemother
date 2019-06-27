@@ -26,7 +26,7 @@ public class Product {
     @Column(name = "gmt_create")
     private Date gmtCreate;
     @Column(name = "gmt_modified")
-    private Date gmtModefied;
+    private Date gmtModified;
 
     public Integer getId() {
         return id;
@@ -68,11 +68,11 @@ public class Product {
         this.gmtCreate = gmtCreate;
     }
 
-    public Date getGmtModefied() {
-        return gmtModefied;
+    public Date getGmtModified() {
+        return gmtModified;
     }
 
-    public void setGmtModefied(Date gmtModefied) {
-        this.gmtModefied = gmtModefied;
+    public void setGmtModified(Date gmtModified) {
+        this.gmtModified = gmtModified;
     }
 }

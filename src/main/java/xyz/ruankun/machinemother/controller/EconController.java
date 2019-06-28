@@ -143,7 +143,6 @@ public class EconController {
     @PostMapping(value = "/order/{orderId}")
     @Authentication(role = AuthAopConstant.ADMIN)
     @ApiOperation(value = "[管理员]确认order完成， 从用户获取orderSecret")
-    @Deprecated
     public ResponseEntity verifyOrder(@RequestParam(value = "orderSecret") String orderSecret,
                                       @RequestParam(value = "password") String password,
                                       @PathVariable(value = "orderId") Integer orderId) {

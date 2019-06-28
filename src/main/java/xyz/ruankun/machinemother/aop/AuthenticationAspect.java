@@ -102,6 +102,7 @@ public class AuthenticationAspect {
                     throwable.printStackTrace();
                     ResponseEntity responseEntity = new ResponseEntity();
                     responseEntity.success(Constant.AOP_SERVER_ERROR, "AOP_SERVER_ERROR", null);
+                    logger.error("aop鉴权完成，但是程序执行出错");
                     return responseEntity;
                 }
             }else{

@@ -39,6 +39,9 @@ public class Comment {
     @Column(name = "is_rcmd")
     private Boolean isRcmd;
 
+    @Transient
+    private String title;
+
     public Integer getId() {
         return id;
     }
@@ -125,5 +128,21 @@ public class Comment {
 
     public void setRcmd(Boolean rcmd) {
         isRcmd = rcmd;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
     }
 }

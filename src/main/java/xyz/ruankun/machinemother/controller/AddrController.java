@@ -32,7 +32,7 @@ public class AddrController {
     @GetMapping(value = {"", "/"})
     @Authentication(role = AuthAopConstant.USER)
     @ApiOperation(value = "[用户]获取制定获取的所有收货地址信息", notes = "确保传入的是有效的用户id值")
-    public ResponseEntity getUserAddrs(@RequestParam(value = "userId") int userId) {
+    public ResponseEntity getUserAddrs(@RequestParam(value = "userId") Integer userId) {
         User user = userInfoService.getUser(userId);
         ResponseEntity responseEntity = new ResponseEntity();
         if (user == null) {
@@ -77,7 +77,7 @@ public class AddrController {
                 responseEntity.serverError();
             } else {
                 addr.setGmtCreate(new Date());
-                addr.setGmtModefied(new Date());
+                addr.setGmtModified(new Date());
                 addr = addrService.add(addr);
                 if (addr == null) {
 //                    responseEntity.error(AddrCode.INVALID_OPERATION, AddrCode.INVALID_MSG, null);

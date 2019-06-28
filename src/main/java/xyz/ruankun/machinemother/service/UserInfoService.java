@@ -52,6 +52,8 @@ public interface UserInfoService {
 
     User getUser(Integer userId);
 
+    List<User> getUsers(Integer userId);
+
     User getByWxId(String wxId);
 
     User getByPhone(String phone);

@@ -28,6 +28,7 @@ import javax.annotation.Resource;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.Date;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 @Service
@@ -154,6 +155,7 @@ public class UserInfoServiceImpl implements UserInfoService {
         if (rs != null) {
             //注册成功，生成钱包信息，将用户信息写入redis，然后直接返回用户的ID
             Wallet wallet = new Wallet();
+            wallet.setGmtModified(new Date());
             wallet.setCredit(0);wallet.setCommission(new BigDecimal(0));wallet.setUserId(rs.getId());
             //保存wallet
             try {
@@ -224,10 +226,12 @@ public class UserInfoServiceImpl implements UserInfoService {
 
     @Override
     public User getUser(Integer userId) {
-        if (userId != null)
             return userRepository.findById(userId.intValue());
-        else
-            return null;
+    }
+
+    @Override
+    public List<User> getUsers(Integer userId) {
+        return userRepository.findByInvitorId(userId);
     }
 
     @Override

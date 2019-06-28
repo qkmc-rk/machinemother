@@ -2,6 +2,7 @@ package xyz.ruankun.machinemother.entity;
 
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
+import org.springframework.data.jpa.repository.Query;
 
 import javax.persistence.*;
 import java.util.Date;
@@ -24,6 +25,9 @@ public class Recommend {
     private Date gmtCreate;
     @Column(name = "gmt_modified")
     private Date gmtModified;
+
+    @Transient
+    private String title;
 
     public Integer getId() {
         return id;
@@ -63,5 +67,13 @@ public class Recommend {
 
     public void setGmtModified(Date gmtModified) {
         this.gmtModified = gmtModified;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
     }
 }

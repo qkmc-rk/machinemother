@@ -7,13 +7,17 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import xyz.ruankun.machinemother.entity.Advertisement;
 import xyz.ruankun.machinemother.entity.Banner;
+import xyz.ruankun.machinemother.entity.Product;
 import xyz.ruankun.machinemother.entity.Recommend;
 import xyz.ruankun.machinemother.repository.AdvertisementRepository;
 import xyz.ruankun.machinemother.repository.BannerRepository;
+import xyz.ruankun.machinemother.repository.ProductRepository;
 import xyz.ruankun.machinemother.repository.RecommendRepository;
 import xyz.ruankun.machinemother.service.HomeService;
 import xyz.ruankun.machinemother.util.QiNiuFileUtil;
 
+import javax.annotation.Resource;
+import java.util.Iterator;
 import java.util.List;
 
 @Service
@@ -27,6 +31,8 @@ public class HomeServiceImpl implements HomeService {
     AdvertisementRepository advertisementRepository;
     @Autowired
     RecommendRepository recommendRepository;
+    @Resource
+    private ProductRepository productRepository;
 
     @Override
     public List<Banner> getAllVisibleBanner() {
@@ -44,7 +50,7 @@ public class HomeServiceImpl implements HomeService {
         banner.setProductId(productId);
 
         String imageSrc = QiNiuFileUtil.uploadImageToQiNiu(image);
-        if (imageSrc == null){
+        if (imageSrc == null) {
             logger.error("上传图片遇到一些错误,不能插入banner到数据库");
             return false;
         }
@@ -72,7 +78,7 @@ public class HomeServiceImpl implements HomeService {
     }
 
     @Override
-    public boolean alterBanner(Integer id,Banner banner) {
+    public boolean alterBanner(Integer id, Banner banner) {
         try {
             bannerRepository.saveAndFlush(banner);
         } catch (Exception e) {
@@ -130,8 +136,26 @@ public class HomeServiceImpl implements HomeService {
 
     @Override
     public List<Recommend> getAllRecommend() {
+        List<Recommend> recommends = null;
         try {
-            return recommendRepository.findAll();
+            recommends = recommendRepository.findAll();
+            if (recommends == null) {
+                logger.error("lzzscl，查找失败");
+                return null;
+            } else {
+                Iterator<Recommend> iterator = recommends.iterator();
+                while (iterator.hasNext()) {
+                    Recommend recommend = iterator.next();
+                    Product product = productRepository.findById(recommend.getProductId()).get();
+                    if (product == null) {
+                        logger.error("没有product，内部有错误数据" + recommend.getId() + "," + iterator.next().getProductId());
+                        iterator.remove();
+                    } else {
+                        recommend.setTitle(product.getTitle());
+                    }
+                }
+            }
+            return recommends;
         } catch (Exception e) {
             e.printStackTrace();
             logger.error("操，获取主页的推荐信息居然出错了，屄了狗了");
@@ -141,12 +165,19 @@ public class HomeServiceImpl implements HomeService {
 
     @Override
     public Recommend putRecommend(Recommend recommend) {
-        try {
-            return recommendRepository.save(recommend);
-        } catch (Exception e) {
-            e.printStackTrace();
-            logger.error("唉，推荐失败");
+        Product product = productRepository.findById(recommend.getProductId()).get();
+        if (product == null) {
+            logger.error("lzzscl, 内部数据错误, productid:" + recommend.getProductId() + "不存在");
             return null;
+        } else {
+            try {
+                recommend.setTitle(product.getTitle());
+                return recommendRepository.save(recommend);
+            } catch (Exception e) {
+                e.printStackTrace();
+                logger.error("唉，推荐失败");
+                return null;
+            }
         }
     }
 

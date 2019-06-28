@@ -22,7 +22,7 @@ public class AddrServiceImpl implements AddrService {
         if (check == null)
             return null;
         else {
-            addr.setGmtModefied(new Date());
+            addr.setGmtModified(new Date());
             EntityUtil.update(addr, check);     //更新数据
             return addrRepository.save(addr);
         }

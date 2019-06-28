@@ -13,6 +13,7 @@ import xyz.ruankun.machinemother.repository.UserRepository;
 
 import javax.annotation.Resource;
 import java.util.Date;
+import java.util.List;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
@@ -69,6 +70,19 @@ public class TestUserInfoService {
         }
         System.out.println(users);
 
+    }
+
+    @Test
+    public void s(){
+//        List<User> users = userRepository.findByInvitorId(7);
+        Integer userId = null;
+        User users = userRepository.findById(userId.intValue());
+//        User users = userRepository.findOne(2);
+        if(users == null){
+            System.out.println("null");
+        }else{
+            System.out.println(users);
+        }
     }
 
 }

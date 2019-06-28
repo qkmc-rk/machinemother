@@ -18,6 +18,7 @@ import xyz.ruankun.machinemother.util.constant.AuthAopConstant;
 import xyz.ruankun.machinemother.vo.ResponseEntity;
 
 import java.util.Date;
+import java.util.List;
 
 @RestController
 @CrossOrigin
@@ -310,6 +311,21 @@ public class UserController {
                 userInfoService.update(user);
                 responseEntity.success(null);
             }
+        }
+        return responseEntity;
+    }
+
+    @GetMapping(value = "/fans")
+    @Authentication(role = AuthAopConstant.USER)
+    @ApiOperation(value = "粉丝接口")
+    public ResponseEntity fans(@RequestHeader(value = "token")String token){
+        ResponseEntity responseEntity = new ResponseEntity();
+        Integer userId = Integer.valueOf(userInfoService.readDataFromRedis(token));
+        List<User> users = userInfoService.getUsers(userId);
+        if(users == null){
+            responseEntity.serverError();
+        }else{
+            responseEntity.success(users);
         }
         return responseEntity;
     }

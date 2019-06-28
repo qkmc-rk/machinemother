@@ -1,6 +1,7 @@
 package xyz.ruankun.machinemother.entity;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -42,7 +43,11 @@ public class Addr {
     @Column(name = "gmt_modified")
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    private Date gmtModefied;
+    private Date gmtModified;
+
+    private String username;
+
+    private String phone;
 
     public Integer getId() {
         return id;
@@ -100,11 +105,28 @@ public class Addr {
         this.gmtCreate = gmtCreate;
     }
 
-    public Date getGmtModefied() {
-        return gmtModefied;
+    public Date getGmtModified() {
+        return gmtModified;
     }
 
-    public void setGmtModefied(Date gmtModefied) {
-        this.gmtModefied = gmtModefied;
+    public void setGmtModified(Date gmtModified) {
+        this.gmtModified = gmtModified;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
     }
 }
+

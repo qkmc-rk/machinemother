@@ -8,4 +8,6 @@ import java.util.List;
 public interface DecouponRepository extends JpaRepository<Decoupon, Integer> {
 
     List<Decoupon> findAllByUserId(Integer userid);
+
+    Integer countByUserIdAndAndIsPastAndAndIsUsed(Integer userId, Boolean past, Boolean used);
 }

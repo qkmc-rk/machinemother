@@ -1,6 +1,7 @@
 package xyz.ruankun.machinemother.service.impl;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import xyz.ruankun.machinemother.entity.DictProductType;
 import xyz.ruankun.machinemother.entity.Product;
 import xyz.ruankun.machinemother.entity.ProductProps;
@@ -8,6 +9,7 @@ import xyz.ruankun.machinemother.repository.DictProductTypeRepository;
 import xyz.ruankun.machinemother.repository.ProductPropsRepository;
 import xyz.ruankun.machinemother.repository.ProductRepository;
 import xyz.ruankun.machinemother.service.ProductService;
+import xyz.ruankun.machinemother.util.DataCode;
 import xyz.ruankun.machinemother.util.EntityUtil;
 
 import javax.annotation.Resource;
@@ -28,14 +30,14 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public Boolean addProduct(Product product, List<ProductProps> productProps) {
-        try{
+        try {
             productRepository.save(product);        //先保存product
-            for(ProductProps props : productProps){
+            for (ProductProps props : productProps) {
                 props.setProductId(product.getId());        //依次修改props的productId
             }
             productPropsRepository.saveAll(productProps);
             return true;
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
             return false;
         }
@@ -49,15 +51,15 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public Boolean updateProduct(Product product) {
         Product check = getProduct(product.getId());
-        if(check == null){
+        if (check == null) {
             return false;
-        }else{
+        } else {
             try {
                 product.setGmtModified(new Date());
-                EntityUtil.update(product, check );
+                EntityUtil.update(product, check);
                 productRepository.save(product);
                 return true;
-            }catch (Exception e){
+            } catch (Exception e) {
                 e.printStackTrace();
                 return false;
             }
@@ -70,17 +72,27 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public Boolean deleteProduct(int id) {
-        if(getProduct(id) == null){
-            return false;
-        }else{
+    @Transactional
+    public Integer deleteProduct(int id) {
+        if (getProduct(id) == null) {
+            return DataCode.DATA_CONFLIC;
+        } else {
             try {
-                productRepository.deleteById(id);
-                productPropsRepository.deleteAllByProductId(id);
-                return true;
-            }catch (Exception e){
+                Integer result = productRepository.deleteById(id);
+                Integer result1 = productPropsRepository.deleteAllByProductId(id);
+                if (result < 0 || result1 < 0) {
+                    try {
+                        throw new Exception(" 有数据未删除完成，product:" + result + ", prop:" + result1);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                        return DataCode.DATA_CONFLIC;
+                    }
+                } else {
+                    return DataCode.DATA_OPERATION_SUCCESS;
+                }
+            } catch (Exception e) {
                 e.printStackTrace();
-                return false;
+                return DataCode.DATA_OPERATION_ERROR;
             }
         }
 

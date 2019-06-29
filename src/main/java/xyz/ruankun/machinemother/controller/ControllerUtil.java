@@ -1,6 +1,8 @@
 package xyz.ruankun.machinemother.controller;
 
 import xyz.ruankun.machinemother.annotation.小坏蛋;
+import xyz.ruankun.machinemother.util.Constant;
+import xyz.ruankun.machinemother.util.DataCode;
 import xyz.ruankun.machinemother.vo.ResponseEntity;
 
 public class ControllerUtil {
@@ -36,4 +38,18 @@ public class ControllerUtil {
         return responseEntity;
     }
 
+
+    public static <T> ResponseEntity<T> parData(Integer result, T data){
+        ResponseEntity responseEntity = new ResponseEntity();
+        if(result == DataCode.DATA_CONFLIC){
+            responseEntity.error(-1, "数据冲突", null);
+        }else if(result == DataCode.DATA_OPERATION_ERROR){
+            responseEntity.error(-1, "操作失败", null);
+        }else if(result == DataCode.DATA_OPERATION_SUCCESS){
+            responseEntity.success(data);
+        }else if(result == DataCode.DATA_OPERATION_FAILURE){
+            responseEntity.serverError();
+        }
+        return responseEntity;
+    }
 }

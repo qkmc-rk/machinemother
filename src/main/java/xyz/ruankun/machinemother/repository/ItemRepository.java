@@ -2,6 +2,8 @@ package xyz.ruankun.machinemother.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.transaction.annotation.Transactional;
 import xyz.ruankun.machinemother.entity.Item;
 
 import java.math.BigDecimal;
@@ -20,8 +22,14 @@ public interface ItemRepository extends JpaRepository<Item, Integer> {
 
     Item findByUserIdAndProductId(int userId, int productId);
 
-    int  deleteByUserId(Integer userId);
+    @Transactional
+    @Query(value = "delete from mm_item where userid=?1", nativeQuery = true)
+    @Modifying
+    Integer deleteByUserId(Integer userId);
 
-    int deleteById(int id);
+    @Query(value = "delete from mm_item where id=?1", nativeQuery = true)
+    @Transactional
+    @Modifying
+    Integer deleteById(int id);
 
 }

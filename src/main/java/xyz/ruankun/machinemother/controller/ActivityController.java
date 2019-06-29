@@ -63,18 +63,25 @@ public class ActivityController {
     @PostMapping(value = "/notice")
     @Authentication(role = AuthAopConstant.USER)    //用户必须传入指定日期范围
     @ApiOperation(value = "[用户]用户获取所有公告")
-    public ResponseEntity getNotice(@RequestParam(value = "start") String start, @RequestParam(value = "end") String end) {
+    public ResponseEntity getNotice(/*@RequestParam(value = "start") String start, @RequestParam(value = "end") String end*/) {
         //根据传入的时间范围获取notice信息
-        Map<String, Date> map = DateUtil.parse(start, end);
-        Date error = map.get("error");
-        if (error == null) {
-            responseEntity.error(Constant.FORMAT_ERROR, "数据格式错误", null);
-        } else {
-            Date first = map.get("start");
-            Date last = map.get("end");
-            List<Announcement> notices = activityService.getNotices(first, last);
+//        Map<String, Date> map = DateUtil.parse(start, end);
+//        Date error = map.get("error");
+//        if (error == null) {
+//            responseEntity.error(Constant.FORMAT_ERROR, "数据格式错误", null);
+//        } else {
+//            Date first = map.get("start");
+//            Date last = map.get("end");
+//            List<Announcement> notices = activityService.getNotices(first, last);
+//            responseEntity.success(notices);
+//        }
+        List<Announcement> notices = activityService.getNotices();
+        if(notices == null){
+            responseEntity.serverError();
+        }else{
             responseEntity.success(notices);
         }
+
         return responseEntity;
     }
 
@@ -95,17 +102,19 @@ public class ActivityController {
     @Authentication(role = AuthAopConstant.ADMIN)
     @ApiOperation(value = "[管理员]管理员删除一条公告")
     public ResponseEntity deleteNotice(@PathVariable(value = "id") Integer id) {
-        Boolean result = activityService.deleteNotice(id);
-        if (result) {
-            responseEntity.success(null);
-        } else {
-            responseEntity.serverError();
-        }
-        return responseEntity;
+//        Boolean result = activityService.deleteNotice(id);
+//        if (result) {
+//            responseEntity.success(null);
+//        } else {
+//            responseEntity.serverError();
+//        }
+
+        Integer result = activityService.deleteNotice(id);
+        return ControllerUtil.parData(result, null);
     }
 
     @PostMapping(value = "/activity")
-    @Authentication(role = AuthAopConstant.USER)//todo 有待斟酌
+    @Authentication(role = AuthAopConstant.USER)
     @ApiOperation(value = "[用户]获取活动信息，是否连同过期的一同获取")
     public ResponseEntity getActivities(@RequestParam(value = "timeout",defaultValue = "true")Boolean timeout) {
         List<Activity> activities = null;
@@ -155,12 +164,8 @@ public class ActivityController {
     @Authentication(role = AuthAopConstant.ADMIN)
     @ApiOperation(value = "[管理员]删除一条活动")
     public ResponseEntity delete(@PathVariable(value = "id") Integer id) {
-        Boolean result = activityService.deleteActivity(id);
-        if (result) {
-            responseEntity.success(null);
-        } else {
-            responseEntity.serverError();
-        }
-        return responseEntity;
+        Integer result = activityService.deleteActivity(id);
+
+        return ControllerUtil.parData(result, null);
     }
 }

@@ -12,11 +12,13 @@ import xyz.ruankun.machinemother.annotation.Authentication;
 import xyz.ruankun.machinemother.entity.Item;
 import xyz.ruankun.machinemother.entity.Order;
 import xyz.ruankun.machinemother.entity.OrderSecret;
+import xyz.ruankun.machinemother.repository.OrderRepository;
 import xyz.ruankun.machinemother.service.EconService;
 import xyz.ruankun.machinemother.service.UserInfoService;
 import xyz.ruankun.machinemother.util.constant.AuthAopConstant;
 import xyz.ruankun.machinemother.vo.ResponseEntity;
 
+import javax.annotation.Resource;
 import java.util.Date;
 import java.util.List;
 
@@ -32,6 +34,8 @@ public class EconController {
 
     @Autowired
     private ResponseEntity responseEntity;
+    @Resource
+    private OrderRepository orderRepository;
 
     //userId 与 productId 算是item表中的一组候选码
     /*@PutMapping(value = "/item") 版本1关闭*/
@@ -77,8 +81,9 @@ public class EconController {
     @Authentication(role = AuthAopConstant.USER)
     @ApiOperation(value = "[用户]删除购物车中的某个服务物品")
     public ResponseEntity deleteItem(@PathVariable(value = "id") Integer id) {
-        Boolean result = econService.deleteItem(id);
-        return ControllerUtil.getTrueOrFalseResult(result);
+//        Boolean result = econService.deleteItem(id);
+//        return ControllerUtil.getTrueOrFalseResult(result);
+        return ControllerUtil.parData(econService.deleteItem(id), null);
     }
 
     //@PostMapping(value = "/order")                版本1关闭
@@ -177,11 +182,13 @@ public class EconController {
         Date date = new Date();
         Long time = date.getTime() - order.getGmtCreate().getTime();
         if (time > 1000 * 60 * 60 * 3 && !order.getPaid()) {
-            Boolean result = econService.deleteOrder(id);
-            responseEntity = ControllerUtil.getTrueOrFalseResult(result);
+//            Boolean result = econService.deleteOrder(id);
+//            responseEntity = ControllerUtil.getTrueOrFalseResult(result);
+            responseEntity = ControllerUtil.parData(econService.deleteOrder(id), null);
         } else {
             responseEntity.serverError();
         }
         return responseEntity;
     }
+
 }

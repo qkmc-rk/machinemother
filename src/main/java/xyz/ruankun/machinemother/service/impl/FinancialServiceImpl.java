@@ -71,7 +71,13 @@ public class FinancialServiceImpl implements FinancialService {
     @Override
     public Wallet selectWallet(Integer userId) {
         try {
-            return walletRepository.findByUserId(userId);
+            Wallet wallet = walletRepository.findByUserId(userId);
+            if(wallet != null){
+                setWallet(wallet);
+                return wallet;
+            }else{
+                return null;
+            }
         } catch (Exception e) {
             e.printStackTrace();
             return null;
@@ -430,7 +436,14 @@ public class FinancialServiceImpl implements FinancialService {
 
     @Override
     public WithDraw getWithDraw(Integer id) {
-        return withDrawRepository.getOne(id);
+//        try {
+//            WithDraw withDraw = withDrawRepository.findById(id).get();
+        WithDraw withDraw = withDrawRepository.findById(id.intValue());
+        return withDraw;
+//        }catch (Exception e){
+//            e.printStackTrace();
+//            return null;
+//        }
     }
 
     @Override
@@ -479,11 +492,11 @@ public class FinancialServiceImpl implements FinancialService {
 
     @Override
     public Boolean deleteWithDraw(Integer id) {
-        try {
-            return withDrawRepository.deleteById(id.intValue());
-        } catch (Exception e) {
-            e.printStackTrace();
-            return false;
+            Integer result = withDrawRepository.deleteById(id.intValue());
+            if(result<=0){
+                return false;
+            }else {
+                return true;
         }
     }
 
@@ -604,5 +617,14 @@ public class FinancialServiceImpl implements FinancialService {
         return request.getRemoteAddr();
     }
 
+    private void setWallet(Wallet wallet){
+        Integer count = decouponRepository.countByUserIdAndAndIsPastAndAndIsUsed(wallet.getUserId(),false, false);
+        if(count <0){
+            logger.error("优惠所有值小于0???");
+            wallet.setCount(0);
+        }else{
+            wallet.setCount(count);
+        }
+    }
 
 }

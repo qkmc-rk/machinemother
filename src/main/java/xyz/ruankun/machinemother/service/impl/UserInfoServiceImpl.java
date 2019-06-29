@@ -20,6 +20,7 @@ import xyz.ruankun.machinemother.repository.WalletRepository;
 import xyz.ruankun.machinemother.service.FinancialService;
 import xyz.ruankun.machinemother.service.UserInfoService;
 import xyz.ruankun.machinemother.util.Constant;
+import xyz.ruankun.machinemother.util.DataCode;
 import xyz.ruankun.machinemother.util.EntityUtil;
 import xyz.ruankun.machinemother.util.MD5Util;
 import xyz.ruankun.machinemother.vo.weixin.WxServerResult;
@@ -156,7 +157,9 @@ public class UserInfoServiceImpl implements UserInfoService {
             //注册成功，生成钱包信息，将用户信息写入redis，然后直接返回用户的ID
             Wallet wallet = new Wallet();
             wallet.setGmtModified(new Date());
-            wallet.setCredit(0);wallet.setCommission(new BigDecimal(0));wallet.setUserId(rs.getId());
+            wallet.setCredit(0);
+            wallet.setCommission(new BigDecimal(0));
+            wallet.setUserId(rs.getId());
             //保存wallet
             try {
                 walletRepository.save(wallet);
@@ -226,7 +229,7 @@ public class UserInfoServiceImpl implements UserInfoService {
 
     @Override
     public User getUser(Integer userId) {
-            return userRepository.findById(userId.intValue());
+        return userRepository.findById(userId.intValue());
     }
 
     @Override
@@ -261,24 +264,30 @@ public class UserInfoServiceImpl implements UserInfoService {
     }
 
     @Override
-    public int delete(String openId) {
-        User user = getUser(openId);
-        if (user == null)
-            return -1;
-        return userRepository.deleteByOpenId(openId);
+    public Integer delete(String openId) {
+        Integer result = userRepository.deleteByOpenId(openId);
+        if (result < 0) {
+            return DataCode.DATA_OPERATION_FAILURE;
+        } else {
+            return DataCode.DATA_OPERATION_SUCCESS;
+        }
     }
 
     @Override
     public Integer delete(Integer userId) {
         User user = getUser(userId);
         if (user == null)
-            return -1;
+            return DataCode.DATA_CONFLIC;
         try {
-            userRepository.deleteById(userId);
-            return 1;
+            Integer result = userRepository.deleteById(userId.intValue());
+            if (result < 0) {
+                return DataCode.DATA_OPERATION_FAILURE;
+            } else {
+                return DataCode.DATA_OPERATION_SUCCESS;
+            }
         } catch (Exception e) {
             e.printStackTrace();
-            return -1;
+            return DataCode.DATA_OPERATION_ERROR;
         }
     }
 
@@ -292,9 +301,9 @@ public class UserInfoServiceImpl implements UserInfoService {
     public User update(User user) {
         logger.info("要修改的user的参数：" + user.toString());
         User check = getUser(user.getId());
-        if(check == null){
+        if (check == null) {
             return null;
-        }else {
+        } else {
             EntityUtil.update(user, check);
             logger.info("修改后的user的参数：" + user.toString());
             user.setGmtModified(new Date());

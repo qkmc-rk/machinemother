@@ -4,6 +4,7 @@ import org.springframework.stereotype.Service;
 import xyz.ruankun.machinemother.entity.Addr;
 import xyz.ruankun.machinemother.repository.AddrRepository;
 import xyz.ruankun.machinemother.service.AddrService;
+import xyz.ruankun.machinemother.util.DataCode;
 import xyz.ruankun.machinemother.util.EntityUtil;
 
 import javax.annotation.Resource;
@@ -17,25 +18,46 @@ public class AddrServiceImpl implements AddrService {
     private AddrRepository addrRepository;
 
     @Override
-    public Addr update(Addr addr) {
+    public Boolean update(Addr addr) {
         Addr check = getAddr(addr.getId());
         if (check == null)
-            return null;
+            return false;
         else {
             addr.setGmtModified(new Date());
             EntityUtil.update(addr, check);     //更新数据
-            return addrRepository.save(addr);
+            try {
+                addrRepository.save(addr);
+                return true;
+            } catch (Exception e) {
+                e.printStackTrace();
+                return null;
+            }
         }
     }
 
     @Override
     public Addr getAddr(int id) {
-        return addrRepository.findById(id);
+        try {
+            Addr addr = addrRepository.findById(id);
+            if (addr == null) {
+                addr = new Addr();
+            }
+            return addr;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 
     @Override
-    public Addr add(Addr addr) {
-        return addrRepository.save(addr);
+    public Boolean add(Addr addr) {
+        try {
+            addrRepository.save(addr);
+            return true;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
     }
 
     @Override
@@ -44,16 +66,36 @@ public class AddrServiceImpl implements AddrService {
     }
 
     @Override
-    public int delete(int id) {
+    public Integer delete(int id) {
         Addr addr = getAddr(id);
         if (addr == null)
-            return -1;
-        return addrRepository.deleteById(id);
+            return DataCode.DATA_CONFLIC;
+        try {
+            Integer result = addrRepository.deleteById(id);
+            if (result <= 0){
+                return DataCode.DATA_OPERATION_FAILURE;
+            }else {
+                return DataCode.DATA_OPERATION_SUCCESS;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            return DataCode.DATA_OPERATION_ERROR;
+        }
     }
 
     @Override
-    public int deleteMyAddr(int userId) {
-        return addrRepository.deleteByUserId(userId);
+    public Integer deleteMyAddr(int userId) {
+        try {
+            Integer result = addrRepository.deleteByUserId(userId);
+            if(result>0) {
+                return DataCode.DATA_OPERATION_SUCCESS;
+            }else{
+                return DataCode.DATA_OPERATION_FAILURE;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            return DataCode.DATA_OPERATION_ERROR;
+        }
     }
 
 

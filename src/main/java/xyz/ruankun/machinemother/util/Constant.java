@@ -12,6 +12,8 @@ public interface Constant {
 
     String MSG_SERVER_ERROR = "服务器故障";
 
+    String MSG_INVALID_OPERATION = "非法操作";
+
     //登录时要用的CODE
 
     //成功登录
@@ -64,4 +66,6 @@ public interface Constant {
     //字符转换操作
     Integer FORMAT_SUCCESS = 1;
     Integer FORMAT_ERROR = -1;
+
+
 }

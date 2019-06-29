@@ -8,6 +8,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.transaction.annotation.Transactional;
 import xyz.ruankun.machinemother.entity.User;
 import xyz.ruankun.machinemother.repository.UserRepository;
 
@@ -50,25 +51,25 @@ public class TestUserInfoService {
         user.setGmtModified(new Date());
         userRepository.save(user);
 
-        PageRequest pageable = PageRequest.of(10, 4, Sort.Direction.DESC, "id");
-        /**
-         * 输出所有数据
-         */
-        for (User user1 : userRepository.findAll(pageable)) {
-            System.out.println(user1);
-            System.out.println("---------------------------------------------------------------------------");
-        }
-
-        Page<User> users = userRepository.findByNameLike("%R%", pageable);
-        System.out.println(users.getTotalElements());
-        System.out.println(users.getTotalPages());
-        System.out.println(users.getNumber());
-        System.out.println(users.getSize());
-        for (User user1 : users) {
-
-            System.out.println(user1 + "================== ");
-        }
-        System.out.println(users);
+//        PageRequest pageable = PageRequest.of(10, 4, Sort.Direction.DESC, "id");
+//        /**
+//         * 输出所有数据
+//         */
+//        for (User user1 : userRepository.findAll(pageable)) {
+//            System.out.println(user1);
+//            System.out.println("---------------------------------------------------------------------------");
+//        }
+//
+//        Page<User> users = userRepository.findByNameLike("%R%", pageable);
+//        System.out.println(users.getTotalElements());
+//        System.out.println(users.getTotalPages());
+//        System.out.println(users.getNumber());
+//        System.out.println(users.getSize());
+//        for (User user1 : users) {
+//
+//            System.out.println(user1 + "================== ");
+//        }
+//        System.out.println(users);
 
     }
 
@@ -76,7 +77,7 @@ public class TestUserInfoService {
     public void s(){
 //        List<User> users = userRepository.findByInvitorId(7);
         Integer userId = null;
-        User users = userRepository.findById(userId.intValue());
+        User users = userRepository.findByOpenId("1234567890");
 //        User users = userRepository.findOne(2);
         if(users == null){
             System.out.println("null");
@@ -85,4 +86,13 @@ public class TestUserInfoService {
         }
     }
 
+    @Test
+//    @Transactional(rollbackFor = Exception.class)
+    public void de(){
+//        try {
+            userRepository.deleteByOpenId("1234567890");
+//        }catch (Exception e){
+//            e.printStackTrace();
+//        }
+    }
 }

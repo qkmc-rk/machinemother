@@ -6,8 +6,10 @@ import xyz.ruankun.machinemother.entity.Announcement;
 import xyz.ruankun.machinemother.repository.ActivityRepository;
 import xyz.ruankun.machinemother.repository.AnnouncementRepository;
 import xyz.ruankun.machinemother.service.ActivityService;
+import xyz.ruankun.machinemother.util.DataCode;
 
 import javax.annotation.Resource;
+import javax.xml.crypto.Data;
 import java.util.Date;
 import java.util.List;
 
@@ -33,17 +35,39 @@ public class ActivityServiceImpl implements ActivityService {
     }
 
     @Override
-    public Boolean deleteNotice(int id) {
-        if (announcementRepository.getOne(id) == null) {
-            return false;
+    public Integer deleteNotice(int id) {
+        Announcement announcement = getNotice(id);
+        if (announcement.getId() == 0) {
+            return DataCode.DATA_CONFLIC;
+        } else if (announcement == null) {
+            return DataCode.DATA_OPERATION_ERROR;
         } else {
             try {
-                announcementRepository.deleteById(id);
-                return true;
+                Integer result = announcementRepository.deleteById(id);
+                if (result <= 0) {
+                    return DataCode.DATA_OPERATION_FAILURE;
+                } else {
+                    return DataCode.DATA_OPERATION_SUCCESS;
+                }
             } catch (Exception e) {
                 e.printStackTrace();
-                return false;
+                return DataCode.DATA_OPERATION_ERROR;
             }
+        }
+
+    }
+
+    @Override
+    public Announcement getNotice(int id) {
+        try {
+            Announcement announcement = announcementRepository.findById(id);
+            if (announcement == null) {
+                announcement = new Announcement();
+            }
+            return announcement;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
         }
     }
 
@@ -80,16 +104,33 @@ public class ActivityServiceImpl implements ActivityService {
     }
 
     @Override
-    public Boolean deleteActivity(int id) {
-        if (activityRepository.getOne(id) == null) {
-            return false;
+    public Activity getActivity(int id) {
+        try {
+            Activity activity = activityRepository.findById(id);
+            if (activity == null) {
+                activity = new Activity();
+            }
+            return activity;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    @Override
+    public Integer deleteActivity(int id) {
+        Activity activity = getActivity(id);
+        if (activity == null) {
+            return DataCode.DATA_OPERATION_FAILURE;
         } else {
             try {
-                activityRepository.deleteById(id);
-                return true;
+                if (activityRepository.deleteById(id) > 0)
+                    return DataCode.DATA_OPERATION_SUCCESS;
+                else
+                    return DataCode.DATA_OPERATION_FAILURE;
             } catch (Exception e) {
                 e.printStackTrace();
-                return false;
+                return DataCode.DATA_OPERATION_ERROR;
             }
         }
     }
@@ -118,7 +159,7 @@ public class ActivityServiceImpl implements ActivityService {
     public List<Activity> getActivities(Date date) {
         try {
             return activityRepository.findAllByEndBefore(date);
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
             return null;
         }

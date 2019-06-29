@@ -68,7 +68,7 @@ public interface UserInfoService {
 
     Page<User> search(String name, Pageable pageable);
 
-    int delete(String openId);
+    Integer delete(String openId);
 
     Integer delete(Integer userId);
 }

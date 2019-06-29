@@ -45,13 +45,14 @@ public class ProductController {
     @Authentication(role = AuthAopConstant.ADMIN)
     @ApiOperation(value = "[管理员]删除某产品")
     public ResponseEntity delete(@PathVariable(value = "id") Integer id) {
-        Boolean result = productService.deleteProduct(id);
-        if (result) {
-            responseEntity.success(Constant.PRODUCT_SUCCESS, "删除成功", null);
-        } else {
-            responseEntity.error(Constant.PRODUCT_ERROR, "删除失败", null);
-        }
-        return responseEntity;
+//        Boolean result = productService.deleteProduct(id);
+//        if (result) {
+//            responseEntity.success(Constant.PRODUCT_SUCCESS, "删除成功", null);
+//        } else {
+//            responseEntity.error(Constant.PRODUCT_ERROR, "删除失败", null);
+//        }
+//        return responseEntity;
+        return ControllerUtil.parData(productService.deleteProduct(id), null);
     }
 
     @PostMapping(value = "/{id}")

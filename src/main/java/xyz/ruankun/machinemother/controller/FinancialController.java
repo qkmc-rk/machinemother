@@ -213,18 +213,22 @@ public class FinancialController {
     @Authentication(role = AuthAopConstant.USER)
     @ApiOperation(value = "[用户] 查看个人提现记录", notes = "未传参则为个人所有记录")
     public ResponseEntity myWithdraws(@ApiParam(value = "提现记录id") @RequestParam(value = "withdrawId", required = false, defaultValue = "0") Integer withdrawId,
-                                      @RequestHeader(value = "token")String token) {
+                                      @RequestHeader(value = "token") String token) {
         ResponseEntity responseEntity = new ResponseEntity();
         Integer userId = Integer.valueOf(userInfoService.readDataFromRedis(token));
-        if(withdrawId == 0){
+        if (withdrawId == 0) {
             List<WithDraw> withDraws = financialService.getWithDraws(userId);
             responseEntity.success(withDraws);
-        }else{
+        } else {
             WithDraw withDraw = financialService.getWithDraw(withdrawId);
-            if(withDraw == null){
+            if (withDraw == null) {
                 responseEntity.serverError();
-            }else{
-                responseEntity.success(withDraw);
+            } else {
+                if (withDraw.getUserid() == userId) {
+                    responseEntity.success(withDraw);
+                }else{
+                    responseEntity.error(Constant.FAILURE_CODE, Constant.MSG_INVALID_OPERATION, null);
+                }
             }
         }
         return responseEntity;
@@ -236,14 +240,14 @@ public class FinancialController {
     public ResponseEntity withdraws(@ApiParam(value = "用户id") @RequestParam(value = "userId", required = false, defaultValue = "0") Integer userId) {
         ResponseEntity responseEntity = new ResponseEntity();
         List<WithDraw> withDraws = null;
-        if(userId == 0){
+        if (userId == 0) {
             withDraws = financialService.getWithDraws();
-        }else{
+        } else {
             withDraws = financialService.getWithDraws(userId);
         }
-        if(withDraws == null){
+        if (withDraws == null) {
             responseEntity.serverError();
-        }else{
+        } else {
             responseEntity.success(withDraws);
         }
         return responseEntity;
@@ -255,9 +259,9 @@ public class FinancialController {
     public ResponseEntity withdraw(@ApiParam(value = "提现记录id") @PathVariable(value = "withdrawId") Integer withdrawId) {
         ResponseEntity responseEntity = new ResponseEntity();
         WithDraw withDraw = financialService.getWithDraw(withdrawId);
-        if(withDraw == null){
+        if (withDraw == null) {
             responseEntity.serverError();
-        }else{
+        } else {
             responseEntity.success(withdrawId);
         }
         return responseEntity;
@@ -270,9 +274,9 @@ public class FinancialController {
                                    @ApiParam(value = "是否确认, true为确认,false为拒绝") @RequestParam(value = "option") Boolean option) {
         ResponseEntity responseEntity = new ResponseEntity();
         Boolean result = financialService.updateWithDraw(withdrawId, option);
-        if(result){
+        if (result) {
             responseEntity.success(null);
-        }else{
+        } else {
             responseEntity.serverError();
         }
         return responseEntity;

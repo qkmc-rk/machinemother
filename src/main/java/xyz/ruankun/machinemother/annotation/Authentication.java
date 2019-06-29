@@ -18,7 +18,7 @@ public @interface Authentication {
      * @return
      *
      */
-    boolean pass() default false;
+    boolean pass() default true;
 
     AuthAopConstant role() default AuthAopConstant.ANON;
 }

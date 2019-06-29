@@ -14,6 +14,7 @@ import xyz.ruankun.machinemother.repository.BannerRepository;
 import xyz.ruankun.machinemother.repository.ProductRepository;
 import xyz.ruankun.machinemother.repository.RecommendRepository;
 import xyz.ruankun.machinemother.service.HomeService;
+import xyz.ruankun.machinemother.util.DataCode;
 import xyz.ruankun.machinemother.util.QiNiuFileUtil;
 
 import javax.annotation.Resource;
@@ -66,15 +67,19 @@ public class HomeServiceImpl implements HomeService {
     }
 
     @Override
-    public boolean deleteBanner(Integer id) {
+    public Integer deleteBanner(Integer id) {
         try {
-            bannerRepository.deleteById(id);
+            Integer result = bannerRepository.deleteById(id.intValue());
+            if (result < 0) {
+                return DataCode.DATA_OPERATION_FAILURE;
+            } else {
+                return DataCode.DATA_OPERATION_SUCCESS;
+            }
         } catch (Exception e) {
             e.printStackTrace();
             logger.error("删除banner失败");
-            return false;
+            return DataCode.DATA_OPERATION_ERROR;
         }
-        return true;
     }
 
     @Override
@@ -112,15 +117,19 @@ public class HomeServiceImpl implements HomeService {
     }
 
     @Override
-    public boolean deleteAdv(Integer id) {
+    public Integer deleteAdv(Integer id) {
         try {
-            advertisementRepository.deleteById(id);
+            Integer result = advertisementRepository.deleteById(id.intValue());
+            if(result<0){
+                return DataCode.DATA_OPERATION_FAILURE;
+            }else{
+                return DataCode.DATA_OPERATION_SUCCESS;
+            }
         } catch (Exception e) {
             e.printStackTrace();
             logger.error("fuck,失误了，删除一个广告的时候出现了一个谁也不知道的问题，天知道");
-            return false;
+            return DataCode.DATA_OPERATION_ERROR;
         }
-        return true;
     }
 
     @Override

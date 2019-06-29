@@ -6,15 +6,15 @@ import java.util.List;
 
 public interface AddrService {
 
-    Addr update(Addr addr);
+    Boolean update(Addr addr);
 
     Addr getAddr(int id);
 
-    Addr add(Addr addr);
+    Boolean add(Addr addr);
 
     List<Addr> myAddr(int userId);
 
-    int delete(int id);
+    Integer delete(int id);
 
-    int deleteMyAddr(int userId);
+    Integer deleteMyAddr(int userId);
 }

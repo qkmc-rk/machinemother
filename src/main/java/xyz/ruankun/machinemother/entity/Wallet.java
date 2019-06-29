@@ -16,6 +16,9 @@ public class Wallet {
     private Integer credit;
     private Date gmtModified;
 
+    @Transient
+    private Integer count;
+
     public Integer getId() {
         return id;
     }
@@ -54,5 +57,13 @@ public class Wallet {
 
     public void setGmtModified(Date gmtModified) {
         this.gmtModified = gmtModified;
+    }
+
+    public Integer getCount() {
+        return count;
+    }
+
+    public void setCount(Integer count) {
+        this.count = count;
     }
 }

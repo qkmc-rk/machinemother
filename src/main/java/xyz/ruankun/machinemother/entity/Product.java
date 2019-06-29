@@ -23,10 +23,20 @@ public class Product {
     private String title;
     @Column
     private String content;
+    @Column
+    private String picture;
     @Column(name = "gmt_create")
     private Date gmtCreate;
     @Column(name = "gmt_modified")
     private Date gmtModified;
+
+    public String getPicture() {
+        return picture;
+    }
+
+    public void setPicture(String picture) {
+        this.picture = picture;
+    }
 
     public Integer getId() {
         return id;

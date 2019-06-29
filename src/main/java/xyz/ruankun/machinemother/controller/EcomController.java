@@ -11,6 +11,7 @@ import xyz.ruankun.machinemother.service.UserInfoService;
 import xyz.ruankun.machinemother.util.constant.AuthAopConstant;
 import xyz.ruankun.machinemother.vo.ResponseEntity;
 
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -37,7 +38,7 @@ public class EcomController {
     public ResponseEntity addToItem(@RequestHeader("token") String token,
                                     @RequestParam Integer productId,
                                     @RequestParam Integer number,
-                                    @RequestParam Integer productPropsId){
+                                    @RequestParam Integer productPropsId) {
         //因为已经通过了权限，所以此处不会抛出异常
         Integer userId = Integer.parseInt(userInfoService.readDataFromRedis(token));
         Item item = new Item();
@@ -48,15 +49,16 @@ public class EcomController {
         Item item1 = ecomService.putToItem(item);
         return ControllerUtil.getDataResult(item1);
     }
+
     //增加或者减少购物车里面的内容，需要判断，如果item的数量为0，直接删除
     @PostMapping("item/{id}")
     @Authentication(role = AuthAopConstant.USER)
     @ApiOperation(value = "[用户]增加或者减少一个购物车物品的数量，减少到0会自动删除")
     public ResponseEntity changeItemNumber(@PathVariable Integer id,
                                            @RequestParam Boolean up,
-                                           @RequestHeader("tokem") String token){
+                                           @RequestHeader("tokem") String token) {
         Integer userId = Integer.parseInt(userInfoService.readDataFromRedis(token));
-        boolean rs = ecomService.changeNumberOfItem(userId,id,up);
+        boolean rs = ecomService.changeNumberOfItem(userId, id, up);
         return ControllerUtil.getTrueOrFalseResult(rs);
     }
     //order相关
@@ -66,14 +68,28 @@ public class EcomController {
     @Authentication(role = AuthAopConstant.USER)
     @ApiOperation(value = "[用户]下订单，此处下单是将购物车中的所有服务下单")
     public ResponseEntity makeOrder(@RequestHeader("token") String token,
-                                        @RequestParam Integer decouponId,
-                                        @RequestParam Boolean useCredit,
-                                        @RequestParam Integer addrId){
+                                    @RequestParam Integer decouponId,
+                                    @RequestParam Boolean useCredit,
+                                    @RequestParam Integer addrId) {
         Integer userId = Integer.parseInt(userInfoService.readDataFromRedis(token));
         Map<String, Object> map;
-        map = ecomService.generateOrder(userId,decouponId,useCredit, addrId);
+        map = ecomService.generateOrder(userId, decouponId, useCredit, addrId);
         return ControllerUtil.getDataResult(map);
     }
 
+    @GetMapping(value = "/item")
+    @Authentication(role = AuthAopConstant.USER)
+    @ApiOperation(value = "[用户]查看购物车")
+    public ResponseEntity getItems(@RequestHeader(value = "token") String token) {
+        ResponseEntity responseEntity = new ResponseEntity();
+        Integer userId = Integer.valueOf(userInfoService.readDataFromRedis(token));
+        List<Item> items = ecomService.getItems(userId);
+        if (items == null) {
+            responseEntity.serverError();
+        } else {
+            responseEntity.success(items);
+        }
+        return responseEntity;
+    }
 
 }

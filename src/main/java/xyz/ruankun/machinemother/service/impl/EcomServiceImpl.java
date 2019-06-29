@@ -31,6 +31,11 @@ public class EcomServiceImpl implements EcomService {
     CreditRecordRepository creditRecordRepository;
 
     @Override
+    public List<Item> getItems(Integer userId) {
+        return itemRepository.findByUserIdAndOrderNumberIsNull(userId);
+    }
+
+    @Override
     public Item putToItem(Item item) {
         try {
             return itemRepository.save(item);

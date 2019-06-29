@@ -2,9 +2,12 @@ package xyz.ruankun.machinemother.service;
 
 import xyz.ruankun.machinemother.entity.Item;
 
+import java.util.List;
 import java.util.Map;
 
 public interface EcomService {
+
+    List<Item> getItems(Integer userId);
 
     Item putToItem(Item item);
 

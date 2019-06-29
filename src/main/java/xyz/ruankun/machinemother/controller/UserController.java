@@ -170,7 +170,7 @@ public class UserController {
     @PostMapping(value = "/userInfo")
     @Authentication(role = AuthAopConstant.USER)
     @ApiOperation(value = "[用户]更新用户数据", notes = "仅可更新用户名， 手机号，以及微信id(微信id仅可更新一次，若表内不为空，则不可操作)")
-    public ResponseEntity update( User user, @RequestHeader(value = "token") String token) {
+    public ResponseEntity update(@RequestBody User user, @RequestHeader(value = "token") String token) {
 
         //去除敏感信息
         user.setInvitorId(null);

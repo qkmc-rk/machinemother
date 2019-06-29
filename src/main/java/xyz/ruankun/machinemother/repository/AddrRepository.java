@@ -1,6 +1,9 @@
 package xyz.ruankun.machinemother.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.transaction.annotation.Transactional;
 import xyz.ruankun.machinemother.entity.Addr;
 
 import java.util.List;
@@ -17,9 +20,13 @@ public interface AddrRepository extends JpaRepository<Addr,Integer> {
 
     Addr findById(int id);
 
-    int deleteByUserId(int userId);
+    @Query(value = "delete from mm_addr where userid=?1", nativeQuery = true)
+    @Transactional
+    @Modifying
+    Integer deleteByUserId(int userId);
 
-    int deleteById(int id);
-
-
+    @Query(value = "delete from mm_addr where id=?1", nativeQuery = true)
+    @Transactional
+    @Modifying
+    Integer deleteById(int id);
 }

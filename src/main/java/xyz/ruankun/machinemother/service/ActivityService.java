@@ -10,7 +10,9 @@ public interface ActivityService {
 
     Boolean addNotice(Announcement announcement);
 
-    Boolean deleteNotice(int id);
+    Integer deleteNotice(int id);
+
+    Announcement getNotice(int id);
 
     List<Announcement> getNotices();
 
@@ -18,7 +20,9 @@ public interface ActivityService {
 
     Boolean addActivity(Activity activity);
 
-    Boolean deleteActivity(int id);
+    Integer deleteActivity(int id);
+
+    Activity getActivity(int id);
 
     List<Activity> getActivities();
 

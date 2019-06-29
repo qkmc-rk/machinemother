@@ -27,7 +27,7 @@ public interface HomeService {
      * @param id
      * @return
      */
-    boolean deleteBanner(Integer id);
+    Integer deleteBanner(Integer id);
 
     boolean alterBanner(Integer id, Banner banner);
 
@@ -36,7 +36,7 @@ public interface HomeService {
 
     Advertisement putAdvertisement(Advertisement advertisement);
 
-    boolean deleteAdv(Integer id);
+    Integer deleteAdv(Integer id);
 
     Advertisement alterAdv(Advertisement advertisement);
 

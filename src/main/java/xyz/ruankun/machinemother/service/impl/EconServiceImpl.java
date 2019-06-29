@@ -10,6 +10,7 @@ import xyz.ruankun.machinemother.entity.*;
 import xyz.ruankun.machinemother.repository.*;
 import xyz.ruankun.machinemother.service.EconService;
 import xyz.ruankun.machinemother.service.UserInfoService;
+import xyz.ruankun.machinemother.util.DataCode;
 import xyz.ruankun.machinemother.util.MD5Util;
 
 import javax.annotation.Resource;
@@ -139,22 +140,33 @@ public class EconServiceImpl implements EconService {
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public Boolean deleteOrder(int id) {
-        int oResult = orderRepository.deleteById(id);
-        int sResult = orderSecretRepository.deleteByOrderid(id);
-        if (oResult <= 0 && sResult <= 0) {
-            return false;
+    public Integer deleteOrder(int id) {
+        Integer oResult = orderRepository.deleteById(id);
+        Integer sResult = orderSecretRepository.deleteByOrderid(id);
+        if (oResult <= 0 || sResult <= 0) {
+            try {
+                throw new Exception("data error");
+            } catch (Exception e) {
+                e.printStackTrace();
+                return DataCode.DATA_OPERATION_FAILURE;
+            }
         } else {
-            return true;
+            return DataCode.DATA_OPERATION_SUCCESS;
         }
     }
 
     @Override
+    @Transactional
     public Boolean deleteOrders(int userId) {
-        int result = orderRepository.deleteByUserId(userId);
-        int re = orderSecretRepository.deleteByUserId(userId);
-        if (result <= 0 && re <= 0) {
-            return false;
+        Integer result = orderRepository.deleteByUserId(userId);
+        Integer re = orderSecretRepository.deleteByUserId(userId);
+        if (result <= 0 || re <= 0) {
+            try {
+                throw new Exception("data error");
+            } catch (Exception e) {
+                e.printStackTrace();
+                return false;
+            }
         } else {
             return true;
         }
@@ -202,32 +214,23 @@ public class EconServiceImpl implements EconService {
     }
 
     @Override
-    public Boolean deleteItem(int id) {
-        try {
-            int result = itemRepository.deleteById(id);
-            if (result <= 0) {
-                return false;
-            } else {
-                return true;
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-            return false;
+    @Transactional
+    public Integer deleteItem(int id) {
+        Integer result = itemRepository.deleteById(id);
+        if (result <= 0) {
+            return DataCode.DATA_OPERATION_FAILURE;
+        } else {
+            return DataCode.DATA_OPERATION_SUCCESS;
         }
     }
 
     @Override
     public Boolean deleteItems(int userId) {
-        try {
-            int result = itemRepository.deleteByUserId(userId);
-            if (result <= 0) {
-                return false;
-            } else {
-                return true;
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
+        Integer result = itemRepository.deleteByUserId(userId);
+        if (result <= 0) {
             return false;
+        } else {
+            return true;
         }
     }
 
@@ -243,6 +246,7 @@ public class EconServiceImpl implements EconService {
 
     /**
      * 这是一个事务级的操作
+     *
      * @param orderSecret
      * @param orderId
      * @return
@@ -253,12 +257,12 @@ public class EconServiceImpl implements EconService {
 
         OrderSecret orderSecret1 = null;
         try {
-            orderSecret1= getSecretByOrder(orderId);
+            orderSecret1 = getSecretByOrder(orderId);
         } catch (Exception e) {
             e.printStackTrace();
             return false;
         }
-        if (orderSecret1.getSecret().equals(orderSecret)){
+        if (orderSecret1.getSecret().equals(orderSecret)) {
             orderSecret1.setUsed(true);
             Order order = null;
             try {
@@ -272,7 +276,7 @@ public class EconServiceImpl implements EconService {
             orderRepository.saveAndFlush(order);
             orderSecretRepository.saveAndFlush(orderSecret1);
             return true;
-        }else
+        } else
             return false;
     }
 

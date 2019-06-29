@@ -50,7 +50,7 @@ public class ReplyCommentController {
 
     @GetMapping("/comment")
     @ApiOperation(value = "【匿名】获取评论,如果没有token就是匿名，有就是管理员或者用户")
-    public ResponseEntity getComment(@RequestHeader String token){
+    public ResponseEntity getComment(@RequestHeader(value = "token", required = false) String token){
 
         if (token == null) return getTrueOrFalseResult(false);
 

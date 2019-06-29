@@ -22,7 +22,7 @@ public interface EconService {
 
     Page<Order> getOrders(Pageable pageable);
 
-    Boolean deleteOrder(int id);
+    Integer deleteOrder(int id);
 
     Boolean deleteOrders(int userId);
 
@@ -42,7 +42,7 @@ public interface EconService {
 
     Boolean updateItem(Item item);
 
-    Boolean deleteItem(int id);
+    Integer deleteItem(int id);
 
     Boolean deleteItems(int userId);
 

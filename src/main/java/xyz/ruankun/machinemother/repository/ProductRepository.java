@@ -1,6 +1,9 @@
 package xyz.ruankun.machinemother.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.transaction.annotation.Transactional;
 import xyz.ruankun.machinemother.entity.Product;
 
 import java.util.Date;
@@ -22,6 +25,9 @@ public interface ProductRepository extends JpaRepository<Product, Integer> {
 
     List<Product> findAll();
 
-    int deleteById(int id);
+    @Modifying
+    @Transactional
+    @Query(value = "delete from mm_product id=?1", nativeQuery = true)
+    Integer deleteById(int id);
 
 }

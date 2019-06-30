@@ -72,11 +72,13 @@ public class FinancialServiceImpl implements FinancialService {
     public Wallet selectWallet(Integer userId) {
         try {
             Wallet wallet = walletRepository.findByUserId(userId);
-            if(wallet != null){
+            if (wallet != null) {
                 setWallet(wallet);
                 return wallet;
-            }else{
-                return null;
+            } else {
+                wallet = new Wallet();
+                wallet.setId(0);
+                return wallet;
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -107,7 +109,12 @@ public class FinancialServiceImpl implements FinancialService {
     @Override
     public OrderSecret GetSecretByOrderIdAndUserId(Integer orderid, Integer userid) {
         try {
-            return orderSecretRepository.findByUserIdAndOrderid(userid, orderid);
+            OrderSecret orderSecret = orderSecretRepository.findByUserIdAndOrderid(userid, orderid);
+            if (orderSecret == null) {
+                orderSecret = new OrderSecret();
+                orderSecret.setId(0);
+            }
+            return orderSecret;
         } catch (Exception e) {
             e.printStackTrace();
             return null;
@@ -436,14 +443,18 @@ public class FinancialServiceImpl implements FinancialService {
 
     @Override
     public WithDraw getWithDraw(Integer id) {
-//        try {
+        try {
 //            WithDraw withDraw = withDrawRepository.findById(id).get();
-        WithDraw withDraw = withDrawRepository.findById(id.intValue());
-        return withDraw;
-//        }catch (Exception e){
-//            e.printStackTrace();
-//            return null;
-//        }
+            WithDraw withDraw = withDrawRepository.findById(id.intValue());
+            if (withDraw == null) {
+                withDraw = new WithDraw();
+                withDraw.setId(0);
+            }
+            return withDraw;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 
     @Override
@@ -492,11 +503,11 @@ public class FinancialServiceImpl implements FinancialService {
 
     @Override
     public Boolean deleteWithDraw(Integer id) {
-            Integer result = withDrawRepository.deleteById(id.intValue());
-            if(result<=0){
-                return false;
-            }else {
-                return true;
+        Integer result = withDrawRepository.deleteById(id.intValue());
+        if (result <= 0) {
+            return false;
+        } else {
+            return true;
         }
     }
 
@@ -617,12 +628,12 @@ public class FinancialServiceImpl implements FinancialService {
         return request.getRemoteAddr();
     }
 
-    private void setWallet(Wallet wallet){
-        Integer count = decouponRepository.countByUserIdAndAndIsPastAndAndIsUsed(wallet.getUserId(),false, false);
-        if(count <0){
+    private void setWallet(Wallet wallet) {
+        Integer count = decouponRepository.countByUserIdAndAndIsPastAndAndIsUsed(wallet.getUserId(), false, false);
+        if (count < 0) {
             logger.error("优惠所有值小于0???");
             wallet.setCount(0);
-        }else{
+        } else {
             wallet.setCount(count);
         }
     }

@@ -90,9 +90,11 @@ public class TestUserInfoService {
 //    @Transactional(rollbackFor = Exception.class)
     public void de(){
 //        try {
-            userRepository.deleteByOpenId("1234567890");
+//            userRepository.deleteByOpenId("1234567890");
 //        }catch (Exception e){
 //            e.printStackTrace();
 //        }
+        User user1 = new User();
+        System.out.println(user1.getId());
     }
 }

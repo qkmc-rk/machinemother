@@ -79,7 +79,7 @@ public class UserController {
     public ResponseEntity register(@ApiParam(value = "小程序的code") @RequestParam String code,
                                    @ApiParam(value = "拉取的微信昵称") @RequestParam String name,
                                    @ApiParam(value = "微信头像地址") @RequestParam String avator,
-                                   @ApiParam(value = "邀请人的ID,扫分享码进入的小程序，则一定可以把分享者id带过来，这个非必须参数")@RequestParam(required = false) Integer invitorId) {
+                                   @ApiParam(value = "邀请人的ID,扫分享码进入的小程序，则一定可以把分享者id带过来，这个非必须参数") @RequestParam(required = false) Integer invitorId) {
         //将数据传入userInfoService进行注册
         User user = new User();
         user.setAvator(avator);
@@ -140,7 +140,7 @@ public class UserController {
         ResponseEntity responseEntity = new ResponseEntity();
         System.out.println("已经调用修改用户方法");
         if (!userId.equals(user.getId())) {
-            responseEntity.error(Constant.AUTH_ERROR,"userId is not equal",null);
+            responseEntity.error(Constant.AUTH_ERROR, "userId is not equal", null);
         } else {
             user = userInfoService.update(user);
             if (user == null) {
@@ -158,7 +158,9 @@ public class UserController {
     public ResponseEntity getUser(@PathVariable(value = "userId") int userId) {
         ResponseEntity responseEntity = new ResponseEntity();
         User user = userInfoService.getUser(userId);
-        if (user == null) {
+        if (user.getId() == 0) {
+            responseEntity.error(-1, "用户不存在", null);
+        } else if (user == null) {
 //            responseEntity.error(UserCode.NO_EXIST, UserCode.NO_SUCH_USER, null);
             responseEntity.serverError();
         } else {
@@ -186,13 +188,13 @@ public class UserController {
             //保证能够字符串与整数能够正确转型
             if (userId != user.getId()) {
 //                responseEntity.error(UserCode.ERROR_DATA, UserCode.INVALID_DATA, null);
-                responseEntity.error(Constant.AUTH_ERROR,"userId is not equal",null);
+                responseEntity.error(Constant.AUTH_ERROR, "userId is not equal", null);
             } else {
 //                User check = userInfoService.getUser(userId);
-                    user = userInfoService.update(user);
-                    responseEntity.success(user);
+                user = userInfoService.update(user);
+                responseEntity.success(user);
 //                } else {
-                    //
+                //
 //                    responseEntity.error(UserCode.INVALID_OPERATION, UserCode.INVALID_MSG, null);
 //                }
             }
@@ -213,11 +215,13 @@ public class UserController {
         try {
             int userId = Integer.valueOf(userInfoService.readDataFromRedis(token));
             User user = userInfoService.getUser(userId);
-            user.setOpenId(null);
-            if (user == null) {
+            if (user.getId() == 0) {
+                responseEntity.error(-1, "用户不存在", null);
+            } else if (user == null) {
 //                responseEntity.error(UserCode.ERROR_DATA, UserCode.LOST_DATA, null);
                 responseEntity.serverError();
             } else {
+                user.setOpenId(null);
                 responseEntity.success(user); //之前怎么会填写null呢
             }
         } catch (Exception e) {
@@ -234,12 +238,14 @@ public class UserController {
     public ResponseEntity delete(@PathVariable(value = "userId") Integer userId) {
         ResponseEntity responseEntity = new ResponseEntity();
         User user = userInfoService.getUser(userId);
-        if (user == null) {
-            responseEntity.error(Constant.FAILURE_CODE,"user doesn't exist",null);
+        if (user.getId() == 0) {
+            responseEntity.error(-1, "用户不存在", null);
+        } else if (user == null) {
+            responseEntity.error(Constant.FAILURE_CODE, "user doesn't exist", null);
         } else {
             Integer rs = userInfoService.delete(userId);
             if (rs < 0) {
-                responseEntity.error(Constant.FAILURE_CODE,"delete failed", null);
+                responseEntity.error(Constant.FAILURE_CODE, "delete failed", null);
             } else {
                 responseEntity.success("delete successfully");
             }
@@ -253,9 +259,11 @@ public class UserController {
     public ResponseEntity updateAward(@RequestParam(value = "award") Double award, @PathVariable(value = "userId") int userId) {
         User user = userInfoService.getUser(userId);
         ResponseEntity responseEntity = new ResponseEntity();
-        if (user == null) {
-            responseEntity.error(UserCode.NO_EXIST, UserCode.NO_SUCH_USER, null);
-            //responseEntity.serverError();
+        if (user.getId() == 0) {
+            responseEntity.error(-1, "用户不存在", null);
+        } else if (user == null) {
+//            responseEntity.error(UserCode.NO_EXIST, UserCode.NO_SUCH_USER, null);
+            responseEntity.serverError();
         } else {
             if (award < 0) {
                 responseEntity.error(UserCode.ERROR_PARAMS, UserCode.INVALID_DATA, null);
@@ -279,13 +287,15 @@ public class UserController {
             //responseEntity.serverError();
         } else {
             User user = userInfoService.getUser(userId);
-            if (user == null) {
+            if (user.getId() == 0) {
+                responseEntity.error(-1, "用户不存在", null);
+            } else if (user == null) {
                 responseEntity.error(UserCode.NO_EXIST, UserCode.NO_SUCH_USER, null);
                 //responseEntity.serverError();
             } else {
                 user.setIntegration(integration);
                 userInfoService.update(user);
-                responseEntity.success( null);
+                responseEntity.success(null);
             }
         }
         return responseEntity;
@@ -297,9 +307,11 @@ public class UserController {
     public ResponseEntity saveWX(@RequestParam(value = "weixinId") String wxId, @PathVariable(value = "userId") int userId) {
         ResponseEntity responseEntity = new ResponseEntity();
         User user = userInfoService.getUser(userId);
-        if (user == null) {
-            responseEntity.error(UserCode.NO_EXIST, UserCode.NO_SUCH_USER, null);
-            //responseEntity.serverError();
+        if (user.getId() == 0) {
+            responseEntity.error(-1, "用户不存在", null);
+        } else if (user == null) {
+//            responseEntity.error(UserCode.NO_EXIST, UserCode.NO_SUCH_USER, null);
+            responseEntity.serverError();
         } else {
 
             if (user.getWxId() != null) {
@@ -318,13 +330,13 @@ public class UserController {
     @GetMapping(value = "/fans")
     @Authentication(role = AuthAopConstant.USER)
     @ApiOperation(value = "粉丝接口")
-    public ResponseEntity fans(@RequestHeader(value = "token")String token){
+    public ResponseEntity fans(@RequestHeader(value = "token") String token) {
         ResponseEntity responseEntity = new ResponseEntity();
         Integer userId = Integer.valueOf(userInfoService.readDataFromRedis(token));
         List<User> users = userInfoService.getUsers(userId);
-        if(users == null){
+        if (users == null) {
             responseEntity.serverError();
-        }else{
+        } else {
             responseEntity.success(users);
         }
         return responseEntity;

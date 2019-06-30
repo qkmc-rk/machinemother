@@ -245,7 +245,7 @@ public class UserInfoServiceImpl implements UserInfoService {
                 user = new User();
                 user.setId(0);
             }
-            return null;
+            return user;
         } catch (Exception e) {
             e.printStackTrace();
             return null;
@@ -265,7 +265,7 @@ public class UserInfoServiceImpl implements UserInfoService {
                 user = new User();
                 user.setId(0);
             }
-            return null;
+            return user;
         } catch (Exception e) {
             e.printStackTrace();
             return null;

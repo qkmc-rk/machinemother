@@ -56,7 +56,7 @@ public class EcomController {
     @ApiOperation(value = "[用户]增加或者减少一个购物车物品的数量，减少到0会自动删除")
     public ResponseEntity changeItemNumber(@PathVariable Integer id,
                                            @RequestParam Boolean up,
-                                           @RequestHeader("tokem") String token) {
+                                           @RequestHeader("token") String token) {
         Integer userId = Integer.parseInt(userInfoService.readDataFromRedis(token));
         boolean rs = ecomService.changeNumberOfItem(userId, id, up);
         return ControllerUtil.getTrueOrFalseResult(rs);

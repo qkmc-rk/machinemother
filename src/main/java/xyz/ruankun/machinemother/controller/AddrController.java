@@ -55,8 +55,10 @@ public class AddrController {
         ResponseEntity responseEntity = new ResponseEntity();
         Addr addr = addrService.getAddr(addrId);
         if (addr == null) {
-            responseEntity.error(AddrCode.NO_EXIST, AddrCode.NO_SUCH_Addr, null);
-//            responseEntity.serverError();
+//            responseEntity.error(AddrCode.ERROR_PARAMS, "", null);
+            responseEntity.serverError();
+        } else if (addr.getId() == 0) {
+            responseEntity.error(-1, AddrCode.NO_SUCH_Addr, null);
         } else {
             responseEntity.success(addr);
         }
@@ -70,7 +72,9 @@ public class AddrController {
         ResponseEntity responseEntity = new ResponseEntity();
         User user = userInfoService.getUser(addr.getUserId());
         if (user == null) {
-            responseEntity.error(UserCode.NO_EXIST, UserCode.NO_SUCH_USER, null);
+            responseEntity.error(-1, "服务器故障", null);
+        } else if (user.getId() == 0) {
+            responseEntity.error(-1, UserCode.NO_SUCH_USER, null);
 //            responseEntity.serverError();
         } else {
             List<Addr> addrs = addrService.myAddr(addr.getUserId());
@@ -100,8 +104,10 @@ public class AddrController {
         Addr addr = addrService.getAddr(addrId);
         ResponseEntity responseEntity = new ResponseEntity();
         if (addr == null) {
-            responseEntity.error(AddrCode.NO_EXIST, AddrCode.NO_SUCH_Addr, null);
-//            responseEntity.serverError();
+//            responseEntity.error(AddrCode.NO_EXIST, AddrCode.NO_SUCH_Addr, null);
+            responseEntity.serverError();
+        } else if (addr.getId() == 0) {
+            responseEntity.error(-1, AddrCode.NO_SUCH_Addr, null);
         } else {
 //            Boolean result = addrService.delete(addrId);
 //            if (result) {

@@ -41,6 +41,7 @@ public class AddrServiceImpl implements AddrService {
             Addr addr = addrRepository.findById(id);
             if (addr == null) {
                 addr = new Addr();
+                addr.setId(0);
             }
             return addr;
         } catch (Exception e) {

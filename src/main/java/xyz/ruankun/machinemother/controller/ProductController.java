@@ -89,13 +89,15 @@ public class ProductController {
     public ResponseEntity getProducts(@PathVariable(value = "id") Integer id) {
         DictProductType dictProductType = productService.getProductType(id);
         if (dictProductType == null) {
-            responseEntity.error(Constant.PRODUCT_ERROR, "无效数据", null);
+            responseEntity.error(-1, "服务器故障", null);
+        } else if (dictProductType.getId() == 0) {
+            responseEntity.error(-1, "无效数据", null);
         } else {
             List<Product> products = productService.getProductsByTypeId(id);
             if (products.size() == 0) {
-                responseEntity.error(Constant.PRODUCT_ERROR, "无效数据", null);
+                responseEntity.error(-1, "无效数据", null);
             } else {
-                responseEntity.success(Constant.PRODUCT_SUCCESS, "获取成功", products);
+                responseEntity.success(1, "获取成功", products);
             }
         }
         return responseEntity;
@@ -118,9 +120,11 @@ public class ProductController {
     public ResponseEntity getProduct(@PathVariable(value = "id") Integer id) {
         Product product = productService.getProduct(id);
         if (product == null) {
-            responseEntity.error(Constant.PRODUCT_ERROR, "无效数据", null);
+            responseEntity.error(-1, "服务器故障", null);
+        } else if (product.getId() == 0) {
+            responseEntity.error(-1, "无效数据", null);
         } else {
-            responseEntity.success(Constant.PRODUCT_SUCCESS, "操作成功", product);
+            responseEntity.success(1, "操作成功", product);
         }
         return responseEntity;
     }

@@ -63,6 +63,7 @@ public class ActivityServiceImpl implements ActivityService {
             Announcement announcement = announcementRepository.findById(id);
             if (announcement == null) {
                 announcement = new Announcement();
+                announcement.setId(0);
             }
             return announcement;
         } catch (Exception e) {
@@ -109,6 +110,7 @@ public class ActivityServiceImpl implements ActivityService {
             Activity activity = activityRepository.findById(id);
             if (activity == null) {
                 activity = new Activity();
+                activity.setId(0);
             }
             return activity;
         } catch (Exception e) {

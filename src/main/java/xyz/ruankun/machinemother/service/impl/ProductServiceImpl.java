@@ -45,7 +45,17 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public Product getProduct(int id) {
-        return productRepository.findById(id);
+        try {
+            Product product = productRepository.findById(id);
+            if(product == null){
+                product = new Product();
+                product.setId(0);
+            }
+            return product;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 
     @Override
@@ -100,12 +110,32 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public DictProductType getProductType(String type) {
-        return dictProductTypeRepository.findByType(type);
+        try {
+            DictProductType dictProductType =  dictProductTypeRepository.findByType(type);
+            if(dictProductType == null){
+                dictProductType = new DictProductType();
+                dictProductType.setId(0);
+            }
+            return dictProductType;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 
     @Override
     public DictProductType getProductType(int id) {
-        return dictProductTypeRepository.findById(id);
+        try {
+            DictProductType dictProductType = dictProductTypeRepository.findById(id);
+            if (dictProductType == null){
+                dictProductType = new DictProductType();
+                dictProductType.setId(0);
+            }
+            return dictProductType;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 
     @Override

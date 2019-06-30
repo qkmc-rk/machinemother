@@ -120,12 +120,34 @@ public class EconServiceImpl implements EconService {
     @Override
     @Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
     public Order getOrder(int id) {
-        return orderRepository.getOne(id);
+        try {
+            Order order = orderRepository.findById(id);
+            if(order == null){
+                order = new Order();
+                order.setId(0);
+            }
+            return order;
+        }catch (Exception e){
+            e.printStackTrace();
+            return null;
+        }
+
     }
 
     @Override
     public Order getOrder(String orderNumber) {
-        return orderRepository.findByOrderNumber(orderNumber);
+        try {
+            Order order = orderRepository.findByOrderNumber(orderNumber);
+            if(order == null){
+                order = new Order();
+                order.setId(0);
+            }
+            return order;
+        }catch (Exception e){
+            e.printStackTrace();
+            return null;
+        }
+
     }
 
     @Override
@@ -174,12 +196,33 @@ public class EconServiceImpl implements EconService {
 
     @Override
     public Item getItem(int id) {
-        return itemRepository.findById(id);
+        try {
+            Item item = itemRepository.findById(id);
+            if(item == null){
+                item = new Item();
+                item.setId(0);
+            }
+            return item;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+
     }
 
     @Override
     public Item getItem(int userId, int productId) {
-        return itemRepository.findByUserIdAndProductId(userId, productId);
+        try {
+            Item item = itemRepository.findByUserIdAndProductId(userId, productId);
+            if(item == null){
+                item = new Item();
+                item .setId(0);
+            }
+            return null;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 
     @Override
@@ -236,12 +279,33 @@ public class EconServiceImpl implements EconService {
 
     @Override
     public OrderSecret getSecretById(int id) {
-        return orderSecretRepository.getOne(id);
+        try {
+            OrderSecret orderSecret = orderSecretRepository.getOne(id);
+            if(orderSecret == null){
+                orderSecret = new OrderSecret();
+                orderSecret.setId(0);
+            }
+            return orderSecret;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+
     }
 
     @Override
     public OrderSecret getSecretByOrder(int orderId) {
-        return orderSecretRepository.findByOrderid(orderId);
+        try {
+            OrderSecret orderSecret = orderSecretRepository.findByOrderid(orderId);
+            if(orderSecret == null){
+                orderSecret = new OrderSecret();
+                orderSecret.setId(0);
+            }
+            return orderSecret;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 
     /**

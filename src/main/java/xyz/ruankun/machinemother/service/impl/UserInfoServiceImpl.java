@@ -224,12 +224,32 @@ public class UserInfoServiceImpl implements UserInfoService {
 
     @Override
     public User getUser(String openId) {
-        return userRepository.findByOpenId(openId);
+        try {
+            User user = userRepository.findByOpenId(openId);
+            if(user == null){
+                user = new User();
+                user.setId(0);
+            }
+            return user;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 
     @Override
     public User getUser(Integer userId) {
-        return userRepository.findById(userId.intValue());
+        try {
+            User user = userRepository.findById(userId.intValue());
+            if(user == null){
+                user = new User();
+                user.setId(0);
+            }
+            return null;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 
     @Override
@@ -239,12 +259,32 @@ public class UserInfoServiceImpl implements UserInfoService {
 
     @Override
     public User getByWxId(String wxId) {
-        return userRepository.findByWxId(wxId);
+        try {
+            User user =  userRepository.findByWxId(wxId);
+            if(user == null){
+                user = new User();
+                user.setId(0);
+            }
+            return null;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 
     @Override
     public User getByPhone(String phone) {
-        return userRepository.findByPhone(phone);
+        try {
+            User user = userRepository.findByPhone(phone);
+            if(user == null){
+                user = new User();
+                user.setId(0);
+            }
+            return user;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 
     @Override

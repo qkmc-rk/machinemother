@@ -139,7 +139,7 @@ public class EconController {
             if (userId == order.getUserId()) {
                 responseEntity.success(order);
             } else {
-                responseEntity.serverError();
+                responseEntity.error(-1, "非法数据请求", null);
             }
         }
         return responseEntity;

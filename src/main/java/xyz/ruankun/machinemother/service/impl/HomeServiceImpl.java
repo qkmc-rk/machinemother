@@ -174,7 +174,7 @@ public class HomeServiceImpl implements HomeService {
 
     @Override
     public Recommend putRecommend(Recommend recommend) {
-        Product product = productRepository.findById(recommend.getProductId()).get();
+        Product product = productRepository.findById(recommend.getProductId().intValue());
         if (product == null) {
             logger.error("lzzscl, 内部数据错误, productid:" + recommend.getProductId() + "不存在");
             return null;

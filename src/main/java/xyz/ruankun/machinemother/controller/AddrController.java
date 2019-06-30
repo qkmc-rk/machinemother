@@ -2,6 +2,8 @@ package xyz.ruankun.machinemother.controller;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import xyz.ruankun.machinemother.annotation.Authentication;
@@ -28,6 +30,8 @@ public class AddrController {
 
     @Autowired
     private UserInfoService userInfoService;
+
+    private Log logger = LogFactory.getLog(AddrController.class);
 
     @GetMapping(value = {"", "/"})
     @Authentication(role = AuthAopConstant.USER)
@@ -69,6 +73,7 @@ public class AddrController {
     @Authentication(role = AuthAopConstant.USER)
     @ApiOperation(value = "[用户]增加用户接口信息", notes = "切记别上传id")
     public ResponseEntity add(@RequestBody Addr addr) {
+        logger.info("前端接收到的数据：" + addr);
         ResponseEntity responseEntity = new ResponseEntity();
         User user = userInfoService.getUser(addr.getUserId());
         if (user == null) {

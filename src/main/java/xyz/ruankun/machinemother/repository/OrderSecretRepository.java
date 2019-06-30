@@ -4,6 +4,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.transaction.annotation.Transactional;
+import xyz.ruankun.machinemother.entity.Order;
 import xyz.ruankun.machinemother.entity.OrderSecret;
 
 import java.util.List;
@@ -16,6 +17,8 @@ public interface OrderSecretRepository extends JpaRepository<OrderSecret, Intege
     OrderSecret findByUserId(Integer userId);
 
     OrderSecret findByOrderid(Integer orderId);
+
+    OrderSecret findById(int id);
 
     @Query(value = "delete from mm_ordersecret where orderid=?1", nativeQuery = true)
     @Modifying

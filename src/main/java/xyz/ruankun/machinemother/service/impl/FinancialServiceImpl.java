@@ -126,7 +126,7 @@ public class FinancialServiceImpl implements FinancialService {
         Order order;
         OrderSecret orderSecret;
         try {
-            order = orderRepository.findById(orderid).get();
+            order = orderRepository.findById(orderid.intValue());
             orderSecret = orderSecretRepository.findByUserId(order.getUserId());
         } catch (Exception e) {
             e.printStackTrace();
@@ -260,7 +260,7 @@ public class FinancialServiceImpl implements FinancialService {
             //订单没有
             rs.put("error", "错误,没有找到符合的订单");
         }
-        Order order = orderRepository.findById(orderid).get();
+        Order order = orderRepository.findById(orderid.intValue());
         if (userid.intValue() != order.getUserId().intValue()) {
             rs.put("error", "错误,订单存在，但不是该用户的订单");
         }
@@ -290,7 +290,7 @@ public class FinancialServiceImpl implements FinancialService {
         if (!decouponRepository.findById(order.getDecouponId()).isPresent()) {
             rs.put("error", "错误,订单所使用的优惠券信息有误，无效订单");
         }
-        decoupon = decouponRepository.findById(order.getDecouponId()).get();
+        decoupon = decouponRepository.findById(order.getDecouponId().intValue());
         if (originAmount.compareTo(decoupon.getMin()) > 0) {
             rs.put("error", "错误,所使用的优惠券明显不符合要求,订单支付拉起失败");
         }
@@ -332,7 +332,7 @@ public class FinancialServiceImpl implements FinancialService {
         packageParams.put("trade_type", tradetype);//支付方式
         User user = null;
         try {
-            user = userRepository.findById(userid).get();
+            user = userRepository.findById(userid.intValue());
         } catch (Exception e) {
             e.printStackTrace();
             //获取用户时出现了问题，无法进行相关交易

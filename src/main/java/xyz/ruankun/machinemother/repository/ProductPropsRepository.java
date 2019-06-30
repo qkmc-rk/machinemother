@@ -11,6 +11,8 @@ import java.util.List;
 
 public interface ProductPropsRepository extends JpaRepository<ProductProps, Integer> {
 
+    ProductProps findById(int id);
+
     @Modifying
     @Transactional
     @Query(value = "delete from mm_productprops where productid=?1", nativeQuery = true)

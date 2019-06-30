@@ -6,6 +6,9 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.context.request.RequestAttributes;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 import xyz.ruankun.machinemother.annotation.Authentication;
 import xyz.ruankun.machinemother.entity.Addr;
 import xyz.ruankun.machinemother.entity.User;
@@ -16,8 +19,10 @@ import xyz.ruankun.machinemother.util.code.UserCode;
 import xyz.ruankun.machinemother.util.constant.AuthAopConstant;
 import xyz.ruankun.machinemother.vo.ResponseEntity;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @CrossOrigin
@@ -73,6 +78,12 @@ public class AddrController {
     @Authentication(role = AuthAopConstant.USER)
     @ApiOperation(value = "[用户]增加用户接口信息", notes = "切记别上传id")
     public ResponseEntity add(@RequestBody Addr addr) {
+        HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
+        Map<String, String[]> map = request.getParameterMap();
+        for (String str : map.keySet()) {
+            logger.info("request parammeter:" + str + ",value:" + map.get(str));
+        }
+
         logger.info("前端接收到的数据：" + addr);
         ResponseEntity responseEntity = new ResponseEntity();
         User user = userInfoService.getUser(addr.getUserId());

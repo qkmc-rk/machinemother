@@ -50,7 +50,7 @@ public class EcomServiceImpl implements EcomService {
     public boolean changeNumberOfItem(Integer userId, Integer id, Boolean up) {
         Item item = null;
         try {
-            item = itemRepository.findById(id).get();
+            item = itemRepository.findById(id.intValue());
         } catch (Exception e) {
             e.printStackTrace();
             return false;
@@ -113,7 +113,7 @@ public class EcomServiceImpl implements EcomService {
         order.setUserId(userId);
         Addr addr = null;
         try {
-            addr = addrRepository.findById(addrId).get();
+            addr = addrRepository.findById(addrId.intValue());
             if (addr.getUserId().intValue() != userId.intValue()) {
                 map.put("error", "改收货地址与用户不匹配");
                 return map;
@@ -134,7 +134,7 @@ public class EcomServiceImpl implements EcomService {
         for (Item i :
                 items) {
             i.setOrderNumber(order.getOrderNumber());
-            amount.add(productPropsRepository.findById(i.getProductPropsId()).get().getPrice());
+            amount.add(productPropsRepository.findById(i.getProductPropsId().intValue()).getPrice());
         }
         amountFen = (int) (amount.floatValue() * 100);
 
@@ -160,9 +160,9 @@ public class EcomServiceImpl implements EcomService {
                 order.setUseCredit(true);
             }
         }
-        if (decouponId != null) {
+        if (decouponId <= 0 || decouponId != null) {
             //若使用优惠券，则把优惠券变成已使用，且减少订单金额。
-            decoupon = decouponRepository.findById(decouponId).get();
+            decoupon = decouponRepository.findById(decouponId.intValue());
             if (decoupon.getPast()) {
                 //过期优惠券不能使用
                 map.put("error", "过期优惠券无法使用");

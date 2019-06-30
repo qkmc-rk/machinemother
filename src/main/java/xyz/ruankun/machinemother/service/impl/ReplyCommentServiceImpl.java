@@ -31,13 +31,13 @@ public class ReplyCommentServiceImpl implements ReplyCommentService {
 
     @Override
     public Comment putComment(Comment comment) {
-        Item item = itemRepository.findById(comment.getItemId()).get();
+        Item item = itemRepository.findById(comment.getItemId().intValue());
         if (item == null) {
             logger.error("no item");
             return null;
         } else {
-            Product product = productRepository.findById(item.getProductId()).get();
-            User user = userRepository.findById(item.getUserId()).get();
+            Product product = productRepository.findById(item.getProductId().intValue());
+            User user = userRepository.findById(item.getUserId().intValue());
             if (product != null && user != null) {
                 try {
                     commentRepository.save(comment);
@@ -107,7 +107,7 @@ public class ReplyCommentServiceImpl implements ReplyCommentService {
     public boolean setCommentWithRecommend(Integer commentId, Boolean recommend) {
 
         try {
-            Comment comment = commentRepository.findById(commentId).get();
+            Comment comment = commentRepository.findById(commentId.intValue());
             comment.setRcmd(recommend);
             commentRepository.saveAndFlush(comment);
             return true;
@@ -132,8 +132,8 @@ public class ReplyCommentServiceImpl implements ReplyCommentService {
                     iterator.remove();
                 } else {
                     //取product
-                    Product product = productRepository.findById(item.getProductId()).get();
-                    User user = userRepository.findById(item.getUserId()).get();
+                    Product product = productRepository.findById(item.getProductId().intValue());
+                    User user = userRepository.findById(item.getUserId().intValue());
                     if (product != null && user != null) {
                         comment.setTitle(product.getTitle());
                         comment.setUsername(user.getName());

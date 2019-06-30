@@ -128,5 +128,21 @@ public class Addr {
     public void setPhone(String phone) {
         this.phone = phone;
     }
+
+    @Override
+    public String toString() {
+        return "Addr{" +
+                "id=" + id +
+                ", userId=" + userId +
+                ", country='" + country + '\'' +
+                ", province='" + province + '\'' +
+                ", city='" + city + '\'' +
+                ", detail='" + detail + '\'' +
+                ", gmtCreate=" + gmtCreate +
+                ", gmtModified=" + gmtModified +
+                ", username='" + username + '\'' +
+                ", phone='" + phone + '\'' +
+                '}';
+    }
 }
 

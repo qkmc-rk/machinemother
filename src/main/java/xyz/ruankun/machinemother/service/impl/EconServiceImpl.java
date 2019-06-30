@@ -46,7 +46,7 @@ public class EconServiceImpl implements EconService {
         BigDecimal youhui = new BigDecimal(0);     //优惠额度
         //如果使用优惠券且优惠券存在
         if (decouponId > 0) {
-            Decoupon decoupon = decouponRepository.getOne(decouponId);
+            Decoupon decoupon = decouponRepository.findById(decouponId);
             if (decoupon != null && !decoupon.getPast() && !decoupon.getUsed()) {
                 //将优惠券标记为使用状态
                 decoupon.setUsed(true);
@@ -86,7 +86,7 @@ public class EconServiceImpl implements EconService {
         List<Item> items = getItemsFree(userId);
         BigDecimal amount = new BigDecimal(0);
         for (Item item : items) {
-            ProductProps productProps = productPropsRepository.getOne(item.getProductPropsId());
+            ProductProps productProps = productPropsRepository.findById(item.getProductPropsId().intValue());
             if (productProps == null) {
                 throw new RuntimeException("没有productProps相关信息");
             } else {
@@ -280,7 +280,7 @@ public class EconServiceImpl implements EconService {
     @Override
     public OrderSecret getSecretById(int id) {
         try {
-            OrderSecret orderSecret = orderSecretRepository.getOne(id);
+            OrderSecret orderSecret = orderSecretRepository.findById(id);
             if(orderSecret == null){
                 orderSecret = new OrderSecret();
                 orderSecret.setId(0);
@@ -330,7 +330,7 @@ public class EconServiceImpl implements EconService {
             orderSecret1.setUsed(true);
             Order order = null;
             try {
-                order = orderRepository.findById(orderId).get();
+                order = orderRepository.findById(orderId.intValue());
             } catch (Exception e) {
                 e.printStackTrace();
                 return false;

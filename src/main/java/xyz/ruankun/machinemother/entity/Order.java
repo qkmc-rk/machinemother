@@ -22,14 +22,17 @@ public class Order {
 
     //添加
     @Column(name = "is_usedecoupon")
-    private Boolean isUseDecoupon;
+    private Boolean useDecoupon;
     @Column(name = "is_usecredit")
-    private Boolean isUseCredit;
+    private Boolean useCredit;
     @Column(name = "decouponid")
     private Integer decouponId;
     @Column(name = "credit")
     private BigDecimal credit;
     private Integer addrId;
+
+
+
     public Integer getAddrId() {
         return addrId;
     }
@@ -38,19 +41,19 @@ public class Order {
     }
 
     public Boolean getUseDecoupon() {
-        return isUseDecoupon;
+        return useDecoupon;
     }
 
     public void setUseDecoupon(Boolean useDecoupon) {
-        isUseDecoupon = useDecoupon;
+        this.useDecoupon = useDecoupon;
     }
 
     public Boolean getUseCredit() {
-        return isUseCredit;
+        return useCredit;
     }
 
     public void setUseCredit(Boolean useCredit) {
-        isUseCredit = useCredit;
+        this.useCredit = useCredit;
     }
 
     public Integer getDecouponId() {
@@ -131,5 +134,24 @@ public class Order {
 
     public void setFinished(Boolean finished) {
         isFinished = finished;
+    }
+
+    @Override
+    public String toString() {
+        return "Order{" +
+                "id=" + id +
+                ", userId=" + userId +
+                ", orderNumber='" + orderNumber + '\'' +
+                ", amount=" + amount +
+                ", gmtCreate=" + gmtCreate +
+                ", gmtModified=" + gmtModified +
+                ", isPaid=" + isPaid +
+                ", isFinished=" + isFinished +
+                ", useDecoupon=" + useDecoupon +
+                ", useCredit=" + useCredit +
+                ", decouponId=" + decouponId +
+                ", credit=" + credit +
+                ", addrId=" + addrId +
+                '}';
     }
 }

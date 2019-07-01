@@ -8,9 +8,11 @@ import xyz.ruankun.machinemother.annotation.Authentication;
 import xyz.ruankun.machinemother.entity.Item;
 import xyz.ruankun.machinemother.service.EcomService;
 import xyz.ruankun.machinemother.service.UserInfoService;
+import xyz.ruankun.machinemother.util.Constant;
 import xyz.ruankun.machinemother.util.constant.AuthAopConstant;
 import xyz.ruankun.machinemother.vo.ResponseEntity;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -72,9 +74,14 @@ public class EcomController {
                                     @RequestParam Boolean useCredit,
                                     @RequestParam Integer addrId) {
         Integer userId = Integer.parseInt(userInfoService.readDataFromRedis(token));
-        Map<String, Object> map;
-        map = ecomService.generateOrder(userId, decouponId, useCredit, addrId);
-        return ControllerUtil.getDataResult(map);
+        Map<String, Object> map = null;
+        try {
+            map = ecomService.generateOrder(userId, decouponId, useCredit, addrId);
+            return ControllerUtil.getDataResult(map);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ControllerUtil.getTrueOrFalseResult(false);
+        }
     }
 
     @GetMapping(value = "/item")

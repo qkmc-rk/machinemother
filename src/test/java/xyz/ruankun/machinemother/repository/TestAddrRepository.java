@@ -16,8 +16,15 @@ public class TestAddrRepository {
     @Resource
     AddrRepository addrRepository;
 
+    @Resource
+    ItemRepository itemRepository;
     @Test
     public void m1(){
         System.out.println(Integer.valueOf(""));
+    }
+
+    @Test
+    public void m2(){
+        System.out.println(itemRepository.findByUserId(17));
     }
 }

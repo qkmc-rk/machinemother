@@ -109,6 +109,12 @@ public class EcomServiceImpl implements EcomService {
         Order order = new Order();
         order.setPaid(false);
         order.setFinished(false);
+        /*********这部分内容填写了可能被覆盖，但是为了最后不为null，必须填写*******/
+        order.setDecouponId(0);
+        order.setUseCredit(false);
+        order.setCredit(new BigDecimal(0));
+        order.setUseDecoupon(false);
+        /*****************/
         //将addrId写入order，userId写入order
         order.setUserId(userId);
         Addr addr = null;
@@ -128,13 +134,27 @@ public class EcomServiceImpl implements EcomService {
         //生成订单号然后注入
         order.setOrderNumber(orderNumberGenerator());
         //找出所有item（该userid的item，并且item是没有订单号的）
-        items = itemRepository.findByUserIdAndOrderNumberIsNull(userId);
+        items = itemRepository.findByUserId(userId);
+        //将ordernumber不为空的排除
+        List<Item> items1 = new ArrayList<>();
+        for (Item item:
+                items) {
+            if (item.getOrderNumber() == null)
+                items1.add(item);
+        }
+        items = items1;//交换一下
         //将所有item的orderId设置为xx，（再次声明，orderId不是order的Id，是orderNumber，小失误，小失误）
         //算出订单没有减免前的总金额，转换成分
+        if(items.isEmpty()){
+            map.put("error","购物车为空");
+            return map;
+        }
         for (Item i :
                 items) {
             i.setOrderNumber(order.getOrderNumber());
-            amount.add(productPropsRepository.findById(i.getProductPropsId().intValue()).getPrice());
+            BigDecimal b = productPropsRepository.findById(i.getProductPropsId().intValue()).getPrice();
+            amount = amount.add(b);
+            System.out.println("I am jisuan amount,item price is :" + b.floatValue() + ",amount is：" + amount);
         }
         amountFen = (int) (amount.floatValue() * 100);
 
@@ -160,7 +180,7 @@ public class EcomServiceImpl implements EcomService {
                 order.setUseCredit(true);
             }
         }
-        if (decouponId <= 0 || decouponId != null) {
+        if (decouponId != null && decouponId /* <= */ > 0) {
             //若使用优惠券，则把优惠券变成已使用，且减少订单金额。
             decoupon = decouponRepository.findById(decouponId.intValue());
             if (decoupon.getPast()) {
@@ -192,12 +212,32 @@ public class EcomServiceImpl implements EcomService {
 
         }
         order.setAmount(new BigDecimal((float) amountFen / 100));
+        System.out.println("订单金额 + ：" + (float) amountFen / 100);
+        //order还有一些参数需要设置
+        order.setGmtCreate(new Date());
+        order.setGmtModified(new Date());
+        System.out.println("moximoxi + :" + order.toString());
         //事务：保存order，保存item。（还有前面的增加消费记录，优惠券状态改变）
-        orderRepository.save(order);
-        itemRepository.saveAll(items);//会覆盖吗
+        try {
+            order = orderRepository.save(order);
+        } catch (Exception e) {
+            e.printStackTrace();
+            map.put("error","保存order出现问题。");
+            return map;
+        }
+        try {
+            items = itemRepository.saveAll(items);//会覆盖吗
+        } catch (Exception e) {
+            e.printStackTrace();
+            map.put("error","重新设置item时出现错误");
+            orderRepository.deleteById(order.getId());//需要回滚
+            return map;
+        }
         if (creditRecord != null)
+            creditRecord.setGmtCreate(new Date());
             creditRecordRepository.save(creditRecord);
         if (decoupon != null)
+            decoupon.setGmtCreate(new Date());
             decouponRepository.saveAndFlush(decoupon);
         map.put("status", Constant.SUCCESS_CODE);
         map.put("msg", "订单创建成功");

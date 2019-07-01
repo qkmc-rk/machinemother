@@ -18,7 +18,7 @@ public class ControllerUtil {
         if (rs)
             responseEntity.success(null);
         else
-            responseEntity.serverError();
+            responseEntity.error(Constant.FAILURE_CODE,"方法执行时返回了false","");
         return responseEntity;
     }
 

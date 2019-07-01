@@ -430,12 +430,35 @@ public class FinancialServiceImpl implements FinancialService {
                     resXml = WePayUtil.NOTIFY_FAIL_SERVER_ERROR;
                     logger.error(resXml);
                 }
+                if (order.getPaid()){
+                    resXml = WePayUtil.NOTIFY_FAIL_REPEAT_ERROR;
+                    logger.error(resXml);
+                    return resXml;
+                }
                 if (order != null) order.setPaid(true);
                 Order order2 = orderRepository.saveAndFlush(order);
                 if (order2 != null && order2.getPaid()) {
-                    //通知微信回调业务已经完成成功
-                    resXml = WePayUtil.NOTIFY_SUCCESS;
-                    logger.error(resXml);
+                    //订单既然支付成功了，就得生成响应的orderSecret
+                    OrderSecret orderSecret = new OrderSecret();
+                    orderSecret.setUsed(false);
+                    orderSecret.setEmployee(null);
+                    orderSecret.setGmtCreate(new Date());
+                    orderSecret.setGmtModified(new Date());
+                    orderSecret.setOrderid(order2.getId());
+                    orderSecret.setSecret(MD5Util.md5(String.valueOf(new Date().getTime()).toUpperCase()));
+                    orderSecret.setUserId(order2.getUserId());
+                    try {
+                        orderSecretRepository.save(orderSecret);
+                        //通知微信回调业务已经完成成功
+                        resXml = WePayUtil.NOTIFY_SUCCESS;
+                        logger.error(resXml);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                        resXml = WePayUtil.NOTIFY_FAIL_SERVER_ERROR;
+                        logger.error(resXml);
+                        return resXml;
+                    }
+
                 } else {
                     //通知微信服务器回调遇到错误(保存订单状态时遇到错误)，业务出现错误
                     resXml = WePayUtil.NOTIFY_FAIL_SERVER_ERROR;

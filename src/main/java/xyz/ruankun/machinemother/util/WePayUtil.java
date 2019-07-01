@@ -600,4 +600,8 @@ public class WePayUtil {
             "  <return_code><![CDATA[FAIL]]></return_code>\n" +
             "  <return_msg><![无法验证数据的合法性，请重新尝试]]></return_msg>\n" +
             "</xml>";
+    public static final String NOTIFY_FAIL_REPEAT_ERROR ="<xml>\n" +
+            "  <return_code><![CDATA[FAIL]]></return_code>\n" +
+            "  <return_msg><![该订单已经支付，请勿重复回调!]]></return_msg>\n" +
+            "</xml>";
     }

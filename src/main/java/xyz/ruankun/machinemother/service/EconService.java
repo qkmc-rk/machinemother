@@ -51,5 +51,5 @@ public interface EconService {
 
     OrderSecret getSecretByOrder( int orderId);
 
-    Boolean confirmOrder(String orderSecret, Integer orderId);
+    Boolean confirmOrder(String orderSecret, String employee, Integer orderId);
 }

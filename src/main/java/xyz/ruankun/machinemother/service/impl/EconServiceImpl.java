@@ -317,7 +317,7 @@ public class EconServiceImpl implements EconService {
      */
     @Override
     @Transactional
-    public Boolean confirmOrder(String orderSecret, Integer orderId) {
+    public Boolean confirmOrder(String orderSecret, String employee, Integer orderId) {
 
         OrderSecret orderSecret1 = null;
         try {
@@ -328,6 +328,7 @@ public class EconServiceImpl implements EconService {
         }
         if (orderSecret1.getSecret().equals(orderSecret)) {
             orderSecret1.setUsed(true);
+            orderSecret1.setEmployee(employee);
             Order order = null;
             try {
                 order = orderRepository.findById(orderId.intValue());

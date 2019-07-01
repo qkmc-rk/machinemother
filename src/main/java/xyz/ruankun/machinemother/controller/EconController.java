@@ -149,9 +149,9 @@ public class EconController {
     @Authentication(role = AuthAopConstant.ADMIN)
     @ApiOperation(value = "[管理员]确认order完成， 从用户获取orderSecret")
     public ResponseEntity verifyOrder(@RequestParam(value = "orderSecret") String orderSecret,
-                                      @RequestParam(value = "password") String password,
+                                      @RequestParam(value = "employee") String employee,
                                       @PathVariable(value = "orderId") Integer orderId) {
-        Boolean rs = econService.confirmOrder(orderSecret, orderId);
+        Boolean rs = econService.confirmOrder(orderSecret, employee, orderId);
         return ControllerUtil.getTrueOrFalseResult(rs);
     }
 

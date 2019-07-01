@@ -305,6 +305,7 @@ public class FinancialServiceImpl implements FinancialService {
         /*-----------------------分割线-------------------------*/
         //开始生成信息去拿去prepay信息
         String nonce_str = WePayUtil.getNonceStr();
+        System.out.println("生成预支付信息 - nonce_str:" + nonce_str);
         //商品名称
         String body = "机器妈服务-";
         List<Integer> ids2 = new ArrayList<>();
@@ -315,11 +316,12 @@ public class FinancialServiceImpl implements FinancialService {
         List<Product> products = productRepository.findAllById(ids2);
         for (Product p :
                 products) {
-            body += p.getTitle() + ",";
+            body += p.getTitle();
         }
-
+        System.out.println("生成预支付信息 - 商品名:" + body);
         //获取客户端的ip地址
         String spbill_create_ip = getIpAddr(request);
+        System.out.println("生成预支付信息 - 客户端IP:" + spbill_create_ip);
         Map<String, String> packageParams = new HashMap<>();
         packageParams.put("appid", appid);
         packageParams.put("mch_id", mch_id);
@@ -341,9 +343,11 @@ public class FinancialServiceImpl implements FinancialService {
         packageParams.put("openid", user.getOpenId() + "");//用户的openID，自己获取
 
         String prestr = WePayUtil.createLinkString(packageParams);
-        String mysign = WePayUtil.sign(prestr, key, "utf-8");
-
+        System.out.println("签名字段组装：" + prestr);
+        String mysign = WePayUtil.sign(prestr, key, "utf-8").toUpperCase();
+        System.out.println("生成签名" + mysign);
         packageParams.put("sign", mysign);
+        System.out.println("生成预支付信息 - 请求prepay所携带参数:" + packageParams.toString());
         String xml = null;
         Map map = null;
 
@@ -365,10 +369,12 @@ public class FinancialServiceImpl implements FinancialService {
         //得到map后，要判断下单是否成功，并封装要返回给前端的数据
         String return_code = (String) map.get("return_code");//返回状态码
         String result_code = (String) map.get("result_code");//返回状态码
+        System.out.println("得到的服务器返回：" + map.toString());
 
         //原来抄过来的代码这里是Map<String, Object>看看改成String会不会报错
         Map<String, String> response = new HashMap<>();//返回给小程序端需要的参数
-        if (return_code == "SUCCESS" && return_code.equals(result_code)) {
+        if (return_code.equals("SUCCESS") && return_code.equals(result_code)) {
+            System.out.println("得到成功的服务器返回：resultcode" + result_code + ",returncode:" + return_code);
             String prepay_id = (String) map.get("prepay_id");//返回的预付单信息
             response.put("nonceStr", nonce_str);
             response.put("package", "prepay_id=" + prepay_id);
@@ -378,17 +384,21 @@ public class FinancialServiceImpl implements FinancialService {
             String stringSignTemp = "appId=" + appid + "&nonceStr=" + nonce_str + "&package=prepay_id=" + prepay_id + "&signType=MD5&timeStamp=" + timeStamp;
             //再次签名，这个签名用于小程序端调用wx.requesetPayment方法
             String paySign = WePayUtil.sign(stringSignTemp, key, "utf-8").toUpperCase();
-
             response.put("paySign", paySign);
+            response.put("appid", appid);
+        }
+        if (response.get("paySign") == null){
+            response.put("error","索取预支付信息失败！");
+            response.put("wx server msg",map.toString());
         }
 
-        response.put("appid", appid);
+        System.out.println("获取预支付-response is:" + response.toString());
         return response;
     }
 
     @Override
     public String orderNotify(HttpServletRequest request) throws Exception {
-        logger.info("回调函数开始执行...");
+        logger.info("notify function begin...");
         BufferedReader br = new BufferedReader(new InputStreamReader(request.getInputStream()));
         String line = null;
         StringBuilder sb = new StringBuilder();
@@ -399,9 +409,10 @@ public class FinancialServiceImpl implements FinancialService {
 
         //sb为微信返回的xml
         String notityXml = sb.toString();
-        logger.info("回调获得的数据：" + notityXml);
+        logger.info("notify xml data：" + notityXml);
         String resXml = "";
         Map map = WePayUtil.xmlToMap(notityXml);
+        logger.info("notify map data:" + map.toString());
         String returnCode = (String) map.get("return_code");
         if ("SUCCESS".equals(returnCode)) {
             //如果微信发来的sign没有问题就会执行用户的业务逻辑代码

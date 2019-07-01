@@ -109,7 +109,7 @@ public class WePayUtil {
          * @return
          */
         public static String sign(String text, String key, String input_charset) {
-            text = text + key;
+            text = text + "&key=" + key;
             return DigestUtils.md5Hex(getContentBytes(text, input_charset));
         }
 
@@ -213,9 +213,13 @@ public class WePayUtil {
          */
         public static boolean verifyWeixinNotify(Map<String, String> map,String key) {
             //根据微信服务端传来的各项参数 进行再一次加密后  与传过来的 sign 签名对比
+            String signWx = map.get("sign");
+            map.remove("sign");//重新获得签名一定要去除sign
             String mapStr = createLinkString(map);
+            System.out.println("回调获得的数据组成mapStr" + mapStr);
             String signOwn = sign(mapStr, key, "utf-8").toUpperCase();         //根据微信端参数进行加密的签名
-            String signWx = map.get("sign");                //微信端传过来的签名
+            System.out.println("回调获得的数据进行重新加密认证得到sign:" + signOwn);
+                           //微信端传过来的签名
             if(signOwn.equals(signWx)){
                 //如果两个签名一致，验证成功
                 return true;

@@ -100,7 +100,7 @@ public class EcomServiceImpl implements EcomService {
     @Transactional
     public Map<String, Object> generateOrder(Integer userId, Integer decouponId, Boolean useCredit, Integer addrId) {
         Map map = new HashMap();
-        List<Item> items = null;
+        List<Item> items;
         BigDecimal amount = new BigDecimal(0);
         Integer amountFen = 0;
         CreditRecord creditRecord = null;
@@ -178,6 +178,7 @@ public class EcomServiceImpl implements EcomService {
                 creditRecord.setAmount(credit);
                 creditRecord.setSave(false);
                 creditRecord.setUserId(userId);
+                creditRecord.setGmtCreate(new Date());//
                 //设置order
                 order.setCredit(new BigDecimal(credit));
                 order.setUseCredit(true);
@@ -228,7 +229,7 @@ public class EcomServiceImpl implements EcomService {
         //order还有一些参数需要设置
         order.setGmtCreate(new Date());
         order.setGmtModified(new Date());
-        System.out.println("moximoxi + :" + order.toString());
+        System.out.println("完整的订单:" + order.toString());
         //事务：保存order，保存item。（还有前面的增加消费记录，优惠券状态改变）
         try {
             order = orderRepository.save(order);
@@ -242,12 +243,12 @@ public class EcomServiceImpl implements EcomService {
             items = itemRepository.saveAll(items);//会覆盖吗
         } catch (Exception e) {
             e.printStackTrace();
+            System.out.println("出错的items：" + items.toString());
             map.put("error","重新设置item时出现错误");
             orderRepository.deleteById(order.getId());//需要回滚
             return map;
         }
         if (creditRecord != null)
-            creditRecord.setGmtCreate(new Date());
             creditRecordRepository.save(creditRecord);
         if (decoupon != null)
             decoupon.setGmtCreate(new Date());

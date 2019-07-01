@@ -122,11 +122,13 @@ public class EcomServiceImpl implements EcomService {
             addr = addrRepository.findById(addrId.intValue());
             if (addr.getUserId().intValue() != userId.intValue()) {
                 map.put("error", "改收货地址与用户不匹配");
+                map.put("status",-1);
                 return map;
             }
         } catch (Exception e) {
             e.printStackTrace();
             map.put("error", "没有找到收货地址");
+            map.put("status",-1);
             return map;
 
         }
@@ -147,6 +149,7 @@ public class EcomServiceImpl implements EcomService {
         //算出订单没有减免前的总金额，转换成分
         if(items.isEmpty()){
             map.put("error","购物车为空");
+            map.put("status",-1);
             return map;
         }
         for (Item i :
@@ -186,6 +189,7 @@ public class EcomServiceImpl implements EcomService {
             if (decoupon.getPast()) {
                 //过期优惠券不能使用
                 map.put("error", "过期优惠券无法使用");
+                map.put("status",-1);
             }
             if (decoupon.getGmtPast().getTime() < new Date().getTime()) {
                 //优惠券过期了
@@ -195,12 +199,20 @@ public class EcomServiceImpl implements EcomService {
                 return map;
             }
             if (decoupon.getUserid().intValue() != userId.intValue()) {
+                map.put("status",-1);
                 map.put("error", "优惠券不是用户的优惠券");
                 return map;
             }
             if (decoupon.getMin().compareTo(amount) > 0) {
                 //使用优惠券条件不足
+                map.put("status",-1);
                 map.put("error", "使用优惠券条件不足");
+                return map;
+            }
+            if (decoupon.getUsed()){
+                //优惠券已经被使用
+                map.put("status",-1);
+                map.put("error", "优惠券已经被使用");
                 return map;
             }
             amountFen -= (decoupon.getWorth().intValue() * 100);
@@ -222,6 +234,7 @@ public class EcomServiceImpl implements EcomService {
             order = orderRepository.save(order);
         } catch (Exception e) {
             e.printStackTrace();
+            map.put("status",-1);
             map.put("error","保存order出现问题。");
             return map;
         }

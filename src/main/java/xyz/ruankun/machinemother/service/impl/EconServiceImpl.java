@@ -15,8 +15,7 @@ import xyz.ruankun.machinemother.util.MD5Util;
 
 import javax.annotation.Resource;
 import java.math.BigDecimal;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 @Service
 public class EconServiceImpl implements EconService {
@@ -32,6 +31,9 @@ public class EconServiceImpl implements EconService {
 
     @Resource
     private DecouponRepository decouponRepository;
+
+    @Resource
+    private ProductRepository productRepository;
 
     @Resource
     private CreditRecordRepository creditRecordRepository;
@@ -122,12 +124,12 @@ public class EconServiceImpl implements EconService {
     public Order getOrder(int id) {
         try {
             Order order = orderRepository.findById(id);
-            if(order == null){
+            if (order == null) {
                 order = new Order();
                 order.setId(0);
             }
             return order;
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
             return null;
         }
@@ -138,12 +140,12 @@ public class EconServiceImpl implements EconService {
     public Order getOrder(String orderNumber) {
         try {
             Order order = orderRepository.findByOrderNumber(orderNumber);
-            if(order == null){
+            if (order == null) {
                 order = new Order();
                 order.setId(0);
             }
             return order;
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
             return null;
         }
@@ -195,10 +197,45 @@ public class EconServiceImpl implements EconService {
     }
 
     @Override
+    public Map<String, Object> getDetail(String ordernumber) {
+        Map<String, Object> map = new LinkedHashMap<>();
+        List<Item> items = itemRepository.findAllByOrderNumber(ordernumber);
+        List<Product> products = new ArrayList<>();
+        if (items.size() > 0) {
+            for (Item item : items) {
+                try {
+                    Product product = productRepository.findById(item.getProductId().intValue());
+                    if (product != null) {
+                        products.add(product);
+                    } else {
+                        map.put("error", "数据错误");
+                        return map;
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    System.out.println("item  id:" + item.getId() + "对应的product不存在");
+                    map.put("error", "数据错误");
+                    return map;
+                }
+            }
+//            添加一一对应关系
+            if (products.size() == items.size()) {
+                map.put("product", products);
+                map.put("item", items);
+            } else {
+                map.put("error", "数据错误");
+            }
+        } else {
+            map.put("error", "数据错误");
+        }
+        return map;
+    }
+
+    @Override
     public Item getItem(int id) {
         try {
             Item item = itemRepository.findById(id);
-            if(item == null){
+            if (item == null) {
                 item = new Item();
                 item.setId(0);
             }
@@ -214,9 +251,9 @@ public class EconServiceImpl implements EconService {
     public Item getItem(int userId, int productId) {
         try {
             Item item = itemRepository.findByUserIdAndProductId(userId, productId);
-            if(item == null){
+            if (item == null) {
                 item = new Item();
-                item .setId(0);
+                item.setId(0);
             }
             return null;
         } catch (Exception e) {
@@ -281,7 +318,7 @@ public class EconServiceImpl implements EconService {
     public OrderSecret getSecretById(int id) {
         try {
             OrderSecret orderSecret = orderSecretRepository.findById(id);
-            if(orderSecret == null){
+            if (orderSecret == null) {
                 orderSecret = new OrderSecret();
                 orderSecret.setId(0);
             }
@@ -297,7 +334,7 @@ public class EconServiceImpl implements EconService {
     public OrderSecret getSecretByOrder(int orderId) {
         try {
             OrderSecret orderSecret = orderSecretRepository.findByOrderid(orderId);
-            if(orderSecret == null){
+            if (orderSecret == null) {
                 orderSecret = new OrderSecret();
                 orderSecret.setId(0);
             }

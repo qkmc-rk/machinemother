@@ -12,6 +12,7 @@ import xyz.ruankun.machinemother.annotation.Authentication;
 import xyz.ruankun.machinemother.entity.Item;
 import xyz.ruankun.machinemother.entity.Order;
 import xyz.ruankun.machinemother.entity.OrderSecret;
+import xyz.ruankun.machinemother.entity.Product;
 import xyz.ruankun.machinemother.repository.OrderRepository;
 import xyz.ruankun.machinemother.service.EconService;
 import xyz.ruankun.machinemother.service.UserInfoService;
@@ -19,8 +20,7 @@ import xyz.ruankun.machinemother.util.constant.AuthAopConstant;
 import xyz.ruankun.machinemother.vo.ResponseEntity;
 
 import javax.annotation.Resource;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 @RestController
 @CrossOrigin
@@ -117,13 +117,63 @@ public class EconController {
 //        return responseEntity;
 //    }
 
+//    @GetMapping(value = "/order/{ordernumber}")
+//    @Authentication(role = AuthAopConstant.USER)
+//    @ApiOperation(value = "[用户]获取指定ordernumber的订单的product数据")
+//    public ResponseEntity getOrders(@PathVariable(value = "ordernumber") String ordernumber,
+//                                    @RequestHeader(value = "token") String token) {
+//        Integer userId = Integer.valueOf(userInfoService.readDataFromRedis(token));
+//        Order order = econService.getOrder(ordernumber);
+//        if (order == null) {
+//            responseEntity.serverError();
+//        } else if (order.getId() == 0) {
+//            responseEntity.error(-1, "订单不存在", null);
+//        } else {
+//            if (order.getUserId() == userId) {
+//                List<Product> products = p
+//            } else {
+//                responseEntity.error(-1, "非法请求", null);
+//            }
+//        }
+//        return responseEntity;
+//    }
+
     @GetMapping(value = "/order")
     @Authentication(role = AuthAopConstant.USER)
     @ApiOperation(value = "[用户]获取用户所有order", notes = "通过token获取userId, 筛选")
     public ResponseEntity getOrders(@RequestHeader(value = "token") String token) {
         int userId = Integer.valueOf(userInfoService.readDataFromRedis(token));
         List<Order> orders = econService.getOrders(userId);
-        return ControllerUtil.getDataResult(orders);
+        Map<String, Object> map = new LinkedHashMap<>();
+        List<Product> products = new ArrayList<>();
+        List<Item> items = new ArrayList<>();
+//        return ControllerUtil.getDataResult(orders);
+        if (orders.size() > 0) {
+            for (Order order : orders) {
+                Map<String, Object> result = econService.getDetail(order.getOrderNumber());
+                if (result.containsKey("error")) {
+                    responseEntity.error(-1, String.valueOf(result.get("error")), null);
+                    return responseEntity;
+                } else {
+                    try {
+                        List<Product> productResult = (List<Product>) result.get("product");
+                        List<Item> itemsResult = (List<Item>) result.get("item");
+                        products.addAll(productResult);
+                        items.addAll(itemsResult);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                        responseEntity.serverError();
+                        return responseEntity;
+                    }
+                }
+            }
+            map.put("product", products);
+            map.put("item", items);
+            responseEntity.success(map);
+        } else {
+            responseEntity.error(-1, "数据不存在", null);
+        }
+        return responseEntity;
     }
 
     @GetMapping(value = "/order/{orderId}")
@@ -134,10 +184,17 @@ public class EconController {
         Order order = econService.getOrder(orderId);
         if (order == null) {
             responseEntity.serverError();
+        } else if (order.getId() == 0) {
+            responseEntity.error(-1, "订单不存在", null);
         } else {
             Integer userId = Integer.valueOf(userInfoService.readDataFromRedis(token));
             if (userId == order.getUserId()) {
-                responseEntity.success(order);
+                Map<String, Object> map = econService.getDetail(order.getOrderNumber());
+                if (map.containsKey("error")) {
+                    responseEntity.error(-1, String.valueOf(map.get("error")), null);
+                } else {
+                    responseEntity.success(map);
+                }
             } else {
                 responseEntity.error(-1, "非法数据请求", null);
             }

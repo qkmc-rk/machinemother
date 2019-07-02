@@ -29,7 +29,7 @@ public class ReplyCommentController {
     @Autowired
     UserInfoService userInfoService;
 
-    @RequestMapping("/item/{itemId}/comment")
+    @PostMapping("/item/{itemId}/comment")
     @Authentication(role = AuthAopConstant.USER)
     @ApiOperation(value = "[用户]新增一条评论")
     public ResponseEntity putCommentToItem(@RequestHeader String token, @PathVariable Integer itemId, @RequestBody Comment comment){

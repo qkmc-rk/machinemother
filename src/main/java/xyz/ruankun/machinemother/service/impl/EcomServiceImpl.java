@@ -255,6 +255,9 @@ public class EcomServiceImpl implements EcomService {
             decouponRepository.saveAndFlush(decoupon);
         map.put("status", Constant.SUCCESS_CODE);
         map.put("msg", "订单创建成功");
+        map.put("order",order);
+        //还要拿到所有item
+        map.put("item",items);
         return map;
     }
     //订单完成时有很多事情要做

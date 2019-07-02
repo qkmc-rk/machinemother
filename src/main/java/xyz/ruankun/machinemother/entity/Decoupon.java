@@ -95,6 +95,23 @@ public class Decoupon {
     }
 
     public void setFromexchange(Boolean fromexchange) {
+
+
         isFromexchange = fromexchange;
+    }
+
+    @Override
+    public String toString() {
+        return "Decoupon{" +
+                "id=" + id +
+                ", userId=" + userId +
+                ", gmtCreate=" + gmtCreate +
+                ", gmtPast=" + gmtPast +
+                ", isUsed=" + isUsed +
+                ", isPast=" + isPast +
+                ", min=" + min +
+                ", worth=" + worth +
+                ", isFromexchange=" + isFromexchange +
+                '}';
     }
 }

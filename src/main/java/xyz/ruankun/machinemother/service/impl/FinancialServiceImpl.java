@@ -282,24 +282,36 @@ public class FinancialServiceImpl implements FinancialService {
         BigDecimal originAmount = new BigDecimal(0);
         for (ProductProps p :
                 productProps) {
-            originAmount.add(p.getPrice());
+            originAmount = originAmount.add(p.getPrice());
         }
-        //拿去优惠券和积分
+        //拿取优惠券和积分
         BigDecimal credit = order.getCredit();  //积分
+        Integer decouponId = order.getDecouponId();//优惠券Id
         Decoupon decoupon = null;
-        if (!decouponRepository.findById(order.getDecouponId()).isPresent()) {
+
+        if (decouponId != null && decouponId.intValue() != 0 && !decouponRepository.findById(order.getDecouponId()).isPresent()) {
+            //如果该订单伪造的优惠券，那么这里可以检查出来
             rs.put("error", "错误,订单所使用的优惠券信息有误，无效订单");
+            return rs;
         }
-        decoupon = decouponRepository.findById(order.getDecouponId().intValue());
-        if (originAmount.compareTo(decoupon.getMin()) > 0) {
+        BigDecimal decouponAmount = new BigDecimal(0);
+        if (decouponId != null && decouponId.intValue() != 0){
+            decoupon = decouponRepository.findById(order.getDecouponId().intValue());
+            System.out.println("操你妈的decoupon：" + decoupon.toString());
+            decouponAmount = decoupon.getWorth();
+        }
+        if (decoupon != null && originAmount.compareTo(decoupon.getMin()) > 0) {
+            //有时伪造不合法的优惠券会出现问题，这里进行检查一下
             rs.put("error", "错误,所使用的优惠券明显不符合要求,订单支付拉起失败");
+            return rs;
         }
-        BigDecimal decouponAmount = decoupon.getWorth();
+
         //把所有金额全部转换成分
-        Integer originAmountFen = (int) originAmount.floatValue() * 100;
+        Integer originAmountFen = (int) (originAmount.floatValue() * 100);
         Integer newOriginAmountFen = (int) (order.getAmount().floatValue() * 100 + credit.floatValue() + decouponAmount.floatValue() * 100);
         if (originAmountFen.intValue() != newOriginAmountFen.intValue()) {
-            rs.put("error", "订单金额有误，无法下单！");
+            rs.put("error", "订单金额有误，无法下单！" + originAmountFen.intValue() + "," + newOriginAmountFen.intValue());
+            return rs;
         }
 
         /*-----------------------分割线-------------------------*/

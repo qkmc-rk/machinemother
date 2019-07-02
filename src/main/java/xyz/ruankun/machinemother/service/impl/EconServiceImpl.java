@@ -200,12 +200,14 @@ public class EconServiceImpl implements EconService {
     public Map<String, Object> getDetail(String ordernumber) {
         Map<String, Object> map = new LinkedHashMap<>();
         List<Item> items = itemRepository.findAllByOrderNumber(ordernumber);
-        List<Product> products = new ArrayList<>();
+        Set<Product> products = new HashSet<>();
+        int count = 0;
         if (items.size() > 0) {
             for (Item item : items) {
                 try {
                     Product product = productRepository.findById(item.getProductId().intValue());
                     if (product != null) {
+                        count+=1;
                         products.add(product);
                     } else {
                         map.put("error", "数据错误");
@@ -219,7 +221,7 @@ public class EconServiceImpl implements EconService {
                 }
             }
 //            添加一一对应关系
-            if (products.size() == items.size()) {
+            if (count == items.size()) {
                 map.put("product", products);
                 map.put("item", items);
             } else {

@@ -5,11 +5,13 @@ import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Lookup;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import xyz.ruankun.machinemother.entity.*;
 import xyz.ruankun.machinemother.repository.*;
 import xyz.ruankun.machinemother.service.ReplyCommentService;
 
 import javax.annotation.Resource;
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
@@ -30,6 +32,7 @@ public class ReplyCommentServiceImpl implements ReplyCommentService {
     private Log logger = LogFactory.getLog(ReplyCommentServiceImpl.class);
 
     @Override
+    @Transactional
     public Comment putComment(Comment comment) {
         Item item = itemRepository.findById(comment.getItemId().intValue());
         if (item == null) {
@@ -50,11 +53,37 @@ public class ReplyCommentServiceImpl implements ReplyCommentService {
                 }
             } else {
                 logger.error("commentid:" + comment.getId() + ", productid:" +
-                        product.getId()+", userid:"+user.getId());
+                        product.getId() + ", userid:" + user.getId());
                 return null;
             }
         }
 
+    }
+
+    @Override
+    public List<Comment> getComments(Integer productId) {
+        List<Item> items = itemRepository.findByProductId(productId);
+        List<Comment> comments = new ArrayList<>();
+        if (items.size() > 0) {
+            for (Item item : items) {
+                List<Comment> result = commentRepository.findByItemId(item.getId());
+                if (result.size() >= 0) {
+                    for (Comment comment : result) {
+                        try {
+                            User user = userRepository.findById(comment.getUserId().intValue());
+                            comment.setUsername(user.getName());
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                            return null;
+                        }
+                    }
+                    comments.addAll(result);
+                } else {
+                    return null;
+                }
+            }
+        }
+        return comments;
     }
 
     @Override
@@ -139,7 +168,7 @@ public class ReplyCommentServiceImpl implements ReplyCommentService {
                         comment.setUsername(user.getName());
                     } else {
                         logger.error("commentid:" + comment.getId() + ", productid:" +
-                                product.getId()+", userid:"+user.getId());
+                                product.getId() + ", userid:" + user.getId());
                         iterator.remove();
                     }
                 }

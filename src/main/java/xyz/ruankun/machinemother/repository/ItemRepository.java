@@ -22,6 +22,8 @@ public interface ItemRepository extends JpaRepository<Item, Integer> {
 
     Item findByUserIdAndProductId(int userId, int productId);
 
+    List<Item> findByProductId(int productId);
+
     @Transactional
     @Query(value = "delete from mm_item where userid=?1", nativeQuery = true)
     @Modifying

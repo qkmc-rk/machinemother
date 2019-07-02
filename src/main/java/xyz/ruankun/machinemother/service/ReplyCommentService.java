@@ -12,6 +12,8 @@ public interface ReplyCommentService {
 
     Reply putReply(Reply reply);
 
+    List<Comment> getComments(Integer productId);
+
     List<Comment> getAllComent();
 
     List<Reply> getAllReplyOfOneComment(Integer commentId);

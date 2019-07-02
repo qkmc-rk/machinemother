@@ -184,13 +184,18 @@ public class EcomServiceImpl implements EcomService {
                 order.setUseCredit(true);
             }
         }
-        if (decouponId != null && decouponId /* <= */ > 0) {
+        if (decouponId != null && decouponId.intValue() /* <= */ > 0) {
             //若使用优惠券，则把优惠券变成已使用，且减少订单金额。
             decoupon = decouponRepository.findById(decouponId.intValue());
+            if (decoupon == null){
+                map.put("error", "没有优惠券");
+                map.put("status",-1);
+            }
             if (decoupon.getPast()) {
                 //过期优惠券不能使用
                 map.put("error", "过期优惠券无法使用");
                 map.put("status",-1);
+                return map;
             }
             if (decoupon.getGmtPast().getTime() < new Date().getTime()) {
                 //优惠券过期了
@@ -251,7 +256,6 @@ public class EcomServiceImpl implements EcomService {
         if (creditRecord != null)
             creditRecordRepository.save(creditRecord);
         if (decoupon != null)
-            decoupon.setGmtCreate(new Date());
             decouponRepository.saveAndFlush(decoupon);
         map.put("status", Constant.SUCCESS_CODE);
         map.put("msg", "订单创建成功");

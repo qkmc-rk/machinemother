@@ -70,7 +70,7 @@ public class EcomController {
     @Authentication(role = AuthAopConstant.USER)
     @ApiOperation(value = "[用户]下订单，此处下单是将购物车中的所有服务下单")
     public ResponseEntity makeOrder(@RequestHeader("token") String token,
-                                    @RequestParam Integer decouponId,
+                                    @RequestParam(required = false) Integer decouponId,
                                     @RequestParam Boolean useCredit,
                                     @RequestParam Integer addrId) {
         Integer userId = Integer.parseInt(userInfoService.readDataFromRedis(token));

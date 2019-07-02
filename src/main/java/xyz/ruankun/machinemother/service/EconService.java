@@ -8,6 +8,7 @@ import xyz.ruankun.machinemother.entity.OrderSecret;
 
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.Map;
 
 public interface EconService {
 
@@ -26,6 +27,7 @@ public interface EconService {
 
     Boolean deleteOrders(int userId);
 
+    Map<String, Object> getDetail(String ordernumber);
 
     //item
     Item getItem(int id);

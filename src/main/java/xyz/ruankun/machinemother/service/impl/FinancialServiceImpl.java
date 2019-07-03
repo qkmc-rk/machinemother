@@ -532,22 +532,23 @@ public class FinancialServiceImpl implements FinancialService {
                 return false;
             } else {
                 //满足则将wallet数据减少
-                wallet.setCommission(commission);
-                wallet.setGmtModified(new Date());
+                //钱包金额也将于提现错做完成后扣除
+//                wallet.setCommission(commission);
+//                wallet.setGmtModified(new Date());
                 withDraw.setGmtCreate(new Date());
                 withDraw.setGmtModified(new Date());
 
-                //且增加扣除佣金记录
-                CommissionRecord record = new CommissionRecord();
-                record.setAmount(commission);
-                record.setReason("佣金提现");
-                record.setGmtCreate(new Date());
-                record.setSave(false);
-                record.setUserId(wallet.getUserId());
+                //7.3 佣金记录操作放于用户提现操作完成后
+//                CommissionRecord record = new CommissionRecord();
+//                record.setAmount(withDraw.getAmount());
+//                record.setReason("佣金提现");
+//                record.setGmtCreate(new Date());
+//                record.setSave(false);
+//                record.setUserId(wallet.getUserId());
                 try {
-                    walletRepository.save(wallet);      //若后续提现失败则需重新添加
+//                    walletRepository.save(wallet);      //若后续提现失败则需重新添加
                     withDrawRepository.save(withDraw);
-                    commissionRecordRepository.save(record);
+//                    commissionRecordRepository.save(record);
                     return true;
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -569,13 +570,15 @@ public class FinancialServiceImpl implements FinancialService {
 
     /**
      * 若为真则说明提现成功， 反则失败，为wallet添加回相应的提现金额
+     * 7.3 需求变更，这个方法就不用了。看着糟心,
      *
      * @param id
      * @param option
      * @return
      */
-    @Override
-    @Transactional(rollbackFor = Exception.class)
+//    @Override
+//    @Transactional(rollbackFor = Exception.class)
+    @Deprecated
     public Boolean updateWithDraw(Integer id, Boolean option) {
         WithDraw withDraw = getWithDraw(id);
         if (withDraw == null || withDraw.getId() == 0) {
@@ -583,55 +586,142 @@ public class FinancialServiceImpl implements FinancialService {
         } else {
             withDraw.setGmtModified(new Date());
             if (option) {
-                //确认则创建佣金使用记录，本应与佣金扣除时创建该记录数据，但为设置外键，无法更具提现记录查找佣金记录
+//                确认则创建佣金使用记录，本应与佣金扣除时创建该记录数据，但为设置外键，无法更具提现记录查找佣金记录
                 withDraw.setConfirm(true);
-
-                //佣金记录更新于提现发起添加提现记录时插入
-//                CommissionRecord record = new CommissionRecord();
-//                record.setAmount(withDraw.getAmount());
-//                record.setGmtCreate(new Date());
-//                record.setSave(false);
-//                record.setUserId(withDraw.getUserid());
-                try {
-//                    commissionRecordRepository.save(record);
-                    withDrawRepository.save(withDraw);
-                    return true;
-                } catch (Exception e) {
-                    e.printStackTrace();
+                //钱包操作
+                Wallet wallet = walletRepository.findByUserId(withDraw.getUserid());
+                if (wallet == null) {
+                    logger.error("用户:" + withDraw.getUserid() + "的账户数据不存在");
                     return false;
+                } else {
+                    //扣除wallet中的commission，若数额不够，则返回
+                    //佣金记录于提现操作确认后插入
+                    CommissionRecord record = new CommissionRecord();
+                    record.setAmount(withDraw.getAmount());
+                    record.setGmtCreate(new Date());
+                    record.setSave(false);
+                    record.setUserId(withDraw.getUserid());
+                    try {
+//                    commissionRecordRepository.save(record);
+                        withDrawRepository.save(withDraw);
+                        return true;
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                        return false;
+                    }
                 }
             } else {
-                //拒绝则生成佣金增加使用记录，且归还原先提现请求时扣除的佣金金额
-                try {
-                    Wallet wallet = selectWallet(withDraw.getUserid());
-                    if (wallet == null) {
-                        return false;
+                //拒绝则生成佣金增加使用记录，且归还原先提现请求时扣除的佣金金额;
+                //7.3若拒绝则将提现记录更新，wallet和commissionrecord不参与操作
+//                try {
+//                    Wallet wallet = selectWallet(withDraw.getUserid());
+//                    if (wallet == null) {
+//                        return false;
+//                    } else {
+//                        BigDecimal commission = wallet.getCommission().add(withDraw.getAmount());
+//                        //wallet
+//                        wallet.setCommission(commission);
+//                        wallet.setGmtModified(new Date());
+//                        //佣金记录
+//                        CommissionRecord record = new CommissionRecord();
+//                        record.setUserId(wallet.getUserId());
+//                        record.setReason("提现失败，退还");
+//                        record.setSave(true);
+//                        record.setGmtCreate(new Date());
+//                        record.setAmount(commission);
+
+                withDraw.setFailed(true);
+
+//                        commissionRecordRepository.save(record);
+                withDrawRepository.save(withDraw);
+//                        walletRepository.save(wallet);
+                return true;
+            }
+//                } catch (Exception e) {
+//                    e.printStackTrace();
+//                    return false;
+//                }
+//            }
+        }
+    }
+
+
+    /**
+     * 7.3 提现记录创建时 不再扣除金额，当前需要重新判断用户当前
+     * 钱包中的佣金余额是否足以满足提现金额，若不足则返回错误，
+     * 若满足则扣除钱包中相应的佣金金额，增加佣金记录数据。多重验证
+     *
+     * @param id
+     * @param option
+     * @return
+     */
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public Map<Boolean, String> alterWithDraw(Integer id, Boolean option, String orderStr) {
+        Map<Boolean, String> map = new LinkedHashMap<>();
+        try {
+            WithDraw withDraw = withDrawRepository.findById(id.intValue());
+            //验证1.提现请求是否存在
+            if (withDraw == null) {
+                map.put(false, "数据不存在");
+            } else {
+                //验证2.提现请求是否被受理
+                if ((withDraw.getFailed() && withDraw.getRecnum() == null) || (withDraw.getConfirm() && withDraw.getRecnum() != null)) {
+                    map.put(false, "非法请求");
+                } else {
+                    //验证３　管理员意见
+                    if (option) {
+                        //同意提现且已完成
+                        if (orderStr.equals("refuse")) {
+                            map.put(false, "数据缺失");
+                        } else {
+                            withDraw.setFailed(false);
+                            withDraw.setGmtModified(new Date());
+                            withDraw.setRecnum(orderStr);
+                            withDraw.setConfirm(true);
+                            Wallet wallet = walletRepository.findByUserId(withDraw.getUserid());
+                            if (wallet == null) {
+                                map.put(false, "数据不存在");
+                            } else {
+                                BigDecimal commission = wallet.getCommission().subtract(withDraw.getAmount());
+                                //若当前用户余额不足以扣除则返回失败
+                                if (commission.doubleValue() < 0) {
+                                    map.put(false, "当前账户余额不足");
+                                } else {
+                                    //账户余额为扣除后的数额
+                                    wallet.setCommission(commission);
+                                    wallet.setGmtModified(new Date());
+                                    //增加扣除记录
+                                    CommissionRecord record = new CommissionRecord();
+                                    record.setUserId(withDraw.getUserid());
+                                    record.setSave(false);
+                                    record.setAmount(withDraw.getAmount());
+                                    record.setReason("提现成功，扣除佣金");
+                                    record.setGmtCreate(new Date());
+
+                                    withDrawRepository.save(withDraw);
+                                    walletRepository.save(wallet);
+                                    commissionRecordRepository.save(record);
+                                    map.put(true, "操作成功");
+                                }
+                            }
+                        }
                     } else {
-                        BigDecimal commission = wallet.getCommission().add(withDraw.getAmount());
-                        //wallet
-                        wallet.setCommission(commission);
-                        wallet.setGmtModified(new Date());
-                        //佣金记录
-                        CommissionRecord record = new CommissionRecord();
-                        record.setUserId(wallet.getUserId());
-                        record.setReason("提现失败，退还");
-                        record.setSave(true);
-                        record.setGmtCreate(new Date());
-                        record.setAmount(commission);
-
                         withDraw.setFailed(true);
-
-                        commissionRecordRepository.save(record);
+                        withDraw.setConfirm(false);
+                        withDraw.setRecnum("refuse");
+                        withDraw.setGmtModified(new Date());
                         withDrawRepository.save(withDraw);
-                        walletRepository.save(wallet);
-                        return true;
+
+                        map.put(true, "操作成功");
                     }
-                } catch (Exception e) {
-                    e.printStackTrace();
-                    return false;
                 }
             }
+        } catch (Exception e) {
+            e.printStackTrace();
+            map.put(false, "非法请求");
         }
+        return map;
     }
 
     /**

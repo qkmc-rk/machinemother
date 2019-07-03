@@ -48,6 +48,7 @@ public class EcomController {
         item.setProductPropsId(productPropsId);
         item.setQuantity(number);
         item.setUserId(userId);
+        item.setComment(false);         //未评价
         Item item1 = ecomService.putToItem(item);
         return ControllerUtil.getDataResult(item1);
     }

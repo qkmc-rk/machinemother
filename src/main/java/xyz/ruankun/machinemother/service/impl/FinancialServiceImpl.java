@@ -295,7 +295,7 @@ public class FinancialServiceImpl implements FinancialService {
             return rs;
         }
         BigDecimal decouponAmount = new BigDecimal(0);
-        if (decouponId != null && decouponId.intValue() != 0){
+        if (decouponId != null && decouponId.intValue() != 0) {
             decoupon = decouponRepository.findById(order.getDecouponId().intValue());
             System.out.println("操你妈的decoupon：" + decoupon.toString());
             decouponAmount = decoupon.getWorth();
@@ -399,9 +399,9 @@ public class FinancialServiceImpl implements FinancialService {
             response.put("paySign", paySign);
             response.put("appid", appid);
         }
-        if (response.get("paySign") == null){
-            response.put("error","索取预支付信息失败！");
-            response.put("wx server msg",map.toString());
+        if (response.get("paySign") == null) {
+            response.put("error", "索取预支付信息失败！");
+            response.put("wx server msg", map.toString());
         }
 
         System.out.println("获取预支付-response is:" + response.toString());
@@ -442,7 +442,7 @@ public class FinancialServiceImpl implements FinancialService {
                     resXml = WePayUtil.NOTIFY_FAIL_SERVER_ERROR;
                     logger.error(resXml);
                 }
-                if (order.getPaid()){
+                if (order.getPaid()) {
                     resXml = WePayUtil.NOTIFY_FAIL_REPEAT_ERROR;
                     logger.error(resXml);
                     return resXml;
@@ -535,9 +535,19 @@ public class FinancialServiceImpl implements FinancialService {
                 wallet.setCommission(commission);
                 wallet.setGmtModified(new Date());
                 withDraw.setGmtCreate(new Date());
+                withDraw.setGmtModified(new Date());
+
+                //且增加扣除佣金记录
+                CommissionRecord record = new CommissionRecord();
+                record.setAmount(commission);
+                record.setReason("佣金提现");
+                record.setGmtCreate(new Date());
+                record.setSave(false);
+                record.setUserId(wallet.getUserId());
                 try {
                     walletRepository.save(wallet);      //若后续提现失败则需重新添加
                     withDrawRepository.save(withDraw);
+                    commissionRecordRepository.save(record);
                     return true;
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -568,20 +578,22 @@ public class FinancialServiceImpl implements FinancialService {
     @Transactional(rollbackFor = Exception.class)
     public Boolean updateWithDraw(Integer id, Boolean option) {
         WithDraw withDraw = getWithDraw(id);
-        if (withDraw == null) {
+        if (withDraw == null || withDraw.getId() == 0) {
             return false;
         } else {
             withDraw.setGmtModified(new Date());
             if (option) {
                 //确认则创建佣金使用记录，本应与佣金扣除时创建该记录数据，但为设置外键，无法更具提现记录查找佣金记录
                 withDraw.setConfirm(true);
-                CommissionRecord record = new CommissionRecord();
-                record.setAmount(withDraw.getAmount());
-                record.setGmtCreate(new Date());
-                record.setSave(false);
-                record.setUserId(withDraw.getUserid());
+
+                //佣金记录更新于提现发起添加提现记录时插入
+//                CommissionRecord record = new CommissionRecord();
+//                record.setAmount(withDraw.getAmount());
+//                record.setGmtCreate(new Date());
+//                record.setSave(false);
+//                record.setUserId(withDraw.getUserid());
                 try {
-                    commissionRecordRepository.save(record);
+//                    commissionRecordRepository.save(record);
                     withDrawRepository.save(withDraw);
                     return true;
                 } catch (Exception e) {
@@ -589,16 +601,27 @@ public class FinancialServiceImpl implements FinancialService {
                     return false;
                 }
             } else {
-                //拒绝则不生成佣金使用记录，且归还原先提现请求时扣除的佣金金额
+                //拒绝则生成佣金增加使用记录，且归还原先提现请求时扣除的佣金金额
                 try {
                     Wallet wallet = selectWallet(withDraw.getUserid());
                     if (wallet == null) {
                         return false;
                     } else {
                         BigDecimal commission = wallet.getCommission().add(withDraw.getAmount());
+                        //wallet
                         wallet.setCommission(commission);
                         wallet.setGmtModified(new Date());
+                        //佣金记录
+                        CommissionRecord record = new CommissionRecord();
+                        record.setUserId(wallet.getUserId());
+                        record.setReason("提现失败，退还");
+                        record.setSave(true);
+                        record.setGmtCreate(new Date());
+                        record.setAmount(commission);
+
                         withDraw.setFailed(true);
+
+                        commissionRecordRepository.save(record);
                         withDrawRepository.save(withDraw);
                         walletRepository.save(wallet);
                         return true;

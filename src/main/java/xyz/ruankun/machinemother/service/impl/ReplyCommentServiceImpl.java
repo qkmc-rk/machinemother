@@ -44,6 +44,8 @@ public class ReplyCommentServiceImpl implements ReplyCommentService {
             if (product != null && user != null) {
                 try {
                     commentRepository.save(comment);
+                    item.setComment(true);      //当评论正常保存时，item设置为已评论
+                    itemRepository.save(item);
                     comment.setTitle(product.getTitle());
                     comment.setUsername(user.getName());
                     return comment;
@@ -66,20 +68,23 @@ public class ReplyCommentServiceImpl implements ReplyCommentService {
         List<Comment> comments = new ArrayList<>();
         if (items.size() > 0) {
             for (Item item : items) {
-                List<Comment> result = commentRepository.findByItemId(item.getId());
-                if (result.size() >= 0) {
-                    for (Comment comment : result) {
-                        try {
-                            User user = userRepository.findById(comment.getUserId().intValue());
-                            comment.setUsername(user.getName());
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                            return null;
+                //如果用户已评价，则获取评价信息
+                if (item.getComment()) {
+                    List<Comment> result = commentRepository.findByItemId(item.getId());
+                    if (result.size() >= 0) {
+                        for (Comment comment : result) {
+                            try {
+                                User user = userRepository.findById(comment.getUserId().intValue());
+                                comment.setUsername(user.getName());
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                                return null;
+                            }
                         }
+                        comments.addAll(result);
+                    } else {
+                        return null;
                     }
-                    comments.addAll(result);
-                } else {
-                    return null;
                 }
             }
         }

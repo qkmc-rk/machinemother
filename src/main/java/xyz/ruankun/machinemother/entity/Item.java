@@ -27,6 +27,16 @@ public class Item {
     @Column(name = "userid")
     private Integer userId;
 
+    @Column(name = "isComment")
+    private Boolean isComment;
+
+    public Boolean getComment() {
+        return isComment;
+    }
+
+    public void setComment(Boolean comment) {
+        isComment = comment;
+    }
 
     public Integer getId() {
         return id;

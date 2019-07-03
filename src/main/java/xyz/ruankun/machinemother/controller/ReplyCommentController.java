@@ -66,15 +66,17 @@ public class ReplyCommentController {
     @GetMapping("/comment")
     @ApiOperation(value = "【匿名】获取评论,如果没有token就是匿名，有就是管理员或者用户")
     public ResponseEntity getComment(@RequestHeader(value = "token", required = false) String token) {
-
-        if (token == null) return getTrueOrFalseResult(false);
+        ResponseEntity responseEntity = new ResponseEntity();
+        if (token == null) {
+            responseEntity.error(-1, "非法请求", null);
+            return responseEntity;
+        }
 
         List<Comment> comments = replyCommentService.getAllComent();
         String tk = userInfoService.readDataFromRedis("session_key" + userInfoService.readDataFromRedis(token));
         if (tk == null) {
             //普通用户
-            for (Comment c :
-                    comments) {
+            for (Comment c : comments) {
                 if (!c.getUserId().equals(userInfoService.readDataFromRedis(token))) {
                     comments.remove(c);
                 }

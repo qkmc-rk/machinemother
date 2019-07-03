@@ -204,7 +204,7 @@ public class FinancialController {
         if (result) {
             responseEntity.success(withDraw);
         } else {
-            responseEntity.serverError();
+            responseEntity.error(-1, "操作失败", null);
         }
         return responseEntity;
     }
@@ -223,10 +223,12 @@ public class FinancialController {
             WithDraw withDraw = financialService.getWithDraw(withdrawId);
             if (withDraw == null) {
                 responseEntity.serverError();
+            } else if (withDraw.getId() == 0) {
+                responseEntity.error(-1, "记录不存在", null);
             } else {
                 if (withDraw.getUserid() == userId) {
                     responseEntity.success(withDraw);
-                }else{
+                } else {
                     responseEntity.error(Constant.FAILURE_CODE, Constant.MSG_INVALID_OPERATION, null);
                 }
             }
@@ -261,6 +263,8 @@ public class FinancialController {
         WithDraw withDraw = financialService.getWithDraw(withdrawId);
         if (withDraw == null) {
             responseEntity.serverError();
+        } else if (withDraw.getId() == 0) {
+            responseEntity.error(-1, "记录不存在", null);
         } else {
             responseEntity.success(withdrawId);
         }
@@ -277,7 +281,7 @@ public class FinancialController {
         if (result) {
             responseEntity.success(null);
         } else {
-            responseEntity.serverError();
+            responseEntity.error(-1, "请求失败", null);
         }
         return responseEntity;
     }

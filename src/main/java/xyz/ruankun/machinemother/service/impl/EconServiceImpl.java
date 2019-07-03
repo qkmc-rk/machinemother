@@ -207,7 +207,7 @@ public class EconServiceImpl implements EconService {
                 try {
                     Product product = productRepository.findById(item.getProductId().intValue());
                     if (product != null) {
-                        count+=1;
+                        count += 1;
                         products.add(product);
                     } else {
                         map.put("error", "数据错误");
@@ -257,7 +257,7 @@ public class EconServiceImpl implements EconService {
                 item = new Item();
                 item.setId(0);
             }
-            return null;
+            return item;
         } catch (Exception e) {
             e.printStackTrace();
             return null;
@@ -282,7 +282,8 @@ public class EconServiceImpl implements EconService {
 
     @Override
     public Boolean updateItem(Item item) {
-        if (getItem(item.getId()) == null) {
+        Item check = getItem(item.getId());
+        if (check == null || check.getId() == 0) {
             return false;
         } else {
             try {

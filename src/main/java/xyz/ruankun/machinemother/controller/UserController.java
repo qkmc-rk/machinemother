@@ -266,7 +266,7 @@ public class UserController {
             responseEntity.serverError();
         } else {
             if (award < 0) {
-                responseEntity.error(UserCode.ERROR_PARAMS, UserCode.INVALID_DATA, null);
+                responseEntity.error(-1, UserCode.INVALID_DATA, null);
                 //responseEntity.serverError();
             } else {
                 user.setAward(award);
@@ -283,14 +283,14 @@ public class UserController {
     public ResponseEntity updateIntegration(@RequestParam(value = "integration") Integer integration, @PathVariable("userId") int userId) {
         ResponseEntity responseEntity = new ResponseEntity();
         if (integration < 0) {
-            responseEntity.error(UserCode.ERROR_PARAMS, UserCode.INVALID_DATA, null);
+            responseEntity.error(-1, UserCode.INVALID_DATA, null);
             //responseEntity.serverError();
         } else {
             User user = userInfoService.getUser(userId);
             if (user.getId() == 0) {
                 responseEntity.error(-1, "用户不存在", null);
             } else if (user == null) {
-                responseEntity.error(UserCode.NO_EXIST, UserCode.NO_SUCH_USER, null);
+                responseEntity.error(-1, UserCode.NO_SUCH_USER, null);
                 //responseEntity.serverError();
             } else {
                 user.setIntegration(integration);
@@ -315,7 +315,7 @@ public class UserController {
         } else {
 
             if (user.getWxId() != null) {
-                responseEntity.error(UserCode.ERROR_PARAMS, UserCode.INVALID_DATA, null);
+                responseEntity.error(-1, UserCode.INVALID_DATA, null);
                 //responseEntity.serverError();
             } else {
                 user.setWxId(wxId);

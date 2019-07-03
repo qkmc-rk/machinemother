@@ -17,6 +17,16 @@ public class CommissionRecord {
     private Boolean isSave;
     private Date gmtCreate;
 
+    private String reason;
+
+    public String getReason() {
+        return reason;
+    }
+
+    public void setReason(String reason) {
+        this.reason = reason;
+    }
+
     public Integer getId() {
         return id;
     }

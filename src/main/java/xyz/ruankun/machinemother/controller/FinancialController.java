@@ -217,7 +217,7 @@ public class FinancialController {
                 responseEntity.error(-1, "操作失败", null);
             }
         } else {
-            responseEntity.error(-1, "这点钱至于吗？有这技术好好工作不好吗？", null);
+            responseEntity.error(-1, "don`t hurt my system pls", null);
         }
         return responseEntity;
     }
@@ -290,9 +290,9 @@ public class FinancialController {
     @PostMapping(value = "/withdraw/{withdrawId}")
     @Authentication(role = AuthAopConstant.ADMIN)
     @ApiOperation(value = "[管理员]关于提现处理", notes = "true则已确认提现成功，false则拒绝提现")
-    public ResponseEntity withdraw(@ApiParam(value = "提现记录Id") @RequestParam(value = "withdrawId") Integer withdrawId,
+    public ResponseEntity withdraw(@ApiParam(value = "提现记录Id,由路径获取") @PathVariable(value = "withdrawId") Integer withdrawId,
                                    @ApiParam(value = "是否确认, true为确认,false为拒绝") @RequestParam(value = "option") Boolean option,
-                                   @ApiParam(value = "微信支付账单号") @RequestParam(value = "orderStr", required = false, defaultValue = "refuse") String orderStr) {
+                                   @ApiParam(value = "微信支付账单号, 若管理员拒绝，则忽略此字段；") @RequestParam(value = "orderStr", required = false, defaultValue = "refuse") String orderStr) {
         ResponseEntity responseEntity = new ResponseEntity();
         Map<Boolean, String> result = financialService.alterWithDraw(withdrawId, option, orderStr);
         if (result.containsKey(true)) {

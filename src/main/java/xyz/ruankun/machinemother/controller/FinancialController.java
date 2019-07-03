@@ -4,13 +4,16 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.*;
+import sun.security.provider.MD5;
 import xyz.ruankun.machinemother.annotation.Authentication;
 import xyz.ruankun.machinemother.entity.Decoupon;
 import xyz.ruankun.machinemother.entity.WithDraw;
 import xyz.ruankun.machinemother.service.FinancialService;
 import xyz.ruankun.machinemother.service.UserInfoService;
 import xyz.ruankun.machinemother.util.Constant;
+import xyz.ruankun.machinemother.util.MD5Util;
 import xyz.ruankun.machinemother.util.WePayUtil;
 import xyz.ruankun.machinemother.util.WxResponseCode;
 import xyz.ruankun.machinemother.util.constant.AuthAopConstant;
@@ -31,6 +34,9 @@ public class FinancialController {
     FinancialService financialService;
     @Autowired
     UserInfoService userInfoService;
+
+    @Value(value = "${md5.salt}")
+    private String salt;
 
     //管理员查询用户钱包信息
     @GetMapping("user/{id}/wallet")
@@ -192,19 +198,26 @@ public class FinancialController {
     @Authentication(role = AuthAopConstant.USER)
     @ApiOperation(value = "[用户] 发起提现请求", notes = "仅传需提现金额即可")
     public ResponseEntity withdraw(@ApiParam(value = "提现所需金额") @RequestParam(value = "amount") Double amount,
-                                   @ApiParam(value = "用户id") @RequestParam(value = "userId") Integer userId) {
+                                   @ApiParam(value = "验证信息") @RequestParam(value = "key") String key,
+                                   @RequestHeader(value = "token") String token) {
         ResponseEntity responseEntity = new ResponseEntity();
-        WithDraw withDraw = new WithDraw();
-        withDraw.setAmount(new BigDecimal(amount));
-        withDraw.setGmtCreate(new Date());
-        withDraw.setUserid(userId);
-        withDraw.setFailed(false);
-        withDraw.setConfirm(false);
-        Boolean result = financialService.addWithDraw(withDraw);
-        if (result) {
-            responseEntity.success(withDraw);
-        } else {
-            responseEntity.error(-1, "操作失败", null);
+        Integer userId = Integer.valueOf(userInfoService.readDataFromRedis(token));
+        String myKey = MD5Util.trueMd5(userId + salt + amount);
+        if (myKey.equals(key)) {
+            WithDraw withDraw = new WithDraw();
+            withDraw.setAmount(new BigDecimal(amount));
+            withDraw.setGmtCreate(new Date());
+            withDraw.setUserid(userId);
+            withDraw.setFailed(false);
+            withDraw.setConfirm(false);
+            Boolean result = financialService.addWithDraw(withDraw);
+            if (result) {
+                responseEntity.success(withDraw);
+            } else {
+                responseEntity.error(-1, "操作失败", null);
+            }
+        }else{
+            responseEntity.error(-1, "这点钱至于吗？有这技术好好工作不好吗？", null);
         }
         return responseEntity;
     }
@@ -212,8 +225,9 @@ public class FinancialController {
     @GetMapping(value = "user/withdraw")
     @Authentication(role = AuthAopConstant.USER)
     @ApiOperation(value = "[用户] 查看个人提现记录", notes = "未传参则为个人所有记录")
-    public ResponseEntity myWithdraws(@ApiParam(value = "提现记录id") @RequestParam(value = "withdrawId", required = false, defaultValue = "0") Integer withdrawId,
-                                      @RequestHeader(value = "token") String token) {
+    public ResponseEntity myWithdraws(@ApiParam(value = "提现记录id") @RequestParam(value = "withdrawId", required = false, defaultValue = "0") Integer
+                     withdrawId,
+             @RequestHeader(value = "token") String token) {
         ResponseEntity responseEntity = new ResponseEntity();
         Integer userId = Integer.valueOf(userInfoService.readDataFromRedis(token));
         if (withdrawId == 0) {
@@ -239,7 +253,8 @@ public class FinancialController {
     @GetMapping(value = "/withdraws")
     @Authentication(role = AuthAopConstant.ADMIN)
     @ApiOperation(value = "[管理员] 查看提现记录", notes = "若无传参则为所有记录")
-    public ResponseEntity withdraws(@ApiParam(value = "用户id") @RequestParam(value = "userId", required = false, defaultValue = "0") Integer userId) {
+    public ResponseEntity withdraws
+            (@ApiParam(value = "用户id") @RequestParam(value = "userId", required = false, defaultValue = "0") Integer userId) {
         ResponseEntity responseEntity = new ResponseEntity();
         List<WithDraw> withDraws = null;
         if (userId == 0) {
@@ -258,7 +273,8 @@ public class FinancialController {
     @GetMapping(value = "/withdraws/{withdrawId}")
     @Authentication(role = AuthAopConstant.ADMIN)
     @ApiOperation(value = "[管理员]查看指定提现记录")
-    public ResponseEntity withdraw(@ApiParam(value = "提现记录id") @PathVariable(value = "withdrawId") Integer withdrawId) {
+    public ResponseEntity withdraw(@ApiParam(value = "提现记录id") @PathVariable(value = "withdrawId") Integer
+                                           withdrawId) {
         ResponseEntity responseEntity = new ResponseEntity();
         WithDraw withDraw = financialService.getWithDraw(withdrawId);
         if (withDraw == null) {
@@ -275,13 +291,14 @@ public class FinancialController {
     @Authentication(role = AuthAopConstant.ADMIN)
     @ApiOperation(value = "[管理员]关于提现处理", notes = "true则已确认提现成功，false则拒绝提现")
     public ResponseEntity withdraw(@ApiParam(value = "提现记录Id") @RequestParam(value = "withdrawId") Integer withdrawId,
-                                   @ApiParam(value = "是否确认, true为确认,false为拒绝") @RequestParam(value = "option") Boolean option) {
+                                   @ApiParam(value = "是否确认, true为确认,false为拒绝") @RequestParam(value = "option") Boolean option,
+                                   @ApiParam(value = "微信支付账单号") @RequestParam(value = "orderStr", required = false, defaultValue = "refuse")String orderStr) {
         ResponseEntity responseEntity = new ResponseEntity();
-        Boolean result = financialService.updateWithDraw(withdrawId, option);
-        if (result) {
+        Map<Boolean, String> result = financialService.alterWithDraw(withdrawId, option, orderStr);
+        if (result.containsKey(true)) {
             responseEntity.success(null);
         } else {
-            responseEntity.error(-1, "请求失败", null);
+            responseEntity.error(-1, result.get(false), null);
         }
         return responseEntity;
     }

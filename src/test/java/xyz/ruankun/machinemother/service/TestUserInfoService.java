@@ -11,10 +11,15 @@ import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.transaction.annotation.Transactional;
 import xyz.ruankun.machinemother.entity.User;
 import xyz.ruankun.machinemother.repository.UserRepository;
+import xyz.ruankun.machinemother.util.MD5Util;
 
 import javax.annotation.Resource;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.Date;
 import java.util.List;
+import java.util.Scanner;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
@@ -74,21 +79,21 @@ public class TestUserInfoService {
     }
 
     @Test
-    public void s(){
+    public void s() {
 //        List<User> users = userRepository.findByInvitorId(7);
         Integer userId = null;
         User users = userRepository.findByOpenId("1234567890");
 //        User users = userRepository.findOne(2);
-        if(users == null){
+        if (users == null) {
             System.out.println("null");
-        }else{
+        } else {
             System.out.println(users);
         }
     }
 
     @Test
 //    @Transactional(rollbackFor = Exception.class)
-    public void de(){
+    public void de() {
 //        try {
 //            userRepository.deleteByOpenId("1234567890");
 //        }catch (Exception e){
@@ -97,4 +102,5 @@ public class TestUserInfoService {
         User user1 = new User();
         System.out.println(user1.getId());
     }
+
 }

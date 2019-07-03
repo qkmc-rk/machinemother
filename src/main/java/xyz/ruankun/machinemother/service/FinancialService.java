@@ -72,7 +72,9 @@ public interface FinancialService {
 
     Boolean addWithDraw(WithDraw withDraw);
 
+    Map<Boolean, String> alterWithDraw(Integer id, Boolean option, String orderSt);
+
     Boolean deleteWithDraw(Integer id);
 
-    Boolean updateWithDraw(Integer id, Boolean option);
+//    Boolean updateWithDraw(Integer id, Boolean option);
 }

@@ -197,15 +197,15 @@ public class FinancialController {
     @PostMapping(value = "user/withdraw")
     @Authentication(role = AuthAopConstant.USER)
     @ApiOperation(value = "[用户] 发起提现请求", notes = "仅传需提现金额即可")
-    public ResponseEntity withdraw(@ApiParam(value = "提现所需金额") @RequestParam(value = "amount") Double amount,
-                                   @ApiParam(value = "验证信息") @RequestParam(value = "key") String key,
+    public ResponseEntity withdraw(@ApiParam(value = "提现所需金额") @RequestParam(value = "amount") BigDecimal amount,
+                                   @ApiParam(value = "验证信息, userid+limo+amount") @RequestParam(value = "key") String key,
                                    @RequestHeader(value = "token") String token) {
         ResponseEntity responseEntity = new ResponseEntity();
         Integer userId = Integer.valueOf(userInfoService.readDataFromRedis(token));
         String myKey = MD5Util.trueMd5(userId + salt + amount);
         if (myKey.equals(key)) {
             WithDraw withDraw = new WithDraw();
-            withDraw.setAmount(new BigDecimal(amount));
+            withDraw.setAmount(amount);
             withDraw.setGmtCreate(new Date());
             withDraw.setUserid(userId);
             withDraw.setFailed(false);
@@ -216,7 +216,7 @@ public class FinancialController {
             } else {
                 responseEntity.error(-1, "操作失败", null);
             }
-        }else{
+        } else {
             responseEntity.error(-1, "这点钱至于吗？有这技术好好工作不好吗？", null);
         }
         return responseEntity;
@@ -226,8 +226,8 @@ public class FinancialController {
     @Authentication(role = AuthAopConstant.USER)
     @ApiOperation(value = "[用户] 查看个人提现记录", notes = "未传参则为个人所有记录")
     public ResponseEntity myWithdraws(@ApiParam(value = "提现记录id") @RequestParam(value = "withdrawId", required = false, defaultValue = "0") Integer
-                     withdrawId,
-             @RequestHeader(value = "token") String token) {
+                                              withdrawId,
+                                      @RequestHeader(value = "token") String token) {
         ResponseEntity responseEntity = new ResponseEntity();
         Integer userId = Integer.valueOf(userInfoService.readDataFromRedis(token));
         if (withdrawId == 0) {
@@ -292,7 +292,7 @@ public class FinancialController {
     @ApiOperation(value = "[管理员]关于提现处理", notes = "true则已确认提现成功，false则拒绝提现")
     public ResponseEntity withdraw(@ApiParam(value = "提现记录Id") @RequestParam(value = "withdrawId") Integer withdrawId,
                                    @ApiParam(value = "是否确认, true为确认,false为拒绝") @RequestParam(value = "option") Boolean option,
-                                   @ApiParam(value = "微信支付账单号") @RequestParam(value = "orderStr", required = false, defaultValue = "refuse")String orderStr) {
+                                   @ApiParam(value = "微信支付账单号") @RequestParam(value = "orderStr", required = false, defaultValue = "refuse") String orderStr) {
         ResponseEntity responseEntity = new ResponseEntity();
         Map<Boolean, String> result = financialService.alterWithDraw(withdrawId, option, orderStr);
         if (result.containsKey(true)) {

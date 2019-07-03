@@ -535,8 +535,8 @@ public class FinancialServiceImpl implements FinancialService {
                 //钱包金额也将于提现错做完成后扣除
 //                wallet.setCommission(commission);
 //                wallet.setGmtModified(new Date());
-//                withDraw.setGmtCreate(new Date());
-//                withDraw.setGmtModified(new Date());
+                withDraw.setGmtCreate(new Date());
+                withDraw.setGmtModified(new Date());
 
                 //7.3 佣金记录操作放于用户提现操作完成后
 //                CommissionRecord record = new CommissionRecord();
@@ -666,7 +666,7 @@ public class FinancialServiceImpl implements FinancialService {
                 map.put(false, "数据不存在");
             } else {
                 //验证2.提现请求是否被受理
-                if ((withDraw.getFailed() || withDraw.getConfirm()) && withDraw.getRecnum() == null) {
+                if ((withDraw.getFailed() && withDraw.getRecnum() == null) || (withDraw.getConfirm() && withDraw.getRecnum() != null)) {
                     map.put(false, "非法请求");
                 } else {
                     //验证３　管理员意见

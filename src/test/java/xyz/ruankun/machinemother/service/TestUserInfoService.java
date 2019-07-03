@@ -103,4 +103,9 @@ public class TestUserInfoService {
         System.out.println(user1.getId());
     }
 
+
+    @Test
+    public void deee(){
+        MD5Util.trueMd5(45+"limo"+99.2);
+    }
 }

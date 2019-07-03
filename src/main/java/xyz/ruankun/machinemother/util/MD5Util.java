@@ -59,6 +59,7 @@ public class MD5Util {
     }
 
     public static String trueMd5(String text) {
+        System.out.println("before using algorithm:" + text);
         String str = DigestUtils.md5Hex(text);
         System.out.println("after using algorithm override：" + str);
         return str;

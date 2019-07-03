@@ -22,6 +22,7 @@ import xyz.ruankun.machinemother.util.MD5Util;
 import xyz.ruankun.machinemother.util.QiNiuFileUtil;
 import xyz.ruankun.machinemother.util.constant.WxAccessTokenReturnConstant;
 import xyz.ruankun.machinemother.vo.weixin.WxAccessToken;
+import xyz.ruankun.machinemother.vo.weixin.WxServerResult;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -53,10 +54,11 @@ public class QrCodeServiceImpl implements QrCodeService {
     private TemplateRepository templateRepository;
 
     @Override
-    public String getQrCodeUrl(Integer userId) {
+    public Map<String, String> getQrCodeUrl(Integer userId) {
         String accessToken = getAccessToken();
         if (accessToken == null)
             return null;
+        System.out.println("now begin to get qrcode...");
         StringBuilder uri = new StringBuilder(QRCODE_API);
         uri.append("?access_token=");
         uri.append(accessToken);
@@ -67,8 +69,9 @@ public class QrCodeServiceImpl implements QrCodeService {
         params.put("width","300");
         params.put("is_hyaline","true");
         params.put("auto_color","true");
-        String imgUrl = postforImg(uri.toString(),params);
-        return imgUrl;
+        System.out.println("获取二维码的uri:" + uri.toString());
+        System.out.println("获取二维码的参数:" + params.toString());
+        return postforImg(uri.toString(),params);
     }
 
     @Override
@@ -86,6 +89,7 @@ public class QrCodeServiceImpl implements QrCodeService {
         WxAccessToken wxAccessToken;
         try {
             wxAccessToken = objectMapper.readValue(strBody, WxAccessToken.class);
+            System.out.println("access_token:" + wxAccessToken.toString());
         } catch (IOException e) {
             e.printStackTrace();
             return null;
@@ -201,7 +205,8 @@ public class QrCodeServiceImpl implements QrCodeService {
      * @param params 请求带着的各种参数
      * @return 图片的url地址
      */
-    private String postforImg(String uri, Map<String,?> params){
+    private Map<String, String> postforImg(String uri, Map<String,?> params){
+        Map<String, String> map = new HashMap<>();
         CloseableHttpClient httpClient = HttpClientBuilder.create().build();
         HttpPost httpPost = new HttpPost(uri);  // 接口
         httpPost.addHeader("content-type", "application/json");
@@ -214,11 +219,13 @@ public class QrCodeServiceImpl implements QrCodeService {
         } catch (JsonProcessingException e) {
             e.printStackTrace();
             logger.error("参数传入错误，无法转换成JSON，无法请求二维码");
-            return null;
+            map.put("error","参数传入错误，无法转换成JSON，无法请求二维码");
+            return (map);
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
             logger.error("无法生成StringEntity，检查传入参数");
-            return null;
+            map.put("error","无法生成StringEntity，检查传入参数");
+            return (map);
         }
         entity.setContentType("img/png");
 
@@ -232,15 +239,45 @@ public class QrCodeServiceImpl implements QrCodeService {
             e.printStackTrace();
         }
         /**
-         * 这里存在一个潜在的错误没加入inputStream不是图片怎么办？？？
+         * 2019.6.12 这里存在一个潜在的错误没加入inputStream不是图片怎么办？？？
          * 我没做处理，最后可能得到错误的结果，再说吧
+         * 2019.7.3 看来这个验证不做不行，不然前台搞不明白为什么出错，出错了还要赖在我的身上
          */
+        byte[] b = new byte[10240];
+        try {
+            inputStream.read(b);
+        } catch (IOException e) {
+            e.printStackTrace();
+            logger.error("错误！！读取输入流出错");
+            map.put("error","错误！！读取输入流出错");
+            return (map);
+        }
+        String bStr = new String(b);
+        ObjectMapper o = new ObjectMapper();
+        WxServerResult wxServerResult = null;
+        try {
+            wxServerResult = o.readValue(bStr,WxServerResult.class);
+        } catch (IOException e) {
+            e.printStackTrace();
+            logger.error("错误！！输入流无法转换成JsonObject");
+            map.put("error","错误！！输入流无法转换成JsonObject");
+            return (map);
+        }
+        if(null != wxServerResult && wxServerResult.getErrcode() != null){
+            logger.error("发生了错误信息:" + wxServerResult.getErrcode() + wxServerResult.getErrmsg());
+            map.put("error","发生了错误信息:" + wxServerResult.getErrcode() + wxServerResult.getErrmsg());
+            return (map);
+        }
         //调用七牛云对象存储存上图片
+        System.out.println("获取小程序码返回的数据：" + inputStream.toString());
         String imgUrl = QiNiuFileUtil.uploadToQiNiu(inputStream,MD5Util.md5("") + ".png");
         if (imgUrl == null){
             logger.info("图片上传失败了,七牛云文件助手返回了NULL值");
+            map.put("error","图片上传失败了,七牛云文件助手返回了NULL值");
+            return (map);
         }
         logger.info("上传成功:" + imgUrl);
-        return imgUrl;
+        map.put("imgUrl",imgUrl);
+        return (map);
     }
 }

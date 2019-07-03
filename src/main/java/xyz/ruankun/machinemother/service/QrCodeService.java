@@ -4,6 +4,7 @@ import org.springframework.web.multipart.MultipartFile;
 import xyz.ruankun.machinemother.entity.Template;
 
 import java.util.List;
+import java.util.Map;
 
 public interface QrCodeService {
 
@@ -13,7 +14,7 @@ public interface QrCodeService {
      * @param userId
      * @return qrcode url
      */
-    String getQrCodeUrl(Integer userId);
+    Map<String, String> getQrCodeUrl(Integer userId);
 
     /**
      * 你要获取二维码,你必须得有这个access_token.对吧？

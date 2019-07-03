@@ -57,4 +57,14 @@ public class WxAccessToken {
     public void setErrMsg(String errMsg) {
         this.errMsg = errMsg;
     }
+
+    @Override
+    public String toString() {
+        return "WxAccessToken{" +
+                "accessToken='" + accessToken + '\'' +
+                ", expiresIn=" + expiresIn +
+                ", errCode=" + errCode +
+                ", errMsg='" + errMsg + '\'' +
+                '}';
+    }
 }

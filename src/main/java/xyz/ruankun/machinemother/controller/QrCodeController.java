@@ -14,6 +14,7 @@ import xyz.ruankun.machinemother.util.constant.AuthAopConstant;
 import xyz.ruankun.machinemother.vo.ResponseEntity;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @CrossOrigin
@@ -34,12 +35,12 @@ public class QrCodeController {
     @Authentication(role = AuthAopConstant.USER)
     @ApiOperation(value = "[用户]获取小程序码",notes = "必须是登录用户才行，因为返回的小程序码需要带上用户的ID，小程序码唯一")
     public ResponseEntity getQrCode(@RequestHeader String token){
-        ResponseEntity<String> responseEntity = new ResponseEntity<>();
+        ResponseEntity<Map> responseEntity = new ResponseEntity<>();
         //鉴权那个地方才刚刚做了token存在验证，这么短时间token不可能丢失吧？
         Integer userId = Integer.parseInt(userInfoService.readDataFromRedis(token));
-        String qrcodeurl = qrCodeService.getQrCodeUrl(userId);
-        if (null == qrcodeurl)
-            responseEntity.serverError();
+        Map<String, String> qrcodeurl = qrCodeService.getQrCodeUrl(userId);
+        if (null != qrcodeurl.get("error"))
+            responseEntity.error(Constant.FAILURE_CODE,"error occured", qrcodeurl);
         else
             responseEntity.success(qrcodeurl);
         return  responseEntity;

@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import xyz.ruankun.machinemother.annotation.小坏蛋;
 import xyz.ruankun.machinemother.service.UserInfoService;
+import xyz.ruankun.machinemother.util.Constant;
 import xyz.ruankun.machinemother.util.QiNiuFileUtil;
 import xyz.ruankun.machinemother.vo.ResponseEntity;
 
@@ -17,7 +18,7 @@ import xyz.ruankun.machinemother.vo.ResponseEntity;
  * 这是一个文件上传的工具，主要是上传图片等。
  *
  */
-@Controller
+@RestController
 @RequestMapping("/upload")
 @CrossOrigin
 @Api(value = "一切上传文件的接口都靠这个老几实现了")
@@ -61,7 +62,7 @@ public class FileController {
         if (rs)
             responseEntity.success(null);
         else
-            responseEntity.serverError();
+            responseEntity.error(Constant.FAILURE_CODE,"error,not permitted,with your token please!",null);
         return responseEntity;
     }
 }

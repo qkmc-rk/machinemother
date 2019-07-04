@@ -144,7 +144,7 @@ public class EconController {
     public ResponseEntity getOrders(@RequestHeader(value = "token") String token) {
         int userId = Integer.valueOf(userInfoService.readDataFromRedis(token));
         List<Order> orders = econService.getOrders(userId);
-                return ControllerUtil.getDataResult(orders);
+        return ControllerUtil.getDataResult(orders);
 //        Map<String, Object> map = new LinkedHashMap<>();
 //        Set<Product> products = new HashSet<>();
 //        List<Item> items = new ArrayList<>();
@@ -237,14 +237,20 @@ public class EconController {
     public ResponseEntity deleteOrder(@PathVariable(value = "id") Integer id) {
         //需order创建时间超过三小时,且状态为unpaid的才可进行该操作
         Order order = econService.getOrder(id);
-        Date date = new Date();
-        Long time = date.getTime() - order.getGmtCreate().getTime();
-        if (time > 1000 * 60 * 60 * 3 && !order.getPaid()) {
+        if (order == null) {
+            responseEntity.serverError();
+        } else if (order.getId() == 0) {
+            responseEntity.error(-1, "数据不存在", null);
+        } else {
+            Date date = new Date();
+            Long time = date.getTime() - order.getGmtCreate().getTime();
+            if (time > 1000 * 60 * 60 * 3 && !order.getPaid()) {
 //            Boolean result = econService.deleteOrder(id);
 //            responseEntity = ControllerUtil.getTrueOrFalseResult(result);
-            responseEntity = ControllerUtil.parData(econService.deleteOrder(id), null);
-        } else {
-            responseEntity.serverError();
+                responseEntity = ControllerUtil.parData(econService.deleteOrder(id), null);
+            } else {
+                responseEntity.error(-1, "非法操作", null);
+            }
         }
         return responseEntity;
     }

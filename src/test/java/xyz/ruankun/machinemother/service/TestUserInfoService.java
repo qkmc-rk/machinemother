@@ -106,6 +106,6 @@ public class TestUserInfoService {
 
     @Test
     public void deee(){
-        MD5Util.trueMd5(45+"limo"+99.2);
+        MD5Util.trueMd5(27+"limo"+0.22);
     }
 }

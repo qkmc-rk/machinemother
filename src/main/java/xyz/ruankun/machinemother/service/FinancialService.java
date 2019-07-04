@@ -76,5 +76,5 @@ public interface FinancialService {
 
     Boolean deleteWithDraw(Integer id);
 
-//    Boolean updateWithDraw(Integer id, Boolean option);
+    Boolean updateWithDraw(Integer id, Boolean option, String orderStr);
 }

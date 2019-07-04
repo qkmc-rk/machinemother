@@ -294,11 +294,19 @@ public class FinancialController {
                                    @ApiParam(value = "是否确认, true为确认,false为拒绝") @RequestParam(value = "option") Boolean option,
                                    @ApiParam(value = "微信支付账单号, 若管理员拒绝，则忽略此字段；") @RequestParam(value = "orderStr", required = false, defaultValue = "refuse") String orderStr) {
         ResponseEntity responseEntity = new ResponseEntity();
-        Map<Boolean, String> result = financialService.alterWithDraw(withdrawId, option, orderStr);
-        if (result.containsKey(true)) {
+        //7.4修改为在提现是就扣除佣金以及增加数据记录
+//        Map<Boolean, String> result = financialService.alterWithDraw(withdrawId, option, orderStr);
+
+//        if (result.containsKey(true)) {
+//            responseEntity.success(null);
+//        } else {
+//            responseEntity.error(-1, result.get(false), null);
+//        }
+        Boolean result = financialService.updateWithDraw(withdrawId, option, orderStr);
+        if (result) {
             responseEntity.success(null);
         } else {
-            responseEntity.error(-1, result.get(false), null);
+            responseEntity.error(-1, "操作失败", null);
         }
         return responseEntity;
     }

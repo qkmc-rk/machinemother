@@ -226,7 +226,7 @@ public class UserInfoServiceImpl implements UserInfoService {
     public User getUser(String openId) {
         try {
             User user = userRepository.findByOpenId(openId);
-            if(user == null){
+            if (user == null) {
                 user = new User();
                 user.setId(0);
             }
@@ -241,7 +241,7 @@ public class UserInfoServiceImpl implements UserInfoService {
     public User getUser(Integer userId) {
         try {
             User user = userRepository.findById(userId.intValue());
-            if(user == null){
+            if (user == null) {
                 user = new User();
                 user.setId(0);
             }
@@ -260,8 +260,8 @@ public class UserInfoServiceImpl implements UserInfoService {
     @Override
     public User getByWxId(String wxId) {
         try {
-            User user =  userRepository.findByWxId(wxId);
-            if(user == null){
+            User user = userRepository.findByWxId(wxId);
+            if (user == null) {
                 user = new User();
                 user.setId(0);
             }
@@ -276,7 +276,7 @@ public class UserInfoServiceImpl implements UserInfoService {
     public User getByPhone(String phone) {
         try {
             User user = userRepository.findByPhone(phone);
-            if(user == null){
+            if (user == null) {
                 user = new User();
                 user.setId(0);
             }
@@ -316,7 +316,7 @@ public class UserInfoServiceImpl implements UserInfoService {
     @Override
     public Integer delete(Integer userId) {
         User user = getUser(userId);
-        if (user == null)
+        if (user == null || user.getId() == 0)
             return DataCode.DATA_CONFLIC;
         try {
             Integer result = userRepository.deleteById(userId.intValue());
@@ -341,7 +341,7 @@ public class UserInfoServiceImpl implements UserInfoService {
     public User update(User user) {
         logger.info("要修改的user的参数：" + user.toString());
         User check = getUser(user.getId());
-        if (check == null) {
+        if (check == null || check.getId() == 0) {
             return null;
         } else {
             EntityUtil.update(user, check);

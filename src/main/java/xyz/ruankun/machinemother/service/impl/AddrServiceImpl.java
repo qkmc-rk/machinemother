@@ -20,7 +20,7 @@ public class AddrServiceImpl implements AddrService {
     @Override
     public Boolean update(Addr addr) {
         Addr check = getAddr(addr.getId());
-        if (check == null)
+        if (check == null || check.getId() == 0)
             return false;
         else {
             addr.setGmtModified(new Date());
@@ -69,13 +69,13 @@ public class AddrServiceImpl implements AddrService {
     @Override
     public Integer delete(int id) {
         Addr addr = getAddr(id);
-        if (addr == null)
+        if (addr == null || addr.getId() == 0)
             return DataCode.DATA_CONFLIC;
         try {
             Integer result = addrRepository.deleteById(id);
-            if (result <= 0){
+            if (result <= 0) {
                 return DataCode.DATA_OPERATION_FAILURE;
-            }else {
+            } else {
                 return DataCode.DATA_OPERATION_SUCCESS;
             }
         } catch (Exception e) {
@@ -88,9 +88,9 @@ public class AddrServiceImpl implements AddrService {
     public Integer deleteMyAddr(int userId) {
         try {
             Integer result = addrRepository.deleteByUserId(userId);
-            if(result>0) {
+            if (result > 0) {
                 return DataCode.DATA_OPERATION_SUCCESS;
-            }else{
+            } else {
                 return DataCode.DATA_OPERATION_FAILURE;
             }
         } catch (Exception e) {

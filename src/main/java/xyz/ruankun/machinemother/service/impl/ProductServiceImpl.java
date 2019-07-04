@@ -47,7 +47,7 @@ public class ProductServiceImpl implements ProductService {
     public Product getProduct(int id) {
         try {
             Product product = productRepository.findById(id);
-            if(product == null){
+            if (product == null) {
                 product = new Product();
                 product.setId(0);
             }
@@ -61,7 +61,7 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public Boolean updateProduct(Product product) {
         Product check = getProduct(product.getId());
-        if (check == null) {
+        if (check == null || check.getId() == 0) {
             return false;
         } else {
             try {
@@ -84,7 +84,8 @@ public class ProductServiceImpl implements ProductService {
     @Override
     @Transactional
     public Integer deleteProduct(int id) {
-        if (getProduct(id) == null) {
+        Product product = getProduct(id);
+        if (product == null || product.getId() == 0) {
             return DataCode.DATA_CONFLIC;
         } else {
             try {
@@ -111,8 +112,8 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public DictProductType getProductType(String type) {
         try {
-            DictProductType dictProductType =  dictProductTypeRepository.findByType(type);
-            if(dictProductType == null){
+            DictProductType dictProductType = dictProductTypeRepository.findByType(type);
+            if (dictProductType == null) {
                 dictProductType = new DictProductType();
                 dictProductType.setId(0);
             }
@@ -127,7 +128,7 @@ public class ProductServiceImpl implements ProductService {
     public DictProductType getProductType(int id) {
         try {
             DictProductType dictProductType = dictProductTypeRepository.findById(id);
-            if (dictProductType == null){
+            if (dictProductType == null) {
                 dictProductType = new DictProductType();
                 dictProductType.setId(0);
             }

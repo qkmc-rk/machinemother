@@ -274,16 +274,18 @@ public class FinancialServiceImpl implements FinancialService {
         BigDecimal amountYuan = order.getAmount(); //订单总金额
         //通过item拿到订单总金额，且算出金额优惠部分，然后跟之前算的比较，如果数字不一样则出错(这一步没什么用，为了保证数据的安全性)
         List<Integer> ids = new ArrayList<>();
+        List<Integer> quantities = new ArrayList<>();   //item的数量
         for (Item i :
                 items) {
             ids.add(i.getProductPropsId());
+            quantities.add(i.getQuantity());
         }
         List<ProductProps> productProps = productPropsRepository.findAllById(ids);
         //未优惠之前的价格
         BigDecimal originAmount = new BigDecimal(0);
-        for (ProductProps p :
-                productProps) {
-            originAmount = originAmount.add(p.getPrice());
+        for (int i=0; i <ids.size(); i++) {
+            originAmount
+                    = originAmount.add(productProps.get(i).getPrice().multiply(new BigDecimal(quantities.get(i).intValue())));
         }
         //拿取优惠券和积分
         BigDecimal credit = order.getCredit();  //积分

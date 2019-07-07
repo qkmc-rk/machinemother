@@ -29,6 +29,16 @@ public class Product {
     private Date gmtCreate;
     @Column(name = "gmt_modified")
     private Date gmtModified;
+    @Column(name = "intro")
+    private String intro;
+
+    public String getIntro() {
+        return intro;
+    }
+
+    public void setIntro(String intro) {
+        this.intro = intro;
+    }
 
     public String getPicture() {
         return picture;

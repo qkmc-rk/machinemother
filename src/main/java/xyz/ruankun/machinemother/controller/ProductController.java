@@ -58,7 +58,7 @@ public class ProductController {
     @PostMapping(value = "/{id}")
     @Authentication(role = AuthAopConstant.ADMIN)
     @ApiOperation(value = "[管理员]修改某产品")
-    public ResponseEntity update(@PathVariable(value = "id") Integer id, Product product) {
+    public ResponseEntity update(@PathVariable(value = "id") Integer id,@RequestBody Product product) {
         if (id != product.getId()) {
             responseEntity.error(Constant.PRODUCT_ERROR, "错误数据", null);
         } else {

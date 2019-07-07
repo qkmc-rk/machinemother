@@ -155,8 +155,16 @@ public class EcomServiceImpl implements EcomService {
         for (Item i :
                 items) {
             i.setOrderNumber(order.getOrderNumber());
-            BigDecimal b = productPropsRepository.findById(i.getProductPropsId().intValue()).getPrice();
+            ProductProps p = productPropsRepository.findById(i.getProductPropsId().intValue());
+            if (p == null){
+                map.put("error","半路获取item出错,可能是数据库出错，也可能是谁删除了数据库记录");
+                map.put("status",-1);
+                return map;
+            }
+            BigDecimal b = p.getPrice();
+            int quantity = i.getQuantity();
             amount = amount.add(b);
+            amount = amount.multiply(new BigDecimal(quantity));
             System.out.println("I am jisuan amount,item price is :" + b.floatValue() + ",amount is：" + amount);
         }
         amountFen = (int) (amount.floatValue() * 100);

@@ -84,3 +84,7 @@
 - 修改register接口，invitorid修改为requestParam
 - FIX 后台token错误时返回没有验证就会出现http 500错误
 - FIX userInfoController所有接口异常，并去除用户相关操作的敏感信息
+
+### 7月 6日
+- 修复下订单时多个item只有一个item算了价格的问题
+- 修复修改订单接口传入参数不是@requestBody的...emmm...问题？？？

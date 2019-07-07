@@ -49,6 +49,17 @@ public class Addr {
 
     private String phone;
 
+    @Column(name = "is_visible")
+    private Boolean isVisible;
+
+    public Boolean getVisible() {
+        return isVisible;
+    }
+
+    public void setVisible(Boolean visible) {
+        isVisible = visible;
+    }
+
     public Integer getId() {
         return id;
     }

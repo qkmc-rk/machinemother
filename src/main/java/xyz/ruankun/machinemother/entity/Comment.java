@@ -40,7 +40,18 @@ public class Comment {
     private Boolean isRcmd;
 
     @Transient
+    private String userAvatar;  //用户头像
+
+    @Transient
     private String title;
+
+    public String getUserAvatar() {
+        return userAvatar;
+    }
+
+    public void setUserAvatar(String userAvatar) {
+        this.userAvatar = userAvatar;
+    }
 
     public Integer getId() {
         return id;

@@ -8,6 +8,7 @@ import xyz.ruankun.machinemother.util.DataCode;
 import xyz.ruankun.machinemother.util.EntityUtil;
 
 import javax.annotation.Resource;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -63,7 +64,14 @@ public class AddrServiceImpl implements AddrService {
 
     @Override
     public List<Addr> myAddr(int userId) {
-        return addrRepository.findAllByUserId(userId);
+        List<Addr> addrs = addrRepository.findAllByUserId(userId);
+        List<Addr> addrs1 = new ArrayList<>();
+        for (Addr a :
+                addrs) {
+            if (a.getVisible() != false)
+                addrs1.add(a);
+        }
+        return addrs;
     }
 
     @Override
@@ -72,8 +80,9 @@ public class AddrServiceImpl implements AddrService {
         if (addr == null || addr.getId() == 0)
             return DataCode.DATA_CONFLIC;
         try {
-            Integer result = addrRepository.deleteById(id);
-            if (result <= 0) {
+            addr.setVisible(false);
+            Addr result = addrRepository.saveAndFlush(addr);
+            if (result == null) {
                 return DataCode.DATA_OPERATION_FAILURE;
             } else {
                 return DataCode.DATA_OPERATION_SUCCESS;

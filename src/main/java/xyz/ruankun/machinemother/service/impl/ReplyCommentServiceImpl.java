@@ -171,6 +171,7 @@ public class ReplyCommentServiceImpl implements ReplyCommentService {
                     if (product != null && user != null) {
                         comment.setTitle(product.getTitle());
                         comment.setUsername(user.getName());
+                        comment.setUserAvatar(user.getAvator());
                     } else {
                         logger.error("commentid:" + comment.getId() + ", productid:" +
                                 product.getId() + ", userid:" + user.getId());

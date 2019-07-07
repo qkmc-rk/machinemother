@@ -14,6 +14,7 @@ import xyz.ruankun.machinemother.entity.Addr;
 import xyz.ruankun.machinemother.entity.User;
 import xyz.ruankun.machinemother.service.AddrService;
 import xyz.ruankun.machinemother.service.UserInfoService;
+import xyz.ruankun.machinemother.util.Constant;
 import xyz.ruankun.machinemother.util.code.AddrCode;
 import xyz.ruankun.machinemother.util.code.UserCode;
 import xyz.ruankun.machinemother.util.constant.AuthAopConstant;
@@ -43,17 +44,7 @@ public class AddrController {
     @ApiOperation(value = "[用户]获取制定获取的所有收货地址信息", notes = "确保传入的是有效的用户id值")
     public ResponseEntity getUserAddrs(@RequestHeader(value = "token") String token) {
         Integer userId = Integer.valueOf(userInfoService.readDataFromRedis(token));
-//        User user = userInfoService.getUser(userId);
-        ResponseEntity responseEntity = new ResponseEntity();
-//////        if (user == null) {
-//////            responseEntity.error(UserCode.NO_EXIST, UserCode.NO_SUCH_USER, null);
-//////           responseEntity.serverError();
-////        } else {
-//            List<Addr> addrs = addrService.myAddr(userId);
-//            responseEntity.success( addrs);
-//        }
         List<Addr> addrs = addrService.myAddr(userId);
-
         return ControllerUtil.getDataResult(addrs);
     }
 
@@ -64,12 +55,14 @@ public class AddrController {
         ResponseEntity responseEntity = new ResponseEntity();
         Addr addr = addrService.getAddr(addrId);
         if (addr == null) {
-//            responseEntity.error(AddrCode.ERROR_PARAMS, "", null);
-            responseEntity.serverError();
+            responseEntity.error(Constant.FAILURE_CODE,"没有找到这个addr",null);
         } else if (addr.getId() == 0) {
             responseEntity.error(-1, AddrCode.NO_SUCH_Addr, null);
         } else {
-            responseEntity.success(addr);
+            if (addr.getVisible())
+                responseEntity.success(addr);
+            else
+                responseEntity.error(Constant.FAILURE_CODE,"该addr已经被删除",null);
         }
         return responseEntity;
     }
@@ -120,17 +113,10 @@ public class AddrController {
         Addr addr = addrService.getAddr(addrId);
         ResponseEntity responseEntity = new ResponseEntity();
         if (addr == null) {
-//            responseEntity.error(AddrCode.NO_EXIST, AddrCode.NO_SUCH_Addr, null);
             responseEntity.serverError();
         } else if (addr.getId() == 0) {
             responseEntity.error(-1, AddrCode.NO_SUCH_Addr, null);
         } else {
-//            Boolean result = addrService.delete(addrId);
-//            if (result) {
-//                responseEntity.success( null);
-//            } else {
-//                responseEntity.error(AddrCode.INVALID_OPERATION, AddrCode.INVALID_MSG, null);
-//            }
             responseEntity = ControllerUtil.parData(addrService.delete(addrId), null);
         }
         return responseEntity;

@@ -71,7 +71,7 @@ public class AddrServiceImpl implements AddrService {
             if (a.getVisible() != false)
                 addrs1.add(a);
         }
-        return addrs;
+        return addrs1;
     }
 
     @Override

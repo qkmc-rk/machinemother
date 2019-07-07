@@ -59,10 +59,7 @@ public class AddrController {
         } else if (addr.getId() == 0) {
             responseEntity.error(-1, AddrCode.NO_SUCH_Addr, null);
         } else {
-            if (addr.getVisible())
-                responseEntity.success(addr);
-            else
-                responseEntity.error(Constant.FAILURE_CODE,"该addr已经被删除",null);
+            responseEntity.success(addr);
         }
         return responseEntity;
     }

@@ -6,12 +6,14 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
+import xyz.ruankun.machinemother.annotation.小坏蛋;
 import xyz.ruankun.machinemother.entity.*;
 import xyz.ruankun.machinemother.repository.*;
 import xyz.ruankun.machinemother.service.EconService;
 import xyz.ruankun.machinemother.service.UserInfoService;
 import xyz.ruankun.machinemother.util.DataCode;
 import xyz.ruankun.machinemother.util.MD5Util;
+import xyz.ruankun.machinemother.util.constant.OrderIndentStatus;
 
 import javax.annotation.Resource;
 import java.math.BigDecimal;
@@ -40,6 +42,9 @@ public class EconServiceImpl implements EconService {
 
     @Resource
     private ProductPropsRepository productPropsRepository;
+
+    @Autowired
+    private CommentRepository commentRepository;
 
     @Override
     @Transactional(rollbackFor = Exception.class)
@@ -128,7 +133,7 @@ public class EconServiceImpl implements EconService {
                 order = new Order();
                 order.setId(0);
             }
-            return order;
+            return setOrderOfCommentProductPropsProductInfo(order);
         } catch (Exception e) {
             e.printStackTrace();
             return null;
@@ -154,7 +159,14 @@ public class EconServiceImpl implements EconService {
 
     @Override
     public List<Order> getOrders(int userId) {
-        return orderRepository.findByUserId(userId);
+        List<Order> orders = orderRepository.findByUserId(userId);
+        if (orders == null) return null;
+        List<Order> orders1 = new ArrayList<>();
+        for (Order order :
+                orders) {
+            orders1.add(setOrderOfCommentProductPropsProductInfo(order));
+        }
+        return orders1;
     }
 
     @Override
@@ -412,5 +424,62 @@ public class EconServiceImpl implements EconService {
     private String generateNumber() {
         long time = new Date().getTime();   //当前时间作为加密种子
         return MD5Util.md5(String.valueOf(time));
+    }
+
+    /**
+     * 丰富一下order的内容
+     * @param order
+     * @return
+     */
+    @小坏蛋(真的吗 = true)
+    private Order setOrderOfCommentProductPropsProductInfo(Order order){
+        if (order == null){
+            System.out.println("传入的order为空，不能为order设置comment product等相关信息");
+            return null;
+        }
+        //第一步，设置indentStatus
+        Boolean paid = order.getPaid();
+        Boolean finished = order.getFinished();
+        if (paid && finished){
+            //已完成
+            order.setIndentStatus(OrderIndentStatus.FINISHED);
+        }else if (!paid.booleanValue()){
+            //未支付
+            order.setIndentStatus(OrderIndentStatus.NOT_PAY);
+        }else if (paid.booleanValue() && !finished.booleanValue()){
+            //已支付
+            order.setIndentStatus(OrderIndentStatus.PAYED);
+        }else if (!paid.booleanValue() && !finished.booleanValue()){
+            //未支付
+            order.setIndentStatus(OrderIndentStatus.NOT_PAY);
+        }
+        //第二步，找到items，并为每个item设置comment,productInfo,productPropsInfo
+        List<Item> items = itemRepository.findByUserIdAndOrderNumber(order.getUserId(),order.getOrderNumber());
+        for (Item item:
+             items) {
+            //设置每个item的Comment,productInfo,productPropsInfo
+            List<Comment> comments = commentRepository.findByItemId(item.getId());
+            Product product = null;
+            ProductProps productProps = null;
+            try {
+                product = productRepository.findById(item.getProductId()).get();
+                productProps = productPropsRepository.findById(item.getProductPropsId()).get();
+
+                item.setProduct(product);
+                item.setCommentInfo(comments.get(0));
+                item.setProductProps(productProps);
+            } catch (Exception e) {
+                System.out.println("无相关product信息或者相关productProps信息");
+                Product product1 = new Product();
+                ProductProps productProps1 = new ProductProps();
+                productProps1.setServiceTime("没有找到任何相关product信息或者productProps信息");
+                product1.setContent("没有找到任何相关product信息或者productProps信息");
+                item.setProduct(product1);
+                e.printStackTrace();
+            }
+        }
+        //第三步，设置order的items信息
+        order.setItems(items);
+        return order;
     }
 }

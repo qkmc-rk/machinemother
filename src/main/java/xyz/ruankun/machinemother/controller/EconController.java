@@ -145,36 +145,6 @@ public class EconController {
         int userId = Integer.valueOf(userInfoService.readDataFromRedis(token));
         List<Order> orders = econService.getOrders(userId);
         return ControllerUtil.getDataResult(orders);
-//        Map<String, Object> map = new LinkedHashMap<>();
-//        Set<Product> products = new HashSet<>();
-//        List<Item> items = new ArrayList<>();
-//
-//        if (orders.size() > 0) {
-//            for (Order order : orders) {
-//                Map<String, Object> result = econService.getDetail(order.getOrderNumber());
-//                if (result.containsKey("error")) {
-//                    responseEntity.error(-1, String.valueOf(result.get("error")), null);
-//                    return responseEntity;
-//                } else {
-//                    try {
-//                        Set<Product> productResult = (Set<Product>) result.get("product");
-//                        List<Item> itemsResult = (List<Item>) result.get("item");
-//                        products.addAll(productResult);
-//                        items.addAll(itemsResult);
-//                    } catch (Exception e) {
-//                        e.printStackTrace();
-//                        responseEntity.serverError();
-//                        return responseEntity;
-//                    }
-//                }
-//            }
-//            map.put("product", products);
-//            map.put("item", items);
-//            responseEntity.success(map);
-//        } else {
-//            responseEntity.error(-1, "数据不存在", null);
-//        }
-//        return responseEntity;
     }
 
     @GetMapping(value = "/order/{orderId}")

@@ -30,6 +30,38 @@ public class Item {
     @Column(name = "isComment")
     private Boolean isComment;
 
+    //transient
+    @Transient
+    private Comment commentInfo;
+    @Transient
+    private Product product;
+    @Transient
+    private ProductProps productProps;
+
+    public Comment getCommentInfo() {
+        return commentInfo;
+    }
+
+    public void setCommentInfo(Comment commentInfo) {
+        this.commentInfo = commentInfo;
+    }
+
+    public Product getProduct() {
+        return product;
+    }
+
+    public void setProduct(Product product) {
+        this.product = product;
+    }
+
+    public ProductProps getProductProps() {
+        return productProps;
+    }
+
+    public void setProductProps(ProductProps productProps) {
+        this.productProps = productProps;
+    }
+
     public Boolean getComment() {
         return isComment;
     }

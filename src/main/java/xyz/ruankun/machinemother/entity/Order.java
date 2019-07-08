@@ -3,6 +3,7 @@ package xyz.ruankun.machinemother.entity;
 import javax.persistence.*;
 import java.math.BigDecimal;
 import java.util.Date;
+import java.util.List;
 
 @Entity
 @Table(name = "mm_order")
@@ -30,8 +31,27 @@ public class Order {
     @Column(name = "credit")
     private BigDecimal credit;
     private Integer addrId;
+    //transient props
+    @Transient
+    private List<Item> items;
+    @Transient
+    private String indentStatus;
 
+    public String getIndentStatus() {
+        return indentStatus;
+    }
 
+    public void setIndentStatus(String indentStatus) {
+        this.indentStatus = indentStatus;
+    }
+
+    public List<Item> getItems() {
+        return items;
+    }
+
+    public void setItems(List<Item> items) {
+        this.items = items;
+    }
 
     public Integer getAddrId() {
         return addrId;

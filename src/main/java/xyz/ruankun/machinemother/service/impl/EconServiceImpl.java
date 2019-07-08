@@ -479,6 +479,7 @@ public class EconServiceImpl implements EconService {
                 e.printStackTrace();
             }
         }
+        //xx
         //第三步，设置order的items信息
         order.setItems(items);
         return order;

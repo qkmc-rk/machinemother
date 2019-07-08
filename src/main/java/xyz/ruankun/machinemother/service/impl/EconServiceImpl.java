@@ -466,7 +466,8 @@ public class EconServiceImpl implements EconService {
                 productProps = productPropsRepository.findById(item.getProductPropsId()).get();
 
                 item.setProduct(product);
-                item.setCommentInfo(comments.get(0));
+                if(!comments.isEmpty())
+                    item.setCommentInfo(comments.get(0));
                 item.setProductProps(productProps);
             } catch (Exception e) {
                 System.out.println("无相关product信息或者相关productProps信息");

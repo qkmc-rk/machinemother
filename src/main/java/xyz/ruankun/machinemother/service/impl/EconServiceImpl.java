@@ -176,10 +176,10 @@ public class EconServiceImpl implements EconService {
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public Integer deleteOrder(int id) {
-        Integer oResult = orderRepository.deleteById(id);
+    public Integer deleteOrder(Integer id) {
+        Integer oResult = orderRepository.deleteById(id.intValue());
         Integer sResult = orderSecretRepository.deleteByOrderid(id);
-        if (oResult <= 0 || sResult <= 0) {
+        if (oResult < 0 || sResult < 0) {  //用小于等于的话，没有ordersecret的话那一定会泡错误
             try {
                 throw new Exception("data error");
             } catch (Exception e) {

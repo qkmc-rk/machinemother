@@ -153,6 +153,7 @@ public class ReplyCommentServiceImpl implements ReplyCommentService {
 
 
     private List<Comment> get(List<Comment> comments) {
+        List<Comment> comments1 = new ArrayList<>();
         if (comments == null) {
             return null;
         } else {
@@ -161,6 +162,7 @@ public class ReplyCommentServiceImpl implements ReplyCommentService {
                 //去item
                 Comment comment = iterator.next();
                 Item item = itemRepository.findById(comment.getItemId().intValue());
+                System.out.println("调试：" + item.toString());
                 if (item == null) {
                     logger.error("commentid:" + comment.getId() + ", 没有item");
                     iterator.remove();
@@ -169,9 +171,11 @@ public class ReplyCommentServiceImpl implements ReplyCommentService {
                     Product product = productRepository.findById(item.getProductId().intValue());
                     User user = userRepository.findById(item.getUserId().intValue());
                     if (product != null && user != null) {
+                        System.err.println("HMP");
                         comment.setTitle(product.getTitle());
                         comment.setUsername(user.getName());
                         comment.setUserAvatar(user.getAvator());
+                        comments1.add(comment);
                     } else {
                         logger.error("commentid:" + comment.getId() + ", productid:" +
                                 product.getId() + ", userid:" + user.getId());
@@ -180,6 +184,7 @@ public class ReplyCommentServiceImpl implements ReplyCommentService {
                 }
             }
         }
-        return comments;
+        System.out.println("MMPO" + comments1.toString() );
+        return comments1;
     }
 }

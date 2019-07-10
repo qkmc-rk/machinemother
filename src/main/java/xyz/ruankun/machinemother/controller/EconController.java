@@ -16,6 +16,7 @@ import xyz.ruankun.machinemother.entity.Product;
 import xyz.ruankun.machinemother.repository.OrderRepository;
 import xyz.ruankun.machinemother.service.EconService;
 import xyz.ruankun.machinemother.service.UserInfoService;
+import xyz.ruankun.machinemother.util.Constant;
 import xyz.ruankun.machinemother.util.constant.AuthAopConstant;
 import xyz.ruankun.machinemother.vo.ResponseEntity;
 
@@ -201,14 +202,14 @@ public class EconController {
         return ControllerUtil.getDataResult(orders);
     }
 
-    @DeleteMapping(value = "/order/id")
+    @DeleteMapping(value = "/order/{id}")
     @Authentication(role = AuthAopConstant.ADMIN)
     @ApiOperation(value = "[管理员]删除指定order")
     public ResponseEntity deleteOrder(@PathVariable(value = "id") Integer id) {
         //需order创建时间超过三小时,且状态为unpaid的才可进行该操作
         Order order = econService.getOrder(id);
         if (order == null) {
-            responseEntity.serverError();
+            responseEntity.error(Constant.FAILURE_CODE,"没有这个订单",null);
         } else if (order.getId() == 0) {
             responseEntity.error(-1, "数据不存在", null);
         } else {
@@ -219,7 +220,7 @@ public class EconController {
 //            responseEntity = ControllerUtil.getTrueOrFalseResult(result);
                 responseEntity = ControllerUtil.parData(econService.deleteOrder(id), null);
             } else {
-                responseEntity.error(-1, "非法操作", null);
+                responseEntity.error(-1, "订单创建未超过3小时，无法删除! 3 hours not exceeds", null);
             }
         }
         return responseEntity;

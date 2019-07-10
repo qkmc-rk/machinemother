@@ -133,4 +133,22 @@ public class Item {
     public void setUserId(Integer userId) {
         this.userId = userId;
     }
+
+    @Override
+    public String toString() {
+        return "Item{" +
+                "id=" + id +
+                ", productId=" + productId +
+                ", productPropsId=" + productPropsId +
+                ", quantity=" + quantity +
+                ", orderNumber='" + orderNumber + '\'' +
+                ", gmtCreate=" + gmtCreate +
+                ", gmtModified=" + gmtModified +
+                ", userId=" + userId +
+                ", isComment=" + isComment +
+                ", commentInfo=" + commentInfo +
+                ", product=" + product +
+                ", productProps=" + productProps +
+                '}';
+    }
 }

@@ -20,7 +20,7 @@ public interface ProductService {
 
     List<ProductProps> getProps(int id);
 
-    Integer deleteProduct(int id);
+    Integer deleteProduct(Integer id);
 
     DictProductType getProductType(String type);
 

@@ -83,14 +83,14 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     @Transactional
-    public Integer deleteProduct(int id) {
+    public Integer deleteProduct(Integer id) {
         Product product = getProduct(id);
         if (product == null || product.getId() == 0) {
             return DataCode.DATA_CONFLIC;
         } else {
             try {
-                Integer result = productRepository.deleteById(id);
-                Integer result1 = productPropsRepository.deleteAllByProductId(id);
+                Integer result = productRepository.deleteById(id.intValue());
+                Integer result1 = productPropsRepository.deleteAllByProductId(id.intValue());
                 if (result < 0 || result1 < 0) {
                     try {
                         throw new Exception(" 有数据未删除完成，product:" + result + ", prop:" + result1);

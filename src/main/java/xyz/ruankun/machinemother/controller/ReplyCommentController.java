@@ -11,9 +11,11 @@ import xyz.ruankun.machinemother.entity.Comment;
 import xyz.ruankun.machinemother.entity.Reply;
 import xyz.ruankun.machinemother.service.ReplyCommentService;
 import xyz.ruankun.machinemother.service.UserInfoService;
+import xyz.ruankun.machinemother.util.Constant;
 import xyz.ruankun.machinemother.util.constant.AuthAopConstant;
 import xyz.ruankun.machinemother.vo.ResponseEntity;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -67,20 +69,27 @@ public class ReplyCommentController {
     @ApiOperation(value = "【匿名】获取评论,如果没有token就是匿名，有就是管理员或者用户")
     public ResponseEntity getComment(@RequestHeader(value = "token", required = false) String token) {
         ResponseEntity responseEntity = new ResponseEntity();
+        String data = userInfoService.readDataFromRedis(token);
+        if (data == null) {
+            responseEntity.error(Constant.FAILURE_CODE,"permission denied!",null);
+            return responseEntity;
+        }
         if (token == null) {
             responseEntity.error(-1, "非法请求", null);
             return responseEntity;
         }
 
         List<Comment> comments = replyCommentService.getAllComent();
+        List<Comment> comments1 = new ArrayList<>();
         String tk = userInfoService.readDataFromRedis("session_key" + userInfoService.readDataFromRedis(token));
-        if (tk == null) {
+        if (tk != null) {
             //普通用户
             for (Comment c : comments) {
-                if (!c.getUserId().equals(userInfoService.readDataFromRedis(token))) {
-                    comments.remove(c);
+                if (!(!c.getUserId().equals(userInfoService.readDataFromRedis(token)))) {
+                    comments1.add(c);
                 }
             }
+            comments = comments1;
         }
         return getDataResult(comments);
     }

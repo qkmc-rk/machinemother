@@ -34,7 +34,7 @@ public class ControllerUtil {
         if (null != data)
             responseEntity.success(data);
         else
-            responseEntity.serverError();
+            responseEntity.error(Constant.FAILURE_CODE,"ControllerUtil.getDataResult获得空的数据",null);
         return responseEntity;
     }
 

@@ -5,6 +5,7 @@ import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import xyz.ruankun.machinemother.annotation.Authentication;
+import xyz.ruankun.machinemother.entity.AddtionalProduct;
 import xyz.ruankun.machinemother.entity.DictProductType;
 import xyz.ruankun.machinemother.entity.Product;
 import xyz.ruankun.machinemother.entity.ProductProps;
@@ -13,6 +14,7 @@ import xyz.ruankun.machinemother.util.Constant;
 import xyz.ruankun.machinemother.util.constant.AuthAopConstant;
 import xyz.ruankun.machinemother.vo.ResponseEntity;
 
+import java.util.Date;
 import java.util.List;
 
 @RestController
@@ -30,8 +32,11 @@ public class ProductController {
     @PutMapping(value = {"", "/"})
     @Authentication(role = AuthAopConstant.ADMIN)
     @ApiOperation(value = "[管理员]增加一个服务产品，同时要增加这个产品的各类参数信息")
-    public ResponseEntity addProduct(@RequestBody Product product, @RequestBody List<ProductProps> productProps) {
-
+    public ResponseEntity addProduct(@RequestBody AddtionalProduct addtionalProduct) {
+        Product product = addtionalProduct.getProduct();
+        List<ProductProps> productProps = addtionalProduct.getProductProps();
+        if (product == null || productProps == null)
+            return ControllerUtil.getDataResult(null);
         Boolean result = productService.addProduct(product, productProps);
         if (result) {
             responseEntity.success(Constant.PRODUCT_SUCCESS, "添加成功", product);

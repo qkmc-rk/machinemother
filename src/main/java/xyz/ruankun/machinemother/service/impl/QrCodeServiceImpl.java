@@ -140,7 +140,7 @@ public class QrCodeServiceImpl implements QrCodeService {
         if (id.length > 0){
             template.setId(id[0]);
             try {
-                logger.info("传入的模板ID是：{}",id);
+                logger.info("传入的模板ID是" + id);
                 template = templateRepository.saveAndFlush(template);
             } catch (Exception e) {
                 e.printStackTrace();

@@ -5,7 +5,6 @@ import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-import sun.tools.jconsole.AboutDialog;
 import xyz.ruankun.machinemother.annotation.Authentication;
 import xyz.ruankun.machinemother.annotation.小坏蛋;
 import xyz.ruankun.machinemother.entity.Advertisement;

@@ -74,4 +74,13 @@ public class Advertisement {
     public void setVisible(Boolean visible) {
         isVisible = visible;
     }
+
+    //add else
+    public Boolean getIsVisible() {
+        return isVisible;
+    }
+
+    public void setIsVisible(Boolean visible) {
+        isVisible = visible;
+    }
 }

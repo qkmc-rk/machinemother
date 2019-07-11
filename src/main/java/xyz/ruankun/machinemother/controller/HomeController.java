@@ -5,14 +5,18 @@ import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import sun.tools.jconsole.AboutDialog;
 import xyz.ruankun.machinemother.annotation.Authentication;
 import xyz.ruankun.machinemother.annotation.小坏蛋;
 import xyz.ruankun.machinemother.entity.Advertisement;
 import xyz.ruankun.machinemother.entity.Banner;
 import xyz.ruankun.machinemother.entity.Recommend;
 import xyz.ruankun.machinemother.service.HomeService;
+import xyz.ruankun.machinemother.util.Constant;
 import xyz.ruankun.machinemother.util.constant.AuthAopConstant;
 import xyz.ruankun.machinemother.vo.ResponseEntity;
+
+import java.util.Date;
 
 /**
  * 主要控制小程序主页面的一些内容和管理。
@@ -53,6 +57,8 @@ public class HomeController {
     @ApiOperation(value = "[管理员]操作,修改一个banner")
     public ResponseEntity alterBanner(@PathVariable Integer id, @RequestBody Banner banner) {
         banner.setId(id);   //看似不起作用的一点至关重要，万一前台数据不对，后台不考虑这个问题，后果就很严重
+        banner.setGmtModified(new Date());
+        banner.setGmtCreate(null);
         return getTrueOrFalseResult(homeService.alterBanner(id, banner));
     }
 
@@ -67,6 +73,9 @@ public class HomeController {
     @ApiOperation(value = "[管理员]操作,增加一个广告")
     public ResponseEntity addOneAdvertisement(@RequestBody Advertisement advertisement) {
         //数据校验省略
+        advertisement.setGmtCreate(new Date());
+        advertisement.setGmtModified(new Date());
+        advertisement.setVisible(true);
         return getDataResult(homeService.putAdvertisement(advertisement));
     }
 
@@ -96,7 +105,8 @@ public class HomeController {
     @Authentication(role = AuthAopConstant.ADMIN)
     @ApiOperation(value = "[管理员]操作,推荐一个产品")
     public ResponseEntity putRecommend(@RequestBody Recommend recommend) {
-        //省略数据校验
+        recommend.setGmtCreate(new Date());
+        recommend.setGmtModified(new Date());
         return getDataResult(homeService.putRecommend(recommend));
     }
 
@@ -136,7 +146,7 @@ public class HomeController {
         if (null != data)
             responseEntity.success(data);
         else
-            responseEntity.serverError();
+            responseEntity.error(Constant.FAILURE_CODE,"null data get",null);
         return responseEntity;
     }
 

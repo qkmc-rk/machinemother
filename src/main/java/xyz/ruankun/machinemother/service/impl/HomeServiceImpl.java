@@ -15,9 +15,11 @@ import xyz.ruankun.machinemother.repository.ProductRepository;
 import xyz.ruankun.machinemother.repository.RecommendRepository;
 import xyz.ruankun.machinemother.service.HomeService;
 import xyz.ruankun.machinemother.util.DataCode;
+import xyz.ruankun.machinemother.util.EntityUtil;
 import xyz.ruankun.machinemother.util.QiNiuFileUtil;
 
 import javax.annotation.Resource;
+import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 
@@ -85,7 +87,11 @@ public class HomeServiceImpl implements HomeService {
     @Override
     public boolean alterBanner(Integer id, Banner banner) {
         try {
-            bannerRepository.saveAndFlush(banner);
+            Banner banner1 = bannerRepository.findById(id.intValue()).get();
+            if (banner1 != null){
+                EntityUtil.update(banner,banner1);
+                bannerRepository.saveAndFlush(banner);
+            }
         } catch (Exception e) {
             e.printStackTrace();
             logger.info("修改banner失败");
@@ -135,6 +141,8 @@ public class HomeServiceImpl implements HomeService {
     @Override
     public Advertisement alterAdv(Advertisement advertisement) {
         try {
+            Advertisement advertisement1 = advertisementRepository.findById(advertisement.getId()).get();
+            EntityUtil.update(advertisement,advertisement1);
             return advertisementRepository.saveAndFlush(advertisement);
         } catch (Exception e) {
             e.printStackTrace();
@@ -176,7 +184,7 @@ public class HomeServiceImpl implements HomeService {
     public Recommend putRecommend(Recommend recommend) {
         Product product = productRepository.findById(recommend.getProductId().intValue());
         if (product == null) {
-            logger.error("lzzscl, 内部数据错误, productid:" + recommend.getProductId() + "不存在");
+            logger.error("lzzscl,productid:" + recommend.getProductId() + "不存在");
             return null;
         } else {
             try {

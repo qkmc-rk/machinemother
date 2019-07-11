@@ -177,8 +177,6 @@ public class ReplyCommentServiceImpl implements ReplyCommentService {
                         comment.setUserAvatar(user.getAvator());
                         comments1.add(comment);
                     } else {
-                        logger.error("commentid:" + comment.getId() + ", productid:" +
-                                product.getId() + ", userid:" + user.getId());
                         iterator.remove();
                     }
                 }

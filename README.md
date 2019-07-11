@@ -99,3 +99,9 @@
 - 修改删除订单出错的问题
 - 修复删除产品时的错误
 - 修复管理员无法获取comment的错误
+
+### 7月11日
+- 修复 /home/recommend
+- 修复 /home/adv 数据库原因
+- 将POST /home/banner/{id} 修复
+- 重新修复comment的错误

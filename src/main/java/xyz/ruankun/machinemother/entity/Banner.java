@@ -79,4 +79,14 @@ public class Banner {
     public void setVisible(Boolean visible) {
         isVisible = visible;
     }
+
+    public Boolean getIsVisible() {
+        return isVisible;
+    }
+
+    public void setIsVisible(Boolean visible) {
+        isVisible = visible;
+    }
+
+
 }

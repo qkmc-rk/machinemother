@@ -139,7 +139,6 @@ public class ReplyCommentServiceImpl implements ReplyCommentService {
 
     @Override
     public boolean setCommentWithRecommend(Integer commentId, Boolean recommend) {
-
         try {
             Comment comment = commentRepository.findById(commentId.intValue());
             comment.setRcmd(recommend);

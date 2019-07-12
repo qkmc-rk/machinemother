@@ -109,7 +109,11 @@ public class ReplyCommentController {
     @PostMapping("/comment/{commentId}/recommend")
     @Authentication(role = AuthAopConstant.ADMIN)
     @ApiOperation(value = "[管理员]管理员操作,修改某条评论，是否推荐这条评论显示在主页上")
-    public ResponseEntity setCommentToRecommend(@PathVariable Integer commentId, Boolean recommend) {
+    public ResponseEntity setCommentToRecommend(@PathVariable Integer commentId,@RequestParam Boolean recommend) {
+        if (commentId == null || commentId.intValue() <= 0){
+            System.err.println("错误,传入的commentId有误" + commentId);
+            return ControllerUtil.getFalseResultMsgBySelf("错误,传入的commentId有误");
+        }
         return getTrueOrFalseResult(replyCommentService.setCommentWithRecommend(commentId, recommend));
     }
 

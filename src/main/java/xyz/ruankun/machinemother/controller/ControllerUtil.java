@@ -38,6 +38,17 @@ public class ControllerUtil {
         return responseEntity;
     }
 
+    public static <T> ResponseEntity<T> getSuccessResultBySelf(T data){
+        ResponseEntity responseEntity = new ResponseEntity<>();
+        responseEntity.success(data);
+        return responseEntity;
+    }
+    public static <T> ResponseEntity<T> getFalseResultMsgBySelf(String msg){
+        ResponseEntity responseEntity = new ResponseEntity<>();
+        responseEntity.error(Constant.FAILURE_CODE,msg,null);
+        return responseEntity;
+    }
+
 
     public static <T> ResponseEntity<T> parData(Integer result, T data){
         ResponseEntity responseEntity = new ResponseEntity();

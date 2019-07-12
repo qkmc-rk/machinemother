@@ -13,6 +13,7 @@ import xyz.ruankun.machinemother.util.DataCode;
 import xyz.ruankun.machinemother.util.EntityUtil;
 
 import javax.annotation.Resource;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -78,7 +79,14 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public List<Product> getProducts() {
-        return productRepository.findAll();
+        List<Product> products = productRepository.findAll();
+        List<Product> products1 = new ArrayList<>();
+        for (Product p :
+                products) {
+            if (p.getIsVisible())
+                products1.add(p);
+        }
+        return products1;
     }
 
     @Override
@@ -89,11 +97,12 @@ public class ProductServiceImpl implements ProductService {
             return DataCode.DATA_CONFLIC;
         } else {
             try {
-                Integer result = productRepository.deleteById(id.intValue());
-                Integer result1 = productPropsRepository.deleteAllByProductId(id.intValue());
-                if (result < 0 || result1 < 0) {
+                product.setIsVisible(false);
+                Product result = productRepository.saveAndFlush(product);
+                //Integer result1 = productPropsRepository.deleteAllByProductId(id.intValue());
+                if (result != null) {
                     try {
-                        throw new Exception(" 有数据未删除完成，product:" + result + ", prop:" + result1);
+                        throw new Exception(" 有数据未删除完成，product:" + result);
                     } catch (Exception e) {
                         e.printStackTrace();
                         return DataCode.DATA_CONFLIC;
@@ -141,7 +150,13 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public List<Product> getProductsByTypeId(int typeId) {
-        return productRepository.findByTypeId(typeId);
+       List<Product> products =  productRepository.findByTypeId(typeId);
+       List<Product> products1 = new ArrayList<>();
+       for (Product p:products){
+           if (p.getIsVisible())
+               products1.add(p);
+       }
+       return products1;
     }
 
     @Override

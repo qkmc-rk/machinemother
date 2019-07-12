@@ -163,7 +163,13 @@ public class HomeServiceImpl implements HomeService {
                 Iterator<Recommend> iterator = recommends.iterator();
                 while (iterator.hasNext()) {
                     Recommend recommend = iterator.next();
-                    Product product = productRepository.findById(recommend.getProductId()).get();
+                    Product product = null;
+                    try {
+                        product = productRepository.findById(recommend.getProductId()).get();
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                        logger.error("sorry,product not found:" + recommend.getProductId());
+                    }
                     if (product == null) {
                         logger.error("没有product，内部有错误数据" + recommend.getId() + "," + iterator.next().getProductId());
                         iterator.remove();

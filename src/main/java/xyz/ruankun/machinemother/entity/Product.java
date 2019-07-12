@@ -31,6 +31,21 @@ public class Product {
     private Date gmtModified;
     @Column(name = "intro")
     private String intro;
+    @Column(name = "is_visible")
+    private Boolean isVisible;
+
+    public Boolean getVisible() {
+        return isVisible;
+    }
+    public void setVisible(Boolean visible) {
+        isVisible = visible;
+    }
+    public Boolean getIsVisible() {
+        return isVisible;
+    }
+    public void setIsVisible(Boolean visible) {
+        isVisible = visible;
+    }
 
     public String getIntro() {
         return intro;

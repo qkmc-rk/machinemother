@@ -4,6 +4,7 @@ import xyz.ruankun.machinemother.entity.Comment;
 import xyz.ruankun.machinemother.entity.Reply;
 
 import java.util.List;
+import java.util.Map;
 
 public interface ReplyCommentService {
 
@@ -12,7 +13,7 @@ public interface ReplyCommentService {
 
     Reply putReply(Reply reply);
 
-    List<Comment> getComments(Integer productId);
+    Map<String, List> getComments(Integer productId);
 
     List<Comment> getAllComent();
 

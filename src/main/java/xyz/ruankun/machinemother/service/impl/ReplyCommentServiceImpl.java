@@ -11,9 +11,7 @@ import xyz.ruankun.machinemother.repository.*;
 import xyz.ruankun.machinemother.service.ReplyCommentService;
 
 import javax.annotation.Resource;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
+import java.util.*;
 
 @Service
 public class ReplyCommentServiceImpl implements ReplyCommentService {
@@ -63,32 +61,44 @@ public class ReplyCommentServiceImpl implements ReplyCommentService {
     }
 
     @Override
-    public List<Comment> getComments(Integer productId) {
+    public Map<String, List> getComments(Integer productId) {
+        Map<String, List> map = new LinkedHashMap<>();
         List<Item> items = itemRepository.findByProductId(productId);
         List<Comment> comments = new ArrayList<>();
+        List<Reply> replies = new ArrayList<>();
         if (items.size() > 0) {
             for (Item item : items) {
                 //如果用户已评价，则获取评价信息
                 if (item.getComment()) {
                     List<Comment> result = commentRepository.findByItemId(item.getId());
                     if (result.size() >= 0) {
-                        for (Comment comment : result) {
+                        Iterator<Comment> iterator = comments.iterator();
+                        while (iterator.hasNext()) {
+                            Comment comment = iterator.next();
                             try {
                                 User user = userRepository.findById(comment.getUserId().intValue());
-                                comment.setUsername(user.getName());
+                                if(user.getId()!=0) {
+                                    comment.setUsername(user.getName());
+                                    List<Reply> reply = replyRepository.findAllByCommentId(comment.getId());
+                                    replies.addAll(reply);
+                                    comments.addAll(result);
+                                }else{
+
+                                }
                             } catch (Exception e) {
                                 e.printStackTrace();
                                 return null;
                             }
                         }
-                        comments.addAll(result);
                     } else {
                         return null;
                     }
                 }
             }
         }
-        return comments;
+        map.put("comment", comments);
+        map.put("reply", replies);
+        return map;
     }
 
     @Override

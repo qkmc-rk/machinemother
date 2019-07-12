@@ -46,6 +46,15 @@ public class EconServiceImpl implements EconService {
     @Autowired
     private CommentRepository commentRepository;
 
+    /**
+     * 没用 7.12
+     * @param userId
+     * @param decouponId
+     * @param useCredit
+     * @param credit
+     * @param addrId
+     * @return
+     */
     @Override
     @Transactional(rollbackFor = Exception.class)
     public Order addOrder(int userId, int decouponId, Boolean useCredit, Integer credit, Integer addrId) {
@@ -65,6 +74,7 @@ public class EconServiceImpl implements EconService {
                 order.setUseDecoupon(true);
                 order.setCredit(new BigDecimal(0));
                 order.setUseCredit(false);
+                order.setDelete(false);
 
             } else {
                 //decoupon状态异常则返回null;
@@ -124,11 +134,16 @@ public class EconServiceImpl implements EconService {
         return order;
     }
 
+    /**
+     * 只取未删除数据
+     * @param id
+     * @return
+     */
     @Override
     @Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
     public Order getOrder(int id) {
         try {
-            Order order = orderRepository.findById(id);
+            Order order = orderRepository.findByIdAndIsDelete(id, false);
             if (order == null) {
                 order = new Order();
                 order.setId(0);
@@ -144,7 +159,7 @@ public class EconServiceImpl implements EconService {
     @Override
     public Order getOrder(String orderNumber) {
         try {
-            Order order = orderRepository.findByOrderNumber(orderNumber);
+            Order order = orderRepository.findByOrderNumberAndIsDelete(orderNumber, false);
             if (order == null) {
                 order = new Order();
                 order.setId(0);
@@ -159,7 +174,7 @@ public class EconServiceImpl implements EconService {
 
     @Override
     public List<Order> getOrders(int userId) {
-        List<Order> orders = orderRepository.findByUserId(userId);
+        List<Order> orders = orderRepository.findByUserIdAndIsDelete(userId, false);
         if (orders == null) return null;
         List<Order> orders1 = new ArrayList<>();
         for (Order order :
@@ -171,39 +186,34 @@ public class EconServiceImpl implements EconService {
 
     @Override
     public Page<Order> getOrders(Pageable pageable) {
-        return orderRepository.findAll(pageable);
+        Page<Order> orders = orderRepository.findAll(pageable);
+        return orders;
     }
 
     @Override
     @Transactional(rollbackFor = Exception.class)
     public Integer deleteOrder(Integer id) {
-        Integer oResult = orderRepository.deleteById(id.intValue());
-        Integer sResult = orderSecretRepository.deleteByOrderid(id);
-        if (oResult < 0 || sResult < 0) {  //用小于等于的话，没有ordersecret的话那一定会泡错误
-            try {
-                throw new Exception("data error");
-            } catch (Exception e) {
-                e.printStackTrace();
-                return DataCode.DATA_OPERATION_FAILURE;
-            }
-        } else {
+        Order order = getOrder(id);
+        if(order.getId()!= 0 ){
+            order.setDelete(true);
+            orderRepository.save(order);
             return DataCode.DATA_OPERATION_SUCCESS;
+        }else{
+            return DataCode.DATA_CONFLIC;
         }
     }
 
     @Override
     @Transactional
     public Boolean deleteOrders(int userId) {
-        Integer result = orderRepository.deleteByUserId(userId);
-        Integer re = orderSecretRepository.deleteByUserId(userId);
-        if (result <= 0 || re <= 0) {
-            try {
-                throw new Exception("data error");
-            } catch (Exception e) {
-                e.printStackTrace();
-                return false;
+        List<Order> order = getOrders(userId);
+        if(order==null){
+            return false;
+        }else{
+            for (Order order1: order){
+                order1.setDelete(true);
+                orderRepository.save(order1);
             }
-        } else {
             return true;
         }
     }
@@ -383,7 +393,7 @@ public class EconServiceImpl implements EconService {
             orderSecret1.setEmployee(employee);
             Order order = null;
             try {
-                order = orderRepository.findById(orderId.intValue());
+                order = getOrder(orderId);
             } catch (Exception e) {
                 e.printStackTrace();
                 return false;

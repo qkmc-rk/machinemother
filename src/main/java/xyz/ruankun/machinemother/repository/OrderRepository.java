@@ -1,5 +1,7 @@
 package xyz.ruankun.machinemother.repository;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -10,19 +12,23 @@ import java.util.List;
 
 public interface OrderRepository extends JpaRepository<Order, Integer> {
 
-    Order findById(int id);
+    Order findByIdAndIsDelete(int id, Boolean isDelete);
 
-    Order findByOrderNumber(String orderNumber);
+    List<Order> findByIsDelete(Boolean isDelete);
 
-    List<Order> findByUserId(int userId);
+    Order findByOrderNumberAndIsDelete(String orderNumber, Boolean isDelete);
 
-    @Modifying
-    @Transactional
-    @Query(value = "delete from mm_order where id=?1", nativeQuery = true)
-    Integer deleteById(int id);
+    List<Order> findByUserIdAndIsDelete(int userId, Boolean isDelete);
 
-    @Query(value = "delete from mm_order where userid=?1", nativeQuery = true)
-    @Modifying
-    @Transactional
-    Integer deleteByUserId(int userId);
+    List<Order> findAllByIsDelete(Boolean isDelete);
+
+//    @Modifying
+//    @Transactional
+//    @Query(value = "delete from mm_order where id=?1", nativeQuery = true)
+//    Integer deleteById(int id);
+
+//    @Query(value = "delete from mm_order where userid=?1", nativeQuery = true)
+//    @Modifying
+//    @Transactional
+//    Integer deleteByUserId(int userId);
 }

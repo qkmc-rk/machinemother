@@ -17,6 +17,7 @@ import xyz.ruankun.machinemother.vo.ResponseEntity;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 /**
  * 该controller控制评论与回复等内容
@@ -45,7 +46,7 @@ public class ReplyCommentController {
     @ApiOperation(value = "匿名访问，获取某产品已评论的数据")
     public ResponseEntity getComments(@PathVariable(value = "productId") Integer productId) {
         ResponseEntity responseEntity = new ResponseEntity();
-        List<Comment> comments = replyCommentService.getComments(productId);
+        Map<String, List> comments = replyCommentService.getComments(productId);
         if (comments == null) {
             responseEntity.serverError();
         } else if (comments.size() >= 0) {

@@ -127,8 +127,11 @@ public class FinancialServiceImpl implements FinancialService {
         Order order;
         OrderSecret orderSecret;
         try {
-            order = orderRepository.findById(orderid.intValue());
+            order = orderRepository.findByIdAndIsDelete(orderid, false);
             orderSecret = orderSecretRepository.findByUserId(order.getUserId());
+            if(order == null || orderSecret==null){
+                return false;
+            }
         } catch (Exception e) {
             e.printStackTrace();
             return false;
@@ -138,6 +141,7 @@ public class FinancialServiceImpl implements FinancialService {
             order.setFinished(true);
             try {
                 orderRepository.saveAndFlush(order);
+                return true;
             } catch (Exception e) {
                 e.printStackTrace();
                 return false;
@@ -145,7 +149,6 @@ public class FinancialServiceImpl implements FinancialService {
         } else {
             return false;
         }
-        return false;
     }
 
     @Override
@@ -261,7 +264,7 @@ public class FinancialServiceImpl implements FinancialService {
             //订单没有
             rs.put("error", "错误,没有找到符合的订单");
         }
-        Order order = orderRepository.findById(orderid.intValue());
+        Order order = orderRepository.findByIdAndIsDelete(orderid, false);
         if (userid.intValue() != order.getUserId().intValue()) {
             rs.put("error", "错误,订单存在，但不是该用户的订单");
         }
@@ -438,7 +441,7 @@ public class FinancialServiceImpl implements FinancialService {
 
                 Order order = null;
                 try {
-                    order = orderRepository.findByOrderNumber(orderNumber);
+                    order = orderRepository.findByOrderNumberAndIsDelete(orderNumber, false);
                 } catch (Exception e) {
                     e.printStackTrace();
                     //通知微信服务器没有该订单，业务出现错误

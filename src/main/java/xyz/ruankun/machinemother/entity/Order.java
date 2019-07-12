@@ -20,6 +20,7 @@ public class Order {
     private Date gmtModified;
     private Boolean isPaid;
     private Boolean isFinished;
+    private Boolean isDelete;
 
     //添加
     @Column(name = "is_usedecoupon")
@@ -154,6 +155,14 @@ public class Order {
 
     public void setFinished(Boolean finished) {
         isFinished = finished;
+    }
+
+    public Boolean getDelete() {
+        return isDelete;
+    }
+
+    public void setDelete(Boolean delete) {
+        isDelete = delete;
     }
 
     @Override

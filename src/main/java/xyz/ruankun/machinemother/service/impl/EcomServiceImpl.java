@@ -107,6 +107,7 @@ public class EcomServiceImpl implements EcomService {
         Decoupon decoupon = null;
         //new 一个order对象，并设置不需要传值的相关区域
         Order order = new Order();
+        order.setDelete(false);
         order.setPaid(false);
         order.setFinished(false);
         /*********这部分内容填写了可能被覆盖，但是为了最后不为null，必须填写*******/

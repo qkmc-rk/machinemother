@@ -36,6 +36,7 @@ public class ProductServiceImpl implements ProductService {
             productRepository.save(product);        //先保存product
             for (ProductProps props : productProps) {
                 props.setProductId(product.getId());        //依次修改props的productId
+                props.setIsVisible(true);
             }
             productPropsRepository.saveAll(productProps);
             return true;

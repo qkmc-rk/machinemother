@@ -11,7 +11,7 @@
  Target Server Version : 80015
  File Encoding         : 65001
 
- Date: 15/06/2019 18:37:45
+ Date: 12/07/2019 22:37:10
 */
 
 SET NAMES utf8mb4;
@@ -29,7 +29,49 @@ CREATE TABLE `hibernate_sequence` (
 -- Records of hibernate_sequence
 -- ----------------------------
 BEGIN;
-INSERT INTO `hibernate_sequence` VALUES (1049);
+INSERT INTO `hibernate_sequence` VALUES (1545);
+INSERT INTO `hibernate_sequence` VALUES (1);
+INSERT INTO `hibernate_sequence` VALUES (1);
+INSERT INTO `hibernate_sequence` VALUES (1);
+INSERT INTO `hibernate_sequence` VALUES (1);
+INSERT INTO `hibernate_sequence` VALUES (1);
+INSERT INTO `hibernate_sequence` VALUES (1);
+INSERT INTO `hibernate_sequence` VALUES (1);
+INSERT INTO `hibernate_sequence` VALUES (1);
+INSERT INTO `hibernate_sequence` VALUES (1);
+INSERT INTO `hibernate_sequence` VALUES (1);
+INSERT INTO `hibernate_sequence` VALUES (1);
+INSERT INTO `hibernate_sequence` VALUES (1);
+INSERT INTO `hibernate_sequence` VALUES (1);
+INSERT INTO `hibernate_sequence` VALUES (1);
+INSERT INTO `hibernate_sequence` VALUES (1);
+INSERT INTO `hibernate_sequence` VALUES (1);
+INSERT INTO `hibernate_sequence` VALUES (1);
+INSERT INTO `hibernate_sequence` VALUES (1);
+INSERT INTO `hibernate_sequence` VALUES (1);
+INSERT INTO `hibernate_sequence` VALUES (1);
+INSERT INTO `hibernate_sequence` VALUES (1);
+INSERT INTO `hibernate_sequence` VALUES (1);
+INSERT INTO `hibernate_sequence` VALUES (1);
+INSERT INTO `hibernate_sequence` VALUES (1);
+INSERT INTO `hibernate_sequence` VALUES (1);
+INSERT INTO `hibernate_sequence` VALUES (1);
+INSERT INTO `hibernate_sequence` VALUES (1);
+INSERT INTO `hibernate_sequence` VALUES (1);
+INSERT INTO `hibernate_sequence` VALUES (1);
+INSERT INTO `hibernate_sequence` VALUES (1);
+INSERT INTO `hibernate_sequence` VALUES (1);
+INSERT INTO `hibernate_sequence` VALUES (1);
+INSERT INTO `hibernate_sequence` VALUES (1);
+INSERT INTO `hibernate_sequence` VALUES (1);
+INSERT INTO `hibernate_sequence` VALUES (1);
+INSERT INTO `hibernate_sequence` VALUES (1);
+INSERT INTO `hibernate_sequence` VALUES (1);
+INSERT INTO `hibernate_sequence` VALUES (1);
+INSERT INTO `hibernate_sequence` VALUES (1);
+INSERT INTO `hibernate_sequence` VALUES (1);
+INSERT INTO `hibernate_sequence` VALUES (1);
+INSERT INTO `hibernate_sequence` VALUES (1);
 COMMIT;
 
 -- ----------------------------
@@ -44,8 +86,19 @@ CREATE TABLE `mm_activity` (
   `gmt_modified` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '活动修改时间',
   `title` varchar(32) COLLATE utf8mb4_general_ci NOT NULL COMMENT '标题',
   `content` text COLLATE utf8mb4_general_ci NOT NULL COMMENT '活动内容',
+  `is_delete` bit(1) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=1506 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- ----------------------------
+-- Records of mm_activity
+-- ----------------------------
+BEGIN;
+INSERT INTO `mm_activity` VALUES (1059, '2019-06-24 18:44:35', '2019-06-24 18:44:36', '2019-06-24 19:00:49', '2019-06-24 19:00:49', 'dsvfs', 'xssasdsa', NULL);
+INSERT INTO `mm_activity` VALUES (1060, '2019-06-24 18:44:35', '2019-06-24 18:44:36', '2019-06-24 19:01:05', '2019-06-24 19:01:05', '.....', 'xcdfdvretyy', NULL);
+INSERT INTO `mm_activity` VALUES (1064, '2019-05-29 04:15:52', '2019-06-06 04:15:54', '2019-06-24 20:15:06', '2019-06-24 20:15:06', '1', '111', NULL);
+INSERT INTO `mm_activity` VALUES (1504, '2019-07-01 13:12:15', '2019-07-17 13:12:21', '2019-07-11 18:12:25', '2019-07-11 18:12:25', '1', '111', NULL);
+COMMIT;
 
 -- ----------------------------
 -- Table structure for mm_addr
@@ -60,14 +113,25 @@ CREATE TABLE `mm_addr` (
   `detail` varchar(255) COLLATE utf8mb4_general_ci NOT NULL COMMENT '详细地址',
   `gmt_create` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
   `gmt_modified` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '修改时间',
+  `phone` varchar(255) COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `username` varchar(255) COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `is_visible` tinyint(1) unsigned NOT NULL DEFAULT '1' COMMENT '是否可见',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=1460 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- ----------------------------
 -- Records of mm_addr
 -- ----------------------------
 BEGIN;
-INSERT INTO `mm_addr` VALUES (2, 2, '中国', '四川', '雅安', '四川农业大学', '2019-06-10 23:14:47', '2019-06-10 23:14:47');
+INSERT INTO `mm_addr` VALUES (1178, 27, '中国', '北京市', '北京', '中国北京市朝阳区', '2019-06-29 06:33:52', '2019-06-29 06:33:52', '15233333333', '五阿哥', 1);
+INSERT INTO `mm_addr` VALUES (1179, 27, '中国', '北京市', '北京', '中国北京市朝阳区', '2019-06-29 06:34:39', '2019-06-29 06:34:39', '1523444444', '五阿哥', 1);
+INSERT INTO `mm_addr` VALUES (1385, 17, '中国', '内蒙古自治区', '包头市', '东河区鸡冠子', '2019-07-04 08:14:54', '2019-07-07 23:14:05', '119029289991', 'mrruan', 0);
+INSERT INTO `mm_addr` VALUES (1420, 45, '中国', '北京市', '北京市', '丰台区啊啊啊啊', '2019-07-06 09:16:41', '2019-07-08 08:59:00', '123456789', '啊啊啊啊', 0);
+INSERT INTO `mm_addr` VALUES (1421, 45, '中国', '北京市', '北京市', '门头沟区aaaaa', '2019-07-06 09:17:22', '2019-07-08 08:59:03', '12345678910', 'aaaaa', 0);
+INSERT INTO `mm_addr` VALUES (1455, 45, '中国', '内蒙古自治区', '呼和浩特市', '新城区4444', '2019-07-07 20:27:38', '2019-07-08 09:30:23', '4444444444', '4444', 0);
+INSERT INTO `mm_addr` VALUES (1456, 45, '中国', '内蒙古自治区', '呼和浩特市', '新城区1111', '2019-07-07 20:31:19', '2019-07-08 09:33:34', '1111111', '111', 0);
+INSERT INTO `mm_addr` VALUES (1458, 45, '中国', '山西省', '太原市', '小店区aaa', '2019-07-07 20:50:42', '2019-07-08 09:53:00', 'aaaa', 'aaaa', 0);
+INSERT INTO `mm_addr` VALUES (1459, 45, '中国', '山西省', '太原市', '小店区sss', '2019-07-07 20:53:56', '2019-07-07 20:53:56', '1111111111', 'ssss', 1);
 COMMIT;
 
 -- ----------------------------
@@ -80,13 +144,15 @@ CREATE TABLE `mm_admin` (
   `password` varchar(255) COLLATE utf8mb4_general_ci NOT NULL COMMENT '密码',
   `is_lock` tinyint(2) unsigned NOT NULL COMMENT '是否锁定0/1',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=314445438 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=314445440 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- ----------------------------
 -- Records of mm_admin
 -- ----------------------------
 BEGIN;
 INSERT INTO `mm_admin` VALUES (314445437, 'admin', '689a7f41007215efcd7662de263812ef', 0);
+INSERT INTO `mm_admin` VALUES (314445438, 'admin1', '689a7f41007215efcd7662de263812ef', 0);
+INSERT INTO `mm_admin` VALUES (314445439, 'admin2', '689a7f41007215efcd7662de263812ef', 0);
 COMMIT;
 
 -- ----------------------------
@@ -97,16 +163,16 @@ CREATE TABLE `mm_announcement` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `title` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
   `content` text CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
-  `gmt_create` datetime NOT NULL,
+  `gmt_create` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `gmt_modified` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=1504 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- ----------------------------
 -- Records of mm_announcement
 -- ----------------------------
 BEGIN;
-INSERT INTO `mm_announcement` VALUES (1, '12', '33d', '2019-06-13 14:30:53', '2019-06-13 14:30:47');
+INSERT INTO `mm_announcement` VALUES (1503, '不要乱删除', '测试内容可以自己在数据库中添加后再删除', '2019-07-11 18:12:09', '2019-07-12 16:49:12');
 COMMIT;
 
 -- ----------------------------
@@ -125,16 +191,32 @@ CREATE TABLE `mm_comment` (
   `gmt_create` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '评论时间',
   `gmt_modified` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '修改时间',
   `is_rcmd` tinyint(2) unsigned NOT NULL DEFAULT '0' COMMENT '是否推荐上主页',
-  `item_id` int(11) DEFAULT NULL,
-  `user_id` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=1465 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- ----------------------------
 -- Records of mm_comment
 -- ----------------------------
 BEGIN;
-INSERT INTO `mm_comment` VALUES (1, 43, 1, 4, '哈哈，还不错，骚的挺干净的', NULL, NULL, NULL, '2019-06-12 21:54:53', '2019-06-12 21:54:53', 0, NULL, NULL);
+INSERT INTO `mm_comment` VALUES (1, 1304, 1, 4, '哈哈，还不错，扫的挺干净的', 'http://image.ruankun.xyz/1.png', 'http://image.ruankun.xyz/1.png', 'http://image.ruankun.xyz/1.png', '2019-06-12 21:54:53', '2019-07-12 18:50:12', 1);
+INSERT INTO `mm_comment` VALUES (2, 1251, 1, 3, '这下应该有数据了', 'http://image.ruankun.xyz/1.png', 'http://image.ruankun.xyz/1.png', 'http://image.ruankun.xyz/1.png', '2019-06-27 15:07:31', '2019-07-12 16:51:01', 1);
+INSERT INTO `mm_comment` VALUES (1204, 1211, 16, 1, 'string', 'http://image.ruankun.xyz/1.png', 'http://image.ruankun.xyz/1.png', 'http://image.ruankun.xyz/1.png', '2019-06-30 06:37:17', '2019-07-12 16:51:02', 1);
+INSERT INTO `mm_comment` VALUES (1317, 1273, 16, 5, '', 'http://image.ruankun.xyz/1.png', 'http://image.ruankun.xyz/1.png', 'http://image.ruankun.xyz/1.png', '2019-07-02 22:28:15', '2019-07-12 16:51:02', 1);
+INSERT INTO `mm_comment` VALUES (1323, 1273, 16, 5, '添加评论', 'http://image.ruankun.xyz/1.png', 'http://image.ruankun.xyz/1.png', 'http://image.ruankun.xyz/1.png', '2019-07-03 13:12:04', '2019-07-12 16:51:02', 1);
+INSERT INTO `mm_comment` VALUES (1347, 1345, 45, 5, '评论测试评论测试', 'http://image.ruankun.xyz/1.png', 'http://image.ruankun.xyz/1.png', 'http://image.ruankun.xyz/1.png', '2019-07-03 20:10:00', '2019-07-12 16:51:02', 1);
+INSERT INTO `mm_comment` VALUES (1350, 1348, 45, 5, '电视机维修评价测试嗷', 'http://image.ruankun.xyz/1.png', 'http://image.ruankun.xyz/1.png', 'http://image.ruankun.xyz/1.png', '2019-07-03 20:11:29', '2019-07-12 16:51:02', 1);
+INSERT INTO `mm_comment` VALUES (1354, 1345, 45, 4, '五星好评嗷', 'http://image.ruankun.xyz/1.png', 'http://image.ruankun.xyz/1.png', 'http://image.ruankun.xyz/1.png', '2019-07-03 20:36:47', '2019-07-12 16:51:03', 0);
+INSERT INTO `mm_comment` VALUES (1355, 1335, 45, 4, '电视机维修！！！！！！修！！！', 'http://image.ruankun.xyz/1.png', 'http://image.ruankun.xyz/1.png', 'http://image.ruankun.xyz/1.png', '2019-07-03 20:38:45', '2019-07-12 16:51:03', 0);
+INSERT INTO `mm_comment` VALUES (1356, 1332, 45, 4, '书啊', 'http://image.ruankun.xyz/1.png', 'http://image.ruankun.xyz/1.png', 'http://image.ruankun.xyz/1.png', '2019-07-03 20:40:32', '2019-07-12 16:51:03', 0);
+INSERT INTO `mm_comment` VALUES (1357, 1348, 45, 4, '啊啊啊啊', 'http://image.ruankun.xyz/1.png', 'http://image.ruankun.xyz/1.png', 'http://image.ruankun.xyz/1.png', '2019-07-03 20:42:46', '2019-07-12 16:51:03', 1);
+INSERT INTO `mm_comment` VALUES (1358, 1348, 45, 4, '啊啊啊啊', 'http://image.ruankun.xyz/1.png', 'http://image.ruankun.xyz/1.png', 'http://image.ruankun.xyz/1.png', '2019-07-03 20:42:52', '2019-07-12 16:51:03', 1);
+INSERT INTO `mm_comment` VALUES (1359, 1339, 45, 3, '再测测', 'http://image.ruankun.xyz/1.png', 'http://image.ruankun.xyz/1.png', 'http://image.ruankun.xyz/1.png', '2019-07-03 20:44:12', '2019-07-12 16:51:03', 1);
+INSERT INTO `mm_comment` VALUES (1360, 1332, 45, 3, '最后此测试嗷', 'http://image.ruankun.xyz/1.png', 'http://image.ruankun.xyz/1.png', 'http://image.ruankun.xyz/1.png', '2019-07-03 20:44:51', '2019-07-12 16:51:03', 1);
+INSERT INTO `mm_comment` VALUES (1361, 1345, 45, 5, '真的最后一次了', 'http://image.ruankun.xyz/1.png', 'http://image.ruankun.xyz/1.png', 'http://image.ruankun.xyz/1.png', '2019-07-03 20:45:25', '2019-07-12 16:51:03', 1);
+INSERT INTO `mm_comment` VALUES (1362, 1332, 45, 5, '肯定能成功啊 ', 'http://image.ruankun.xyz/1.png', 'http://image.ruankun.xyz/1.png', 'http://image.ruankun.xyz/1.png', '2019-07-03 20:46:52', '2019-07-12 16:51:03', 1);
+INSERT INTO `mm_comment` VALUES (1384, 1235, 17, 5, '什么啊', 'http://image.ruankun.xyz/1.png', 'http://image.ruankun.xyz/1.png', 'http://image.ruankun.xyz/1.png', '2019-07-04 21:11:07', '2019-07-12 16:51:03', 0);
+INSERT INTO `mm_comment` VALUES (1463, 1442, 45, 5, '加点评论', 'http://image.ruankun.xyz/1.png', 'http://image.ruankun.xyz/1.png', 'http://image.ruankun.xyz/1.png', '2019-07-08 18:14:18', '2019-07-12 16:51:04', 0);
+INSERT INTO `mm_comment` VALUES (1464, 1460, 45, 4, '测试商品添加评论', 'http://image.ruankun.xyz/1.png', 'http://image.ruankun.xyz/1.png', 'http://image.ruankun.xyz/1.png', '2019-07-08 18:14:37', '2019-07-12 16:51:04', 0);
 COMMIT;
 
 -- ----------------------------
@@ -144,11 +226,35 @@ DROP TABLE IF EXISTS `mm_commissionrecord`;
 CREATE TABLE `mm_commissionrecord` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `userid` bigint(20) unsigned NOT NULL COMMENT '用户id',
-  `amount` decimal(10,0) unsigned NOT NULL COMMENT '佣金数量',
+  `amount` decimal(10,2) unsigned NOT NULL COMMENT '佣金数量',
   `is_save` tinyint(1) unsigned NOT NULL COMMENT '1-存入佣金,0-消费佣金',
   `gmt_create` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '记录创建时间',
+  `reason` varchar(255) COLLATE utf8mb4_general_ci DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci COMMENT='佣金记录表';
+) ENGINE=InnoDB AUTO_INCREMENT=1543 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci COMMENT='佣金记录表';
+
+-- ----------------------------
+-- Records of mm_commissionrecord
+-- ----------------------------
+BEGIN;
+INSERT INTO `mm_commissionrecord` VALUES (1, 2, 5.00, 1, '2019-06-24 13:46:23', NULL);
+INSERT INTO `mm_commissionrecord` VALUES (2, 16, 5.00, 1, '2019-06-27 09:39:23', NULL);
+INSERT INTO `mm_commissionrecord` VALUES (1331, 45, 100.00, 1, '2019-07-03 22:28:37', '系统赠送');
+INSERT INTO `mm_commissionrecord` VALUES (1371, 45, 2.99, 0, '2019-07-03 09:54:40', '提现成功，扣除佣金');
+INSERT INTO `mm_commissionrecord` VALUES (1377, 27, 0.22, 0, '2019-07-04 07:07:40', '佣金提现');
+INSERT INTO `mm_commissionrecord` VALUES (1378, 27, 0.22, 1, '2019-07-04 07:14:08', '提现失败，退还');
+INSERT INTO `mm_commissionrecord` VALUES (1380, 27, 0.22, 0, '2019-07-04 07:16:27', '佣金提现');
+INSERT INTO `mm_commissionrecord` VALUES (1382, 27, 2.78, 0, '2019-07-04 07:45:21', '佣金提现');
+INSERT INTO `mm_commissionrecord` VALUES (1391, 16, 0.01, 0, '2019-07-04 21:07:36', '佣金提现');
+INSERT INTO `mm_commissionrecord` VALUES (1393, 16, 0.02, 0, '2019-07-04 21:14:55', '佣金提现');
+INSERT INTO `mm_commissionrecord` VALUES (1402, 16, 0.03, 0, '2019-07-05 06:32:21', '佣金提现');
+INSERT INTO `mm_commissionrecord` VALUES (1409, 45, 1.00, 0, '2019-07-05 22:05:21', '佣金提现');
+INSERT INTO `mm_commissionrecord` VALUES (1411, 45, 1.00, 0, '2019-07-05 22:11:00', '佣金提现');
+INSERT INTO `mm_commissionrecord` VALUES (1413, 45, 0.01, 0, '2019-07-06 00:34:53', '佣金提现');
+INSERT INTO `mm_commissionrecord` VALUES (1415, 45, 2.00, 0, '2019-07-06 00:39:57', '佣金提现');
+INSERT INTO `mm_commissionrecord` VALUES (1417, 45, 3.00, 0, '2019-07-06 00:42:29', '佣金提现');
+INSERT INTO `mm_commissionrecord` VALUES (1542, 17, 2.00, 0, '2019-07-12 04:20:47', '佣金提现');
+COMMIT;
 
 -- ----------------------------
 -- Table structure for mm_creditrecord
@@ -161,7 +267,18 @@ CREATE TABLE `mm_creditrecord` (
   `amount` int(255) unsigned NOT NULL COMMENT '积分变化数量',
   `is_save` tinyint(1) unsigned NOT NULL COMMENT '是否存入积分1是，0消费',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci COMMENT='积分记录';
+) ENGINE=InnoDB AUTO_INCREMENT=1389 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci COMMENT='积分记录';
+
+-- ----------------------------
+-- Records of mm_creditrecord
+-- ----------------------------
+BEGIN;
+INSERT INTO `mm_creditrecord` VALUES (1, 2, '2019-06-24 13:46:49', 20, 1);
+INSERT INTO `mm_creditrecord` VALUES (1262, 16, '2019-07-03 14:43:46', 10000, 1);
+INSERT INTO `mm_creditrecord` VALUES (1263, 45, '2019-07-03 20:16:34', 900, 1);
+INSERT INTO `mm_creditrecord` VALUES (1365, 45, '2019-07-03 08:40:50', 900, 0);
+INSERT INTO `mm_creditrecord` VALUES (1388, 17, '2019-07-04 08:18:26', 190, 0);
+COMMIT;
 
 -- ----------------------------
 -- Table structure for mm_decoupon
@@ -178,7 +295,50 @@ CREATE TABLE `mm_decoupon` (
   `worth` decimal(10,2) unsigned NOT NULL COMMENT '优惠券额度',
   `is_fromexchange` tinyint(1) unsigned NOT NULL COMMENT '是否是兑换得到优惠券获得来源,0:领取,1:兑换',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci COMMENT='优惠券';
+) ENGINE=InnoDB AUTO_INCREMENT=1473 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci COMMENT='优惠券';
+
+-- ----------------------------
+-- Records of mm_decoupon
+-- ----------------------------
+BEGIN;
+INSERT INTO `mm_decoupon` VALUES (1, 17, '2019-07-01 10:20:40', '2019-07-04 13:47:35', 1, 0, 120.00, 20.00, 0);
+INSERT INTO `mm_decoupon` VALUES (16, 113, '2019-06-25 19:12:24', '2019-06-13 03:13:10', 0, 0, 120.00, 20.00, 0);
+INSERT INTO `mm_decoupon` VALUES (1085, 2, '2019-06-25 18:32:15', '2019-06-07 02:33:00', 0, 0, 120.00, 20.00, 0);
+INSERT INTO `mm_decoupon` VALUES (1086, 2, '2019-06-25 18:40:35', '2019-05-31 02:41:19', 0, 0, 120.00, 20.00, 0);
+INSERT INTO `mm_decoupon` VALUES (1087, 2, '2019-06-25 18:41:27', '2019-06-14 02:41:04', 0, 0, 120.00, 20.00, 0);
+INSERT INTO `mm_decoupon` VALUES (1088, 2, '2019-06-25 18:43:18', '2019-06-06 02:44:03', 0, 0, 120.00, 20.00, 0);
+INSERT INTO `mm_decoupon` VALUES (1089, 2, '2019-06-25 19:00:24', '2019-05-30 03:00:09', 0, 0, 120.00, 20.00, 0);
+INSERT INTO `mm_decoupon` VALUES (1090, 3, '2019-06-25 19:00:24', '2019-05-30 03:00:09', 0, 0, 120.00, 20.00, 0);
+INSERT INTO `mm_decoupon` VALUES (1091, 4, '2019-06-25 19:00:24', '2019-05-30 03:00:09', 0, 0, 120.00, 20.00, 0);
+INSERT INTO `mm_decoupon` VALUES (1092, 5, '2019-06-25 19:00:24', '2019-05-30 03:00:09', 0, 0, 120.00, 20.00, 0);
+INSERT INTO `mm_decoupon` VALUES (1093, 6, '2019-06-25 19:00:24', '2019-05-30 03:00:09', 0, 0, 120.00, 20.00, 0);
+INSERT INTO `mm_decoupon` VALUES (1094, 7, '2019-06-25 19:00:24', '2019-05-30 03:00:09', 0, 0, 120.00, 20.00, 0);
+INSERT INTO `mm_decoupon` VALUES (1095, 8, '2019-06-25 19:00:24', '2019-05-30 03:00:09', 0, 0, 120.00, 20.00, 0);
+INSERT INTO `mm_decoupon` VALUES (1096, 9, '2019-06-25 19:00:24', '2019-05-30 03:00:09', 0, 0, 120.00, 20.00, 0);
+INSERT INTO `mm_decoupon` VALUES (1097, 16, '2019-06-25 19:00:24', '2019-05-30 03:00:09', 0, 1, 120.00, 20.00, 0);
+INSERT INTO `mm_decoupon` VALUES (1098, 11, '2019-06-25 19:00:24', '2019-05-30 03:00:09', 0, 0, 120.00, 20.00, 0);
+INSERT INTO `mm_decoupon` VALUES (1099, 12, '2019-06-25 19:00:24', '2019-05-30 03:00:09', 0, 0, 120.00, 20.00, 0);
+INSERT INTO `mm_decoupon` VALUES (1100, 13, '2019-06-25 19:00:24', '2019-05-30 03:00:09', 0, 0, 120.00, 20.00, 0);
+INSERT INTO `mm_decoupon` VALUES (1101, 2, '2019-06-25 19:12:24', '2019-06-13 03:13:10', 0, 0, 120.00, 20.00, 0);
+INSERT INTO `mm_decoupon` VALUES (1102, 3, '2019-06-25 19:12:24', '2019-06-13 03:13:10', 0, 0, 120.00, 20.00, 0);
+INSERT INTO `mm_decoupon` VALUES (1103, 16, '2019-07-01 19:25:24', '2019-08-13 03:13:10', 1, 0, 120.00, 20.00, 0);
+INSERT INTO `mm_decoupon` VALUES (1104, 5, '2019-06-25 19:12:24', '2019-06-13 03:13:10', 0, 0, 120.00, 20.00, 0);
+INSERT INTO `mm_decoupon` VALUES (1105, 6, '2019-06-25 19:12:24', '2019-06-13 03:13:10', 0, 0, 120.00, 20.00, 0);
+INSERT INTO `mm_decoupon` VALUES (1106, 7, '2019-06-25 19:12:24', '2019-06-13 03:13:10', 0, 0, 120.00, 20.00, 0);
+INSERT INTO `mm_decoupon` VALUES (1107, 16, '2019-07-01 20:34:25', '2019-08-13 03:13:10', 1, 0, 120.00, 20.00, 0);
+INSERT INTO `mm_decoupon` VALUES (1108, 9, '2019-06-25 19:12:24', '2019-06-13 03:13:10', 0, 0, 120.00, 20.00, 0);
+INSERT INTO `mm_decoupon` VALUES (1109, 10, '2019-06-25 19:12:24', '2019-06-13 03:13:10', 0, 0, 120.00, 20.00, 0);
+INSERT INTO `mm_decoupon` VALUES (1110, 16, '2019-06-25 19:12:24', '2019-06-13 03:13:10', 0, 1, 120.00, 20.00, 0);
+INSERT INTO `mm_decoupon` VALUES (1111, 16, '2019-06-25 19:12:24', '2019-06-13 03:13:10', 0, 1, 120.00, 20.00, 0);
+INSERT INTO `mm_decoupon` VALUES (1113, 45, '2019-07-03 21:45:52', '2019-07-10 13:45:40', 1, 0, 120.00, 20.00, 0);
+INSERT INTO `mm_decoupon` VALUES (1114, 45, '2019-07-03 21:46:24', '2019-07-10 13:46:07', 1, 0, 100.00, 10.00, 0);
+INSERT INTO `mm_decoupon` VALUES (1404, 2, '2019-07-05 07:44:51', '2019-07-03 15:43:46', 0, 0, 2.00, 2.00, 0);
+INSERT INTO `mm_decoupon` VALUES (1468, 2, '2019-07-10 04:18:22', '2019-07-19 12:16:37', 0, 0, 0.00, 1.00, 0);
+INSERT INTO `mm_decoupon` VALUES (1469, 16, '2019-07-10 04:18:22', '2019-07-19 12:16:37', 0, 0, 0.00, 1.00, 0);
+INSERT INTO `mm_decoupon` VALUES (1470, 17, '2019-07-10 04:18:22', '2019-07-19 12:16:37', 0, 0, 0.00, 1.00, 0);
+INSERT INTO `mm_decoupon` VALUES (1471, 27, '2019-07-10 04:18:22', '2019-07-19 12:16:37', 0, 0, 0.00, 1.00, 0);
+INSERT INTO `mm_decoupon` VALUES (1472, 45, '2019-07-10 04:18:22', '2019-07-19 12:16:37', 0, 0, 0.00, 1.00, 0);
+COMMIT;
 
 -- ----------------------------
 -- Table structure for mm_decouponcdkey
@@ -194,7 +354,7 @@ CREATE TABLE `mm_decouponcdkey` (
   `min` decimal(10,2) unsigned NOT NULL COMMENT '使用最低额度',
   `worth` decimal(10,2) unsigned NOT NULL COMMENT '优惠券额度',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=1049 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci COMMENT='优惠券的兑换码';
+) ENGINE=InnoDB AUTO_INCREMENT=1406 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci COMMENT='优惠券的兑换码';
 
 -- ----------------------------
 -- Records of mm_decouponcdkey
@@ -202,1004 +362,6 @@ CREATE TABLE `mm_decouponcdkey` (
 BEGIN;
 INSERT INTO `mm_decouponcdkey` VALUES (16, '24412852877eec5e2140ef33180cdeac', '2019-06-14 22:21:54', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
 INSERT INTO `mm_decouponcdkey` VALUES (17, '71699937d9535c03c4afbd5f95fac3b1', '2019-06-14 22:21:58', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (18, '5650c9cd1d1bb5c1251080a541554960', '2019-06-14 22:22:01', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (19, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:23:55', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (20, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:23:55', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (21, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:23:55', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (22, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:23:55', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (23, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:23:55', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (24, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:23:55', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (25, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:23:55', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (26, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:23:55', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (27, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:23:55', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (28, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:23:56', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (29, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:23:56', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (30, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:23:56', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (31, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:23:56', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (32, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:23:56', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (33, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:23:56', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (34, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:23:56', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (35, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:23:56', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (36, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:23:56', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (37, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:23:56', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (38, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:23:56', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (39, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:23:56', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (40, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:23:56', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (41, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:23:56', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (42, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:23:56', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (43, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:23:56', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (44, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:23:56', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (45, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:23:56', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (46, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:23:56', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (47, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:23:56', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (48, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:23:56', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (49, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:23:56', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (50, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:23:56', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (51, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:23:56', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (52, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:23:56', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (53, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:23:56', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (54, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:23:56', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (55, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:23:56', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (56, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:23:56', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (57, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:23:56', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (58, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:23:56', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (59, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:23:56', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (60, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:23:56', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (61, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:23:56', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (62, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:23:56', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (63, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:23:56', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (64, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:23:56', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (65, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:23:56', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (66, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:23:56', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (67, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:23:56', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (68, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:23:56', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (69, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:23:56', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (70, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:23:56', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (71, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:23:56', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (72, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:23:56', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (73, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:23:56', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (74, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:23:56', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (75, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:23:56', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (76, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:23:56', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (77, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:23:56', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (78, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:23:56', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (79, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:23:56', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (80, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:23:56', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (81, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:23:56', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (82, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:23:56', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (83, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:23:56', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (84, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:23:56', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (85, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:23:56', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (86, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:23:56', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (87, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:23:56', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (88, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:23:57', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (89, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:23:57', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (90, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:23:57', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (91, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:23:57', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (92, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:23:57', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (93, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:23:57', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (94, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:23:57', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (95, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:23:57', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (96, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:23:57', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (97, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:23:57', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (98, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:23:57', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (99, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:23:57', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (100, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:23:57', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (101, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:23:57', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (102, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:23:57', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (103, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:23:57', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (104, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:23:57', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (105, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:23:57', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (106, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:23:57', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (107, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:23:57', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (108, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:23:57', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (109, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:23:57', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (110, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:23:57', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (111, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:23:57', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (112, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:23:57', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (113, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:23:57', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (114, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:23:57', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (115, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:23:57', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (116, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:23:57', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (117, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:23:57', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (118, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:23:57', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (119, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:23:57', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (120, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:23:57', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (121, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:23:57', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (122, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:23:57', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (123, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:23:57', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (124, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:23:57', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (125, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:23:57', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (126, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:23:57', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (127, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:23:57', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (128, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:23:57', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (129, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:23:57', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (130, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:23:57', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (131, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:23:57', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (132, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:23:57', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (133, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:23:57', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (134, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:23:57', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (135, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:23:57', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (136, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:23:57', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (137, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:23:57', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (138, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:23:57', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (139, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:23:57', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (140, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:23:57', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (141, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:23:57', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (142, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:23:57', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (143, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:23:57', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (144, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:23:57', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (145, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:23:57', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (146, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:23:57', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (147, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:23:57', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (148, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:23:58', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (149, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:23:58', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (150, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:23:58', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (151, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:23:58', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (152, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:23:58', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (153, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:23:58', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (154, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:23:58', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (155, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:23:58', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (156, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:23:58', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (157, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:23:58', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (158, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:23:58', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (159, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:23:58', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (160, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:23:58', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (161, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:23:58', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (162, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:23:58', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (163, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:23:58', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (164, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:23:58', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (165, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:23:58', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (166, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:23:58', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (167, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:23:58', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (168, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:23:58', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (169, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:23:58', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (170, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:23:58', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (171, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:23:58', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (172, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:23:58', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (173, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:23:58', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (174, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:23:58', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (175, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:23:58', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (176, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:23:58', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (177, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:23:58', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (178, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:23:58', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (179, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:23:58', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (180, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:23:58', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (181, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:23:58', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (182, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:23:58', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (183, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:23:58', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (184, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:23:58', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (185, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:23:58', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (186, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:23:58', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (187, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:23:58', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (188, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:23:58', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (189, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:23:58', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (190, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:23:58', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (191, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:23:58', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (192, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:23:58', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (193, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:23:58', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (194, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:23:58', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (195, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:23:58', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (196, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:23:58', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (197, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:23:58', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (198, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:23:58', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (199, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:23:58', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (200, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:23:58', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (201, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:23:58', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (202, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:23:58', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (203, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:23:58', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (204, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:23:58', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (205, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:23:58', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (206, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:23:58', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (207, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:23:58', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (208, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:23:59', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (209, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:23:59', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (210, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:23:59', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (211, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:23:59', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (212, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:23:59', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (213, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:23:59', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (214, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:23:59', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (215, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:23:59', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (216, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:23:59', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (217, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:23:59', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (218, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:23:59', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (219, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:23:59', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (220, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:23:59', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (221, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:23:59', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (222, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:23:59', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (223, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:23:59', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (224, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:23:59', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (225, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:23:59', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (226, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:23:59', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (227, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:23:59', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (228, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:23:59', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (229, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:23:59', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (230, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:23:59', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (231, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:23:59', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (232, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:23:59', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (233, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:23:59', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (234, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:23:59', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (235, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:23:59', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (236, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:23:59', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (237, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:23:59', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (238, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:23:59', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (239, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:23:59', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (240, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:23:59', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (241, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:23:59', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (242, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:23:59', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (243, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:23:59', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (244, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:23:59', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (245, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:23:59', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (246, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:23:59', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (247, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:23:59', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (248, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:23:59', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (249, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:23:59', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (250, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:23:59', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (251, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:23:59', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (252, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:23:59', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (253, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:23:59', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (254, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:23:59', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (255, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:23:59', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (256, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:23:59', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (257, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:23:59', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (258, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:23:59', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (259, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:23:59', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (260, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:23:59', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (261, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:23:59', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (262, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:23:59', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (263, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:23:59', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (264, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:23:59', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (265, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:23:59', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (266, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:23:59', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (267, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:23:59', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (268, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:00', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (269, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:00', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (270, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:00', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (271, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:00', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (272, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:00', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (273, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:00', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (274, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:00', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (275, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:00', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (276, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:00', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (277, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:00', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (278, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:00', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (279, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:00', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (280, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:00', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (281, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:00', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (282, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:00', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (283, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:00', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (284, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:00', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (285, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:00', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (286, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:00', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (287, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:00', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (288, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:00', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (289, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:00', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (290, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:00', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (291, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:00', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (292, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:00', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (293, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:00', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (294, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:00', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (295, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:00', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (296, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:00', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (297, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:00', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (298, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:00', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (299, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:00', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (300, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:00', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (301, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:00', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (302, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:00', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (303, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:00', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (304, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:00', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (305, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:00', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (306, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:00', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (307, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:00', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (308, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:00', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (309, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:00', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (310, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:00', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (311, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:00', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (312, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:00', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (313, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:00', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (314, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:00', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (315, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:00', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (316, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:00', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (317, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:00', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (318, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:00', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (319, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:00', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (320, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:00', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (321, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:00', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (322, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:00', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (323, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:00', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (324, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:00', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (325, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:00', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (326, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:00', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (327, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:00', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (328, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:01', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (329, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:01', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (330, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:01', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (331, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:01', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (332, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:01', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (333, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:01', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (334, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:01', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (335, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:01', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (336, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:01', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (337, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:01', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (338, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:01', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (339, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:01', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (340, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:01', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (341, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:01', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (342, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:01', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (343, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:01', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (344, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:01', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (345, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:01', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (346, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:01', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (347, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:01', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (348, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:01', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (349, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:01', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (350, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:01', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (351, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:01', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (352, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:01', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (353, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:01', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (354, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:01', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (355, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:01', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (356, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:01', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (357, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:01', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (358, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:01', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (359, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:01', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (360, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:01', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (361, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:01', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (362, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:01', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (363, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:01', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (364, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:01', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (365, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:01', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (366, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:01', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (367, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:01', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (368, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:01', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (369, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:01', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (370, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:01', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (371, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:01', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (372, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:01', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (373, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:01', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (374, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:01', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (375, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:01', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (376, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:01', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (377, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:01', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (378, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:01', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (379, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:01', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (380, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:01', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (381, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:01', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (382, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:01', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (383, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:01', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (384, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:01', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (385, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:01', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (386, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:01', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (387, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:01', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (388, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:01', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (389, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:02', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (390, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:02', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (391, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:02', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (392, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:02', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (393, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:02', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (394, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:02', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (395, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:02', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (396, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:02', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (397, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:02', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (398, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:02', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (399, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:02', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (400, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:02', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (401, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:02', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (402, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:02', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (403, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:02', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (404, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:02', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (405, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:02', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (406, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:02', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (407, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:02', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (408, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:02', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (409, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:02', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (410, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:02', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (411, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:02', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (412, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:02', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (413, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:02', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (414, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:02', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (415, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:02', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (416, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:02', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (417, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:02', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (418, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:02', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (419, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:02', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (420, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:02', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (421, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:02', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (422, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:02', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (423, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:02', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (424, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:02', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (425, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:02', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (426, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:02', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (427, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:02', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (428, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:02', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (429, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:02', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (430, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:02', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (431, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:02', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (432, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:02', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (433, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:02', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (434, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:02', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (435, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:02', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (436, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:02', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (437, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:02', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (438, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:02', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (439, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:02', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (440, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:02', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (441, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:02', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (442, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:02', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (443, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:02', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (444, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:02', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (445, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:02', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (446, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:02', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (447, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:02', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (448, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:02', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (449, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:03', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (450, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:03', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (451, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:03', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (452, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:03', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (453, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:03', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (454, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:03', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (455, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:03', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (456, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:03', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (457, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:03', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (458, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:03', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (459, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:03', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (460, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:03', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (461, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:03', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (462, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:03', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (463, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:03', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (464, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:03', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (465, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:03', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (466, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:03', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (467, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:03', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (468, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:03', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (469, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:03', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (470, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:03', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (471, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:03', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (472, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:03', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (473, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:03', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (474, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:03', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (475, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:03', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (476, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:03', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (477, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:03', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (478, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:03', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (479, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:03', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (480, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:03', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (481, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:03', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (482, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:03', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (483, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:03', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (484, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:03', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (485, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:03', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (486, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:03', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (487, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:03', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (488, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:03', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (489, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:03', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (490, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:03', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (491, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:03', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (492, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:03', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (493, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:03', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (494, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:03', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (495, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:03', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (496, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:03', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (497, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:03', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (498, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:03', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (499, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:03', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (500, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:03', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (501, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:03', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (502, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:03', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (503, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:03', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (504, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:03', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (505, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:03', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (506, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:03', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (507, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:03', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (508, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:03', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (509, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:04', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (510, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:04', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (511, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:04', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (512, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:04', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (513, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:04', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (514, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:04', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (515, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:04', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (516, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:04', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (517, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:04', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (518, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:04', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (519, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:04', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (520, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:04', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (521, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:04', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (522, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:04', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (523, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:04', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (524, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:04', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (525, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:04', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (526, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:04', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (527, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:04', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (528, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:04', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (529, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:04', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (530, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:04', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (531, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:04', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (532, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:04', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (533, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:04', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (534, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:04', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (535, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:04', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (536, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:04', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (537, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:04', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (538, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:04', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (539, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:04', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (540, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:04', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (541, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:04', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (542, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:04', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (543, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:04', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (544, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:04', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (545, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:04', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (546, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:04', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (547, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:04', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (548, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:04', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (549, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:04', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (550, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:04', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (551, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:04', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (552, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:04', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (553, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:04', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (554, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:04', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (555, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:04', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (556, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:04', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (557, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:04', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (558, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:04', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (559, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:04', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (560, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:04', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (561, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:04', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (562, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:04', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (563, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:04', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (564, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:04', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (565, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:04', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (566, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:04', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (567, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:04', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (568, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:04', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (569, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:05', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (570, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:05', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (571, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:05', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (572, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:05', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (573, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:05', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (574, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:05', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (575, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:05', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (576, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:05', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (577, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:05', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (578, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:05', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (579, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:05', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (580, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:05', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (581, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:05', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (582, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:05', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (583, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:05', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (584, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:05', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (585, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:05', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (586, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:05', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (587, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:05', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (588, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:05', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (589, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:05', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (590, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:05', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (591, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:05', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (592, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:05', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (593, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:05', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (594, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:05', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (595, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:05', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (596, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:05', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (597, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:05', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (598, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:05', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (599, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:05', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (600, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:05', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (601, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:05', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (602, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:05', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (603, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:05', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (604, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:05', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (605, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:05', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (606, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:05', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (607, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:05', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (608, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:05', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (609, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:05', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (610, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:05', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (611, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:05', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (612, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:05', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (613, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:05', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (614, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:05', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (615, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:05', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (616, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:05', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (617, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:05', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (618, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:05', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (619, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:05', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (620, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:05', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (621, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:05', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (622, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:05', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (623, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:05', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (624, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:05', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (625, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:05', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (626, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:05', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (627, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:05', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (628, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:05', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (629, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:05', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (630, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:05', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (631, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:06', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (632, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:06', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (633, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:06', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (634, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:06', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (635, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:06', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (636, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:06', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (637, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:06', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (638, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:06', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (639, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:06', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (640, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:06', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (641, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:06', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (642, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:06', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (643, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:06', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (644, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:06', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (645, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:06', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (646, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:06', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (647, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:06', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (648, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:06', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (649, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:06', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (650, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:06', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (651, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:06', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (652, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:06', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (653, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:06', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (654, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:06', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (655, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:06', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (656, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:06', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (657, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:06', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (658, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:06', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (659, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:06', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (660, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:06', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (661, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:06', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (662, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:06', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (663, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:06', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (664, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:06', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (665, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:06', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (666, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:06', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (667, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:06', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (668, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:06', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (669, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:06', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (670, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:06', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (671, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:06', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (672, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:06', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (673, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:06', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (674, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:06', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (675, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:06', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (676, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:06', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (677, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:06', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (678, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:06', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (679, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:06', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (680, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:06', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (681, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:06', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (682, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:06', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (683, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:06', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (684, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:06', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (685, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:06', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (686, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:06', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (687, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:06', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (688, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:06', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (689, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:06', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (690, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:06', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (691, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:07', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (692, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:07', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (693, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:07', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (694, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:07', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (695, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:07', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (696, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:07', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (697, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:07', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (698, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:07', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (699, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:07', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (700, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:07', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (701, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:07', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (702, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:07', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (703, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:07', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (704, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:07', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (705, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:07', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (706, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:07', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (707, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:07', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (708, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:07', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (709, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:07', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (710, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:07', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (711, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:07', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (712, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:07', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (713, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:07', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (714, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:07', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (715, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:07', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (716, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:07', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (717, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:07', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (718, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:07', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (719, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:07', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (720, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:07', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (721, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:07', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (722, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:07', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (723, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:07', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (724, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:07', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (725, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:07', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (726, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:07', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (727, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:07', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (728, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:07', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (729, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:07', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (730, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:07', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (731, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:07', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (732, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:07', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (733, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:07', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (734, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:07', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (735, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:07', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (736, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:07', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (737, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:07', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (738, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:07', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (739, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:07', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (740, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:07', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (741, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:07', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (742, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:07', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (743, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:07', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (744, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:07', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (745, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:07', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (746, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:07', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (747, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:07', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (748, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:07', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (749, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:07', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (750, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:07', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (751, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:07', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (752, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:07', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (753, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:08', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (754, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:08', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (755, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:08', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (756, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:08', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (757, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:08', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (758, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:08', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (759, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:08', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (760, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:08', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (761, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:08', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (762, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:08', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (763, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:08', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (764, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:08', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (765, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:08', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (766, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:08', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (767, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:08', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (768, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:08', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (769, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:08', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (770, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:08', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (771, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:08', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (772, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:08', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (773, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:08', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (774, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:08', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (775, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:08', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (776, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:08', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (777, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:08', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (778, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:08', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (779, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:08', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (780, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:08', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (781, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:08', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (782, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:08', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (783, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:08', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (784, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:08', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (785, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:08', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (786, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:08', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (787, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:08', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (788, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:08', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (789, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:08', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (790, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:08', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (791, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:08', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (792, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:08', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (793, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:08', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (794, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:08', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (795, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:08', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (796, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:08', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (797, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:08', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (798, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:08', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (799, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:08', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (800, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:08', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (801, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:08', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (802, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:08', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (803, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:08', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (804, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:08', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (805, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:08', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (806, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:08', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (807, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:08', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (808, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:08', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (809, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:08', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (810, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:08', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (811, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:08', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (812, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:08', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (813, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:08', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (814, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:08', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (815, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:09', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (816, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:09', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (817, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:09', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (818, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:09', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (819, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:09', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (820, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:09', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (821, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:09', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (822, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:09', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (823, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:09', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (824, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:09', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (825, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:09', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (826, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:09', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (827, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:09', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (828, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:09', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (829, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:09', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (830, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:09', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (831, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:09', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (832, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:09', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (833, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:09', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (834, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:09', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (835, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:09', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (836, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:09', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (837, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:09', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (838, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:09', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (839, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:09', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (840, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:09', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (841, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:09', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (842, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:09', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (843, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:09', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (844, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:09', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (845, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:09', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (846, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:09', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (847, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:09', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (848, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:09', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (849, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:09', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (850, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:09', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (851, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:09', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (852, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:09', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (853, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:09', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (854, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:09', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (855, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:09', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (856, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:09', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (857, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:09', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (858, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:09', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (859, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:09', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (860, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:09', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (861, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:09', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (862, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:09', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (863, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:09', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (864, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:09', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (865, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:09', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (866, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:09', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (867, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:09', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (868, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:09', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (869, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:09', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (870, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:09', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (871, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:09', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (872, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:09', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (873, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:09', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (874, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:09', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (875, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:10', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (876, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:10', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (877, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:10', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (878, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:10', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (879, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:10', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (880, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:10', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (881, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:10', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (882, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:10', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (883, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:10', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (884, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:10', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (885, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:10', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (886, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:10', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (887, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:10', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (888, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:10', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (889, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:10', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (890, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:10', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (891, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:10', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (892, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:10', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (893, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:10', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (894, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:10', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (895, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:10', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (896, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:10', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (897, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:10', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (898, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:10', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (899, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:10', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (900, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:10', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (901, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:10', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (902, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:10', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (903, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:10', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (904, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:10', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (905, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:10', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (906, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:10', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (907, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:10', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (908, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:10', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (909, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:10', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (910, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:10', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (911, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:10', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (912, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:10', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (913, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:10', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (914, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:10', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (915, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:10', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (916, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:10', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (917, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:10', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (918, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:10', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (919, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:10', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (920, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:10', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (921, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:10', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (922, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:10', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (923, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:10', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (924, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:10', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (925, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:10', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (926, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:10', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (927, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:10', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (928, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:10', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (929, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:10', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (930, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:10', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (931, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:10', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (932, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:10', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (933, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:10', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (934, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:10', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (935, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:10', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (936, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:10', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (937, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:11', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (938, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:11', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (939, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:11', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (940, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:11', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (941, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:11', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (942, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:11', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (943, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:11', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (944, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:11', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (945, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:11', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (946, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:11', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (947, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:11', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (948, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:11', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (949, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:11', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (950, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:11', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (951, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:11', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (952, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:11', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (953, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:11', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (954, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:11', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (955, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:11', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (956, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:11', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (957, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:11', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (958, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:11', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (959, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:11', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (960, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:11', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (961, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:11', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (962, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:11', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (963, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:11', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (964, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:11', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (965, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:11', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (966, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:11', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (967, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:11', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (968, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:11', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (969, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:11', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (970, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:11', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (971, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:11', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (972, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:11', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (973, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:11', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (974, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:11', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (975, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:11', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (976, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:11', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (977, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:11', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (978, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:11', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (979, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:11', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (980, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:11', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (981, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:11', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (982, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:11', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (983, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:11', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (984, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:11', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (985, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:11', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (986, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:11', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (987, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:11', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (988, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:11', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (989, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:11', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (990, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:11', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (991, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:11', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (992, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:11', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (993, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:11', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (994, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:11', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (995, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:11', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (996, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:11', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (997, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:11', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (998, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:11', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (999, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:12', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (1000, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:12', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (1001, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:12', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (1002, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:12', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (1003, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:12', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (1004, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:12', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (1005, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:12', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (1006, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:12', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (1007, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:12', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (1008, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:12', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (1009, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:12', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (1010, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:12', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (1011, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:12', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (1012, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:12', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (1013, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:12', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (1014, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:12', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
-INSERT INTO `mm_decouponcdkey` VALUES (1015, 'a6abccb798d8879e3e396a45578e1928', '2019-06-14 22:24:12', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
 INSERT INTO `mm_decouponcdkey` VALUES (1039, '48b678c28e82b34b247ec9d1c614136a', '2019-06-14 22:40:08', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
 INSERT INTO `mm_decouponcdkey` VALUES (1040, 'b8ebe404d10c880338c07665a3175749', '2019-06-14 22:40:08', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
 INSERT INTO `mm_decouponcdkey` VALUES (1041, 'c14acaf800bc9428c044b3f4e31a34e5', '2019-06-14 22:40:08', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
@@ -1210,6 +372,10 @@ INSERT INTO `mm_decouponcdkey` VALUES (1045, 'c3f2ee20f25ab0dc6389bdb5ba1c5918',
 INSERT INTO `mm_decouponcdkey` VALUES (1046, 'c71b4927ff4722a60a0b3e95b783f241', '2019-06-14 22:40:08', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
 INSERT INTO `mm_decouponcdkey` VALUES (1047, '9b167fd0ee437708bb7d352897cb3ee4', '2019-06-14 22:40:08', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
 INSERT INTO `mm_decouponcdkey` VALUES (1048, '22989990c8ea7aee6484ff696c605947', '2019-06-14 22:40:08', '2019-06-15 22:11:58', 0, 0, 1000.00, 100.00);
+INSERT INTO `mm_decouponcdkey` VALUES (1161, '1816415cc032bc278254f5a9b74be409', '2019-06-28 04:39:30', '2019-06-27 07:59:09', 0, 0, 0.00, 0.00);
+INSERT INTO `mm_decouponcdkey` VALUES (1162, '719c3db104c6c063f648818281541c57', '2019-06-28 04:40:56', '2019-05-28 12:39:54', 0, 0, 1.00, 0.00);
+INSERT INTO `mm_decouponcdkey` VALUES (1163, 'eb599d93993dbb57a2a0eecc96a63848', '2019-06-28 08:46:57', '2019-06-08 16:46:55', 0, 0, 1.00, 0.00);
+INSERT INTO `mm_decouponcdkey` VALUES (1405, 'c853a2d922528b7113f1bae36f469fa7', '2019-07-05 07:45:01', '2019-07-12 15:36:58', 0, 0, 1.00, 0.00);
 COMMIT;
 
 -- ----------------------------
@@ -1241,12 +407,23 @@ DROP TABLE IF EXISTS `mm_index_advertisement`;
 CREATE TABLE `mm_index_advertisement` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `imagesrc` varchar(255) COLLATE utf8mb4_general_ci NOT NULL COMMENT '图片地址',
-  `productid` bigint(20) NOT NULL COMMENT '产品ID',
-  `gmt_create` datetime NOT NULL COMMENT '创建时间',
-  `gmt_modified` datetime NOT NULL COMMENT '修改时间',
-  `is_visible` tinyint(2) NOT NULL COMMENT '是否可被前端检索',
+  `productid` bigint(20) unsigned NOT NULL COMMENT '产品ID',
+  `gmt_create` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+  `gmt_modified` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '修改时间',
+  `is_visible` tinyint(2) unsigned NOT NULL DEFAULT '1' COMMENT '是否可被前端检索',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=1541 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- ----------------------------
+-- Records of mm_index_advertisement
+-- ----------------------------
+BEGIN;
+INSERT INTO `mm_index_advertisement` VALUES (3, 'http://image.ruankun.xyz/adf9b76a9b48a7fd40816905f3c4a454.jpg', 3, '2019-06-24 14:02:21', '2019-06-24 14:02:27', 1);
+INSERT INTO `mm_index_advertisement` VALUES (1277, 'http://image.ruankun.xyz/adf9b76a9b48a7fd40816905f3c4a454.jpg', 1, '2019-07-02 01:00:35', '2019-07-02 01:00:35', 1);
+INSERT INTO `mm_index_advertisement` VALUES (1509, 'http://image.ruankun.xyz/adf9b76a9b48a7fd40816905f3c4a454.jpg', 10, '2019-07-11 19:12:25', '2019-07-11 19:12:25', 1);
+INSERT INTO `mm_index_advertisement` VALUES (1510, 'http://image.ruankun.xyz/adf9b76a9b48a7fd40816905f3c4a454.jpg', 11, '2019-07-11 19:12:33', '2019-07-11 19:12:33', 0);
+INSERT INTO `mm_index_advertisement` VALUES (1540, 'http://image.ruankun.xyz/36eb3db0503a6b8bb7bc1161676a5748.jpg', 12, '2019-07-12 04:09:40', '2019-07-12 04:09:40', 1);
+COMMIT;
 
 -- ----------------------------
 -- Table structure for mm_index_banner
@@ -1258,17 +435,17 @@ CREATE TABLE `mm_index_banner` (
   `productid` bigint(20) NOT NULL COMMENT '该图指向的具体产品',
   `gmt_create` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
   `gmt_modified` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '修改时间',
-  `is_visible` tinyint(2) unsigned NOT NULL DEFAULT '1' COMMENT '是否可见',
+  `is_visible` tinyint(1) unsigned NOT NULL DEFAULT '1' COMMENT '是否可见',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci COMMENT='主页banner的数据信息';
+) ENGINE=InnoDB AUTO_INCREMENT=1514 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci COMMENT='主页banner的数据信息';
 
 -- ----------------------------
 -- Records of mm_index_banner
 -- ----------------------------
 BEGIN;
-INSERT INTO `mm_index_banner` VALUES (1, 'http://image.ruankun.xyz/31291f79c353f5c2ac334c85ee482344.jpg', 1, '2019-06-09 14:24:03', '2019-06-09 14:54:14', 1);
-INSERT INTO `mm_index_banner` VALUES (2, 'http://image.ruankun.xyz/31291f79c353f5c2ac334c85ee482344.jpg', 1, '2019-06-09 14:36:29', '2019-06-09 14:54:14', 1);
-INSERT INTO `mm_index_banner` VALUES (11, 'http://image.ruankun.xyz/221e632a5ccf3fb9453e5d77e9a36455.jpg', 1, '2019-06-09 15:55:03', '2019-06-09 15:55:03', 1);
+INSERT INTO `mm_index_banner` VALUES (1127, 'http://image.ruankun.xyz/2fe3c2ee3ce6da2c3724c29caacdeaa6.jpg', 3, '2019-06-27 14:10:37', '2019-07-11 06:25:38', 0);
+INSERT INTO `mm_index_banner` VALUES (1496, 'http://image.ruankun.xyz/6314c9af70d0ab4898abcd4ed7928237.jpg', 4, '2019-07-10 23:07:41', '2019-07-12 16:52:37', 0);
+INSERT INTO `mm_index_banner` VALUES (1513, 'http://image.ruankun.xyz/adb18ac789bce1c9dabc8cc2946d5ecf.jpg', 5, '2019-07-11 19:16:28', '2019-07-12 16:52:39', 1);
 COMMIT;
 
 -- ----------------------------
@@ -1282,7 +459,23 @@ CREATE TABLE `mm_index_recommend` (
   `gmt_create` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
   `gmt_modified` datetime NOT NULL COMMENT '更新时间',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci COMMENT='主页推荐';
+) ENGINE=InnoDB AUTO_INCREMENT=1538 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci COMMENT='主页推荐';
+
+-- ----------------------------
+-- Records of mm_index_recommend
+-- ----------------------------
+BEGIN;
+INSERT INTO `mm_index_recommend` VALUES (1, 1, 'http://image.ruankun.xyz/1.png', '2019-06-24 14:06:05', '2019-06-24 14:06:02');
+INSERT INTO `mm_index_recommend` VALUES (1506, 10, 'http://image.ruankun.xyz/1.png', '2019-07-11 06:08:35', '2019-07-11 06:08:35');
+INSERT INTO `mm_index_recommend` VALUES (1507, 10, 'http://image.ruankun.xyz/1.png', '2019-07-11 06:08:52', '2019-07-11 06:08:52');
+INSERT INTO `mm_index_recommend` VALUES (1514, 2, 'http://image.ruankun.xyz/6d109850373d935d010b7cc432ff1cbf.jpg', '2019-07-11 07:24:15', '2019-07-11 07:24:15');
+INSERT INTO `mm_index_recommend` VALUES (1515, 12, 'http://image.ruankun.xyz/ca499afd0fccc9c869026ce3b38fe4a0.jpg', '2019-07-11 07:24:48', '2019-07-11 07:24:48');
+INSERT INTO `mm_index_recommend` VALUES (1524, 13, 'http://image.ruankun.xyz/b6302054df9b0cccb2f78d08db18de3e.jpg', '2019-07-11 07:48:19', '2019-07-11 07:48:19');
+INSERT INTO `mm_index_recommend` VALUES (1525, 13, 'http://image.ruankun.xyz/9cb2942db124a7c600be2e8c8deb3b2c.jpg', '2019-07-11 07:48:26', '2019-07-11 07:48:26');
+INSERT INTO `mm_index_recommend` VALUES (1531, 11, 'http://image.ruankun.xyz/0be6988a42d59700bd8b463950045ec5.jpg', '2019-07-11 21:29:06', '2019-07-11 21:29:06');
+INSERT INTO `mm_index_recommend` VALUES (1536, 12, 'http://image.ruankun.xyz/b3d1a461596673c0d8c708ed1f9c0eb6.jpg', '2019-07-12 04:07:10', '2019-07-12 04:07:10');
+INSERT INTO `mm_index_recommend` VALUES (1537, 12, 'http://image.ruankun.xyz/692d40961ef990cd71493e45b573a6d3.jpg', '2019-07-12 04:07:29', '2019-07-12 04:07:29');
+COMMIT;
 
 -- ----------------------------
 -- Table structure for mm_item
@@ -1293,12 +486,90 @@ CREATE TABLE `mm_item` (
   `productid` bigint(20) unsigned NOT NULL COMMENT '产品id',
   `productpropsid` bigint(20) unsigned NOT NULL COMMENT '产品规格id',
   `quantity` int(10) unsigned NOT NULL COMMENT '数量',
-  `orderid` varchar(0) COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT '订单号，只有生成订单后才有效，否则该字段无效',
+  `orderid` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT '订单号，只有生成订单后才有效，否则该字段无效',
   `gmt_create` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '添加时间',
   `gmt_modified` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '修改时间',
   `userid` bigint(20) unsigned NOT NULL COMMENT '用户id',
+  `is_comment` tinyint(1) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci COMMENT='item表，表示购物车，购物车里面的每一件物品都是item，当生成订单时，item中的订单号就不为空了。表示item从购物车移除，到了订单中';
+) ENGINE=InnoDB AUTO_INCREMENT=1535 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci COMMENT='item表，表示购物车，购物车里面的每一件物品都是item，当生成订单时，item中的订单号就不为空了。表示item从购物车移除，到了订单中';
+
+-- ----------------------------
+-- Records of mm_item
+-- ----------------------------
+BEGIN;
+INSERT INTO `mm_item` VALUES (1049, 1, 2, 1, '23423412342342341234234234123434', '2019-06-21 22:55:24', '2019-06-24 14:04:54', 2, 0);
+INSERT INTO `mm_item` VALUES (1174, 1, 1, 1, '99956995741034135212886859129465', '2019-06-29 14:04:53', '2019-06-30 19:34:00', 16, 0);
+INSERT INTO `mm_item` VALUES (1192, 1, 1, 1, '99956995741034135212886859129465', '2019-06-30 17:03:18', '2019-06-30 19:34:01', 16, 0);
+INSERT INTO `mm_item` VALUES (1196, 1, 1, 1, '90370486652796732973096201047185', '2019-06-30 19:38:53', '2019-06-30 19:55:18', 16, 0);
+INSERT INTO `mm_item` VALUES (1197, 1, 1, 1, '90370486652796732973096201047185', '2019-06-30 19:39:42', '2019-06-30 19:55:19', 16, 0);
+INSERT INTO `mm_item` VALUES (1198, 1, 1, 1, '90370486652796732973096201047185', '2019-06-30 19:41:20', '2019-06-30 19:55:19', 16, 0);
+INSERT INTO `mm_item` VALUES (1199, 1, 1, 1, '90370486652796732973096201047185', '2019-06-30 19:42:01', '2019-06-30 19:55:19', 16, 0);
+INSERT INTO `mm_item` VALUES (1200, 1, 1, 1, '90631701229720658923076673954436', '2019-06-30 20:10:34', '2019-06-30 20:16:30', 16, 0);
+INSERT INTO `mm_item` VALUES (1211, 1, 2, 2, '92672355824325071779976860010895', '2019-07-01 11:17:30', '2019-07-01 11:52:37', 27, 0);
+INSERT INTO `mm_item` VALUES (1232, 1, 1, 1, '98731676762347928862395636179498', '2019-07-01 14:40:21', '2019-07-01 18:27:11', 16, 0);
+INSERT INTO `mm_item` VALUES (1235, 1, 1, 1, '91846853587271756706443795641643', '2019-07-01 17:24:47', '2019-07-04 21:11:07', 17, 1);
+INSERT INTO `mm_item` VALUES (1251, 1, 1, 1, '98648179394702027655142046848388', '2019-07-01 18:36:44', '2019-07-01 21:08:42', 16, 0);
+INSERT INTO `mm_item` VALUES (1263, 1, 1, 1, '94533756816147945802971633795873', '2019-07-01 21:20:44', '2019-07-01 21:21:08', 16, 0);
+INSERT INTO `mm_item` VALUES (1270, 1, 1, 1, '90352422261140259283048667486430', '2019-07-01 22:13:41', '2019-07-02 08:25:24', 16, 0);
+INSERT INTO `mm_item` VALUES (1271, 1, 1, 1, '90352422261140259283048667486430', '2019-07-01 22:14:21', '2019-07-03 10:34:58', 16, 1);
+INSERT INTO `mm_item` VALUES (1273, 1, 1, 1, '90352422261140259283048667486430', '2019-07-01 22:23:34', '2019-07-03 10:16:35', 16, 1);
+INSERT INTO `mm_item` VALUES (1279, 1, 2, 1, '98078704535512468345194645062712', '2019-07-02 08:43:43', '2019-07-02 09:17:43', 16, 0);
+INSERT INTO `mm_item` VALUES (1282, 1, 1, 1, '94279718722385892113590056976410', '2019-07-02 09:32:22', '2019-07-02 09:34:25', 16, 0);
+INSERT INTO `mm_item` VALUES (1285, 1, 1, 1, '95258330957573397975254696128653', '2019-07-02 09:37:13', '2019-07-02 10:23:06', 16, 0);
+INSERT INTO `mm_item` VALUES (1290, 1, 1, 1, '92798462112834037213987076401734', '2019-07-02 10:25:24', '2019-07-02 10:29:10', 16, 0);
+INSERT INTO `mm_item` VALUES (1292, 1, 1, 1, '90024144610012837861008459169206', '2019-07-02 10:29:48', '2019-07-02 10:29:53', 16, 0);
+INSERT INTO `mm_item` VALUES (1294, 1, 2, 1, '90510946827006965957140812286903', '2019-07-02 10:31:22', '2019-07-02 10:31:28', 16, 0);
+INSERT INTO `mm_item` VALUES (1296, 1, 1, 1, '98247442628203606253385853581600', '2019-07-02 10:32:25', '2019-07-02 10:32:30', 16, 0);
+INSERT INTO `mm_item` VALUES (1298, 1, 1, 1, '99348276942927237726549472392174', '2019-07-02 10:32:59', '2019-07-02 10:33:05', 16, 0);
+INSERT INTO `mm_item` VALUES (1300, 1, 1, 1, '94556096651103877729615274541057', '2019-07-02 10:33:59', '2019-07-02 10:34:04', 16, 0);
+INSERT INTO `mm_item` VALUES (1302, 1, 1, 1, '90225048959336383451435205055161', '2019-07-02 10:35:21', '2019-07-02 10:35:25', 16, 0);
+INSERT INTO `mm_item` VALUES (1304, 1, 1, 1, '91492116666311879733181661184401', '2019-07-02 10:42:42', '2019-07-02 10:43:06', 16, 0);
+INSERT INTO `mm_item` VALUES (1309, 1, 7, 1, '94762866892689551518748024765173', '2019-07-02 14:46:44', '2019-07-02 14:47:02', 16, 0);
+INSERT INTO `mm_item` VALUES (1310, 1, 9, 1, '90316406694398464508811757277345', '2019-07-02 14:48:38', '2019-07-02 14:48:48', 16, 0);
+INSERT INTO `mm_item` VALUES (1313, 1, 4, 1, NULL, '2019-07-02 18:11:31', '2019-07-02 18:11:31', 16, 0);
+INSERT INTO `mm_item` VALUES (1332, 1, 1, 1, '90920877384242141683642702690361', '2019-07-03 17:30:31', '2019-07-03 20:40:32', 45, 1);
+INSERT INTO `mm_item` VALUES (1335, 1, 2, 3, '97885490763149529682019899516398', '2019-07-03 18:11:05', '2019-07-03 20:38:45', 45, 1);
+INSERT INTO `mm_item` VALUES (1337, 2, 17, 2, '99712295103439448190683326167223', '2019-07-03 18:11:27', '2019-07-03 18:11:32', 45, 0);
+INSERT INTO `mm_item` VALUES (1339, 6, 79, 2, '90575953497526403323564281027853', '2019-07-03 18:11:46', '2019-07-03 20:44:12', 45, 1);
+INSERT INTO `mm_item` VALUES (1341, 2, 23, 1, '98658812031731250303980130878260', '2019-07-03 18:15:02', '2019-07-03 18:15:33', 45, 0);
+INSERT INTO `mm_item` VALUES (1342, 4, 49, 1, '98658812031731250303980130878260', '2019-07-03 18:15:15', '2019-07-03 18:15:33', 45, 0);
+INSERT INTO `mm_item` VALUES (1343, 5, 62, 1, '98658812031731250303980130878260', '2019-07-03 18:15:25', '2019-07-03 18:15:33', 45, 0);
+INSERT INTO `mm_item` VALUES (1345, 2, 23, 1, '92092344712291695101311146714397', '2019-07-03 18:25:10', '2019-07-03 20:10:00', 45, 1);
+INSERT INTO `mm_item` VALUES (1348, 1, 2, 1, '94476712399288851992385824283031', '2019-07-03 20:10:36', '2019-07-03 20:11:29', 45, 1);
+INSERT INTO `mm_item` VALUES (1363, 2, 15, 1, '97752323180844070277695980077257', '2019-07-03 21:40:08', '2019-07-03 21:40:49', 45, 0);
+INSERT INTO `mm_item` VALUES (1366, 1, 12, 1, '99347223341412441259505123022011', '2019-07-03 22:25:41', '2019-07-04 09:10:24', 45, 0);
+INSERT INTO `mm_item` VALUES (1367, 1, 6, 1, '99347223341412441259505123022011', '2019-07-03 22:27:11', '2019-07-04 09:10:24', 45, 0);
+INSERT INTO `mm_item` VALUES (1373, 2, 20, 1, '95455475515148130420326580404945', '2019-07-04 09:11:19', '2019-07-04 09:11:24', 45, 0);
+INSERT INTO `mm_item` VALUES (1375, 2, 18, 1, '90284914179505066336973300466427', '2019-07-04 09:19:10', '2019-07-05 16:43:11', 45, 0);
+INSERT INTO `mm_item` VALUES (1386, 1, 12, 4, '93206206350719436160615910656373', '2019-07-04 21:17:25', '2019-07-04 21:18:26', 17, 0);
+INSERT INTO `mm_item` VALUES (1389, 5, 68, 1, '90284914179505066336973300466427', '2019-07-04 21:42:18', '2019-07-05 16:43:11', 45, 0);
+INSERT INTO `mm_item` VALUES (1394, 1, 6, 1, '90284914179505066336973300466427', '2019-07-05 16:37:17', '2019-07-05 16:43:11', 45, 0);
+INSERT INTO `mm_item` VALUES (1397, 2, 19, 1, '99070344265028268589133556114596', '2019-07-05 16:48:29', '2019-07-05 16:48:38', 45, 0);
+INSERT INTO `mm_item` VALUES (1399, 1, 10, 1, '90909299613615221992337292836179', '2019-07-05 16:55:27', '2019-07-05 16:58:49', 45, 0);
+INSERT INTO `mm_item` VALUES (1419, 2, 19, 1, '99229967085205118722761007292108', '2019-07-06 21:29:39', '2019-07-06 22:17:35', 45, 0);
+INSERT INTO `mm_item` VALUES (1423, 2, 23, 1, '91940308422322440075513213426609', '2019-07-06 22:19:27', '2019-07-07 21:18:57', 45, 0);
+INSERT INTO `mm_item` VALUES (1424, 1, 2, 3, '93168710726225509009404532612826', '2019-07-07 21:18:28', '2019-07-07 21:18:51', 17, 0);
+INSERT INTO `mm_item` VALUES (1425, 2, 21, 1, '91940308422322440075513213426609', '2019-07-07 21:18:49', '2019-07-07 21:18:57', 45, 0);
+INSERT INTO `mm_item` VALUES (1428, 1, 12, 5, '93662717099116565015794336844783', '2019-07-07 21:24:41', '2019-07-07 21:24:48', 17, 0);
+INSERT INTO `mm_item` VALUES (1430, 5, 65, 3, '99631488069777565716558639041726', '2019-07-07 21:26:36', '2019-07-07 21:26:53', 17, 0);
+INSERT INTO `mm_item` VALUES (1432, 1, 14, 2, '91708652152378741237495949519747', '2019-07-07 21:27:41', '2019-07-07 21:27:45', 17, 0);
+INSERT INTO `mm_item` VALUES (1434, 1, 13, 3, '94427003802838255530238853789136', '2019-07-07 21:29:04', '2019-07-07 21:29:38', 17, 0);
+INSERT INTO `mm_item` VALUES (1436, 1, 2, 1, '97227874597848847806540221767487', '2019-07-07 22:00:10', '2019-07-07 22:00:17', 17, 0);
+INSERT INTO `mm_item` VALUES (1437, 1, 2, 2, '97227874597848847806540221767487', '2019-07-07 22:00:10', '2019-07-07 22:00:18', 17, 0);
+INSERT INTO `mm_item` VALUES (1440, 2, 21, 2, '97906906620263530305790273544126', '2019-07-07 23:12:43', '2019-07-07 23:12:53', 17, 0);
+INSERT INTO `mm_item` VALUES (1442, 3, 35, 1, '91444223088210884881452005112271', '2019-07-08 08:53:37', '2019-07-08 18:14:18', 45, 1);
+INSERT INTO `mm_item` VALUES (1443, 3, 35, 2, '91444223088210884881452005112271', '2019-07-08 08:53:37', '2019-07-08 08:54:25', 45, 0);
+INSERT INTO `mm_item` VALUES (1444, 4, 54, 1, '91444223088210884881452005112271', '2019-07-08 08:53:55', '2019-07-08 08:54:25', 45, 0);
+INSERT INTO `mm_item` VALUES (1446, 3, 33, 2, '91125506510022371117096570653808', '2019-07-08 08:57:17', '2019-07-08 08:57:37', 45, 0);
+INSERT INTO `mm_item` VALUES (1447, 5, 66, 1, '91125506510022371117096570653808', '2019-07-08 08:57:27', '2019-07-08 08:57:37', 45, 0);
+INSERT INTO `mm_item` VALUES (1450, 7, 86, 1, '91328527030425713674616912458089', '2019-07-08 09:20:42', '2019-07-08 09:20:48', 17, 0);
+INSERT INTO `mm_item` VALUES (1457, 7, 86, 2, NULL, '2019-07-08 09:37:40', '2019-07-08 09:37:40', 17, 0);
+INSERT INTO `mm_item` VALUES (1460, 7, 86, 1, '95769136008899935203007007424881', '2019-07-08 10:14:31', '2019-07-08 18:14:37', 45, 1);
+INSERT INTO `mm_item` VALUES (1465, 7, 86, 3, '94919096059442130123180360060934', '2019-07-09 07:51:06', '2019-07-09 07:51:19', 45, 0);
+INSERT INTO `mm_item` VALUES (1533, 5, 67, 1, '93772042768500565702013942717024', '2019-07-12 16:36:47', '2019-07-12 16:37:15', 45, 0);
+INSERT INTO `mm_item` VALUES (1534, 7, 86, 1, '93772042768500565702013942717024', '2019-07-12 16:37:08', '2019-07-12 16:37:15', 45, 0);
+COMMIT;
 
 -- ----------------------------
 -- Table structure for mm_order
@@ -1317,8 +588,56 @@ CREATE TABLE `mm_order` (
   `is_usedecoupon` tinyint(1) NOT NULL DEFAULT '0' COMMENT '是否使用优惠券',
   `credit` decimal(10,0) DEFAULT NULL COMMENT '使用的积分数量',
   `is_usecredit` tinyint(1) NOT NULL DEFAULT '0' COMMENT '该订单是否使用了积分',
+  `addr_id` bigint(20) unsigned NOT NULL COMMENT '服务地址ID',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=1536 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- ----------------------------
+-- Records of mm_order
+-- ----------------------------
+BEGIN;
+INSERT INTO `mm_order` VALUES (1, 2, '23423412342342341234234234123434', 12.00, '2019-06-24 14:05:25', '2019-06-24 14:05:25', 0, 0, NULL, 0, NULL, 0, 2);
+INSERT INTO `mm_order` VALUES (5, 12, 'AFADFDFA', 323.00, '2019-06-29 18:25:59', '2019-06-29 18:25:59', 0, 0, NULL, 0, NULL, 0, 222);
+INSERT INTO `mm_order` VALUES (1224, 27, '92672355824325071779976860010895', 10.00, '2019-06-30 22:52:36', '2019-07-02 10:51:03', 0, 0, 0, 0, 0, 0, 1178);
+INSERT INTO `mm_order` VALUES (1275, 17, '90119795788481023983939137291631', 100.00, '2019-07-01 10:20:40', '2019-07-02 00:39:04', 1, 0, 1, 1, 0, 0, 2);
+INSERT INTO `mm_order` VALUES (1278, 16, '90352422261140259283048667486430', 340.00, '2019-07-01 19:25:23', '2019-07-01 19:25:23', 0, 0, 1103, 1, 0, 0, 3);
+INSERT INTO `mm_order` VALUES (1281, 16, '98078704535512468345194645062712', 130.00, '2019-07-01 20:17:43', '2019-07-01 20:17:43', 0, 0, 1107, 1, 0, 0, 3);
+INSERT INTO `mm_order` VALUES (1284, 16, '94279718722385892113590056976410', 100.00, '2019-07-01 20:34:25', '2019-07-01 20:34:25', 0, 0, 1107, 1, 0, 0, 3);
+INSERT INTO `mm_order` VALUES (1291, 16, '92798462112834037213987076401734', 120.00, '2019-07-01 21:29:10', '2019-07-01 21:29:10', 0, 0, 0, 0, 0, 0, 3);
+INSERT INTO `mm_order` VALUES (1293, 16, '90024144610012837861008459169206', 120.00, '2019-07-01 21:29:54', '2019-07-01 21:29:54', 0, 0, 0, 0, 0, 0, 3);
+INSERT INTO `mm_order` VALUES (1299, 16, '99348276942927237726549472392174', 120.00, '2019-07-01 21:33:05', '2019-07-01 21:33:05', 0, 0, 0, 0, 0, 0, 3);
+INSERT INTO `mm_order` VALUES (1301, 16, '94556096651103877729615274541057', 120.00, '2019-07-01 21:34:04', '2019-07-01 21:34:04', 0, 0, 0, 0, 0, 0, 3);
+INSERT INTO `mm_order` VALUES (1303, 16, '90225048959336383451435205055161', 120.00, '2019-07-01 21:35:25', '2019-07-01 21:35:25', 0, 0, 0, 0, 0, 0, 3);
+INSERT INTO `mm_order` VALUES (1305, 16, '91492116666311879733181661184401', 100.00, '2019-07-01 21:43:06', '2019-07-01 21:43:06', 0, 0, 1103, 1, 0, 0, 3);
+INSERT INTO `mm_order` VALUES (1307, 17, '91846853587271756706443795641643', 121.00, '2019-07-01 21:53:05', '2019-07-02 11:23:16', 0, 0, 0, 0, 0, 0, 2);
+INSERT INTO `mm_order` VALUES (1334, 45, '90920877384242141683642702690361', 120.00, '2019-07-03 04:31:28', '2019-07-03 04:31:28', 0, 0, 0, 0, 0, 0, 1333);
+INSERT INTO `mm_order` VALUES (1336, 45, '97885490763149529682019899516398', 120.00, '2019-07-03 05:11:12', '2019-07-03 05:11:12', 0, 0, 0, 0, 0, 0, 1333);
+INSERT INTO `mm_order` VALUES (1338, 45, '99712295103439448190683326167223', 120.00, '2019-07-03 05:11:32', '2019-07-03 05:11:32', 0, 0, 0, 0, 0, 0, 1333);
+INSERT INTO `mm_order` VALUES (1340, 45, '90575953497526403323564281027853', 120.00, '2019-07-03 05:11:51', '2019-07-03 05:11:51', 0, 0, 0, 0, 0, 0, 1333);
+INSERT INTO `mm_order` VALUES (1344, 45, '98658812031731250303980130878260', 360.00, '2019-07-03 05:15:33', '2019-07-03 05:15:33', 0, 0, 0, 0, 0, 0, 1333);
+INSERT INTO `mm_order` VALUES (1346, 45, '92092344712291695101311146714397', 120.00, '2019-07-03 05:25:15', '2019-07-03 05:25:15', 0, 0, 0, 0, 0, 0, 1333);
+INSERT INTO `mm_order` VALUES (1349, 45, '94476712399288851992385824283031', 120.00, '2019-07-03 07:10:45', '2019-07-03 07:10:45', 0, 0, 0, 0, 0, 0, 1333);
+INSERT INTO `mm_order` VALUES (1364, 45, '97752323180844070277695980077257', 111.00, '2019-07-03 08:40:50', '2019-07-03 08:40:50', 0, 0, 0, 0, 900, 1, 1333);
+INSERT INTO `mm_order` VALUES (1372, 45, '99347223341412441259505123022011', 240.00, '2019-07-03 20:10:24', '2019-07-03 20:10:24', 0, 0, 0, 0, 0, 0, 1370);
+INSERT INTO `mm_order` VALUES (1374, 45, '95455475515148130420326580404945', 120.00, '2019-07-03 20:11:25', '2019-07-03 20:11:25', 0, 0, 0, 0, 0, 0, 1370);
+INSERT INTO `mm_order` VALUES (1387, 17, '93206206350719436160615910656373', 118.10, '2019-07-04 08:18:26', '2019-07-04 08:18:26', 0, 0, 0, 0, 190, 1, 1385);
+INSERT INTO `mm_order` VALUES (1396, 45, '90284914179505066336973300466427', 340.00, '2019-07-05 03:43:11', '2019-07-05 03:43:11', 0, 0, 1113, 1, 0, 0, 1395);
+INSERT INTO `mm_order` VALUES (1398, 45, '99070344265028268589133556114596', 120.00, '2019-07-05 03:48:39', '2019-07-05 03:48:39', 0, 0, 0, 0, 0, 0, 1395);
+INSERT INTO `mm_order` VALUES (1400, 45, '90909299613615221992337292836179', 110.00, '2019-07-05 03:58:50', '2019-07-05 03:58:50', 0, 0, 1114, 1, 0, 0, 1395);
+INSERT INTO `mm_order` VALUES (1422, 45, '99229967085205118722761007292108', 120.00, '2019-07-06 09:17:35', '2019-07-06 09:17:35', 0, 0, 0, 0, 0, 0, 1420);
+INSERT INTO `mm_order` VALUES (1426, 17, '93168710726225509009404532612826', 120.00, '2019-07-07 08:18:52', '2019-07-07 08:18:52', 0, 0, 0, 0, 0, 0, 1385);
+INSERT INTO `mm_order` VALUES (1427, 45, '91940308422322440075513213426609', 240.00, '2019-07-07 08:18:57', '2019-07-07 08:18:57', 0, 0, 0, 0, 0, 0, 1420);
+INSERT INTO `mm_order` VALUES (1433, 17, '91708652152378741237495949519747', 240.00, '2019-07-07 08:27:45', '2019-07-07 08:27:45', 0, 0, 0, 0, 0, 0, 1385);
+INSERT INTO `mm_order` VALUES (1435, 17, '94427003802838255530238853789136', 360.00, '2019-07-07 08:29:39', '2019-07-07 08:29:39', 0, 0, 0, 0, 0, 0, 1385);
+INSERT INTO `mm_order` VALUES (1438, 17, '97227874597848847806540221767487', 480.00, '2019-07-07 09:00:18', '2019-07-07 09:00:18', 0, 0, 0, 0, 0, 0, 1385);
+INSERT INTO `mm_order` VALUES (1441, 17, '97906906620263530305790273544126', 240.00, '2019-07-07 10:12:54', '2019-07-07 10:12:54', 0, 0, 0, 0, 0, 0, 1385);
+INSERT INTO `mm_order` VALUES (1445, 45, '91444223088210884881452005112271', 600.00, '2019-07-07 19:54:26', '2019-07-07 19:54:26', 0, 0, 0, 0, 0, 0, 1420);
+INSERT INTO `mm_order` VALUES (1448, 45, '91125506510022371117096570653808', 360.00, '2019-07-07 19:57:37', '2019-07-07 19:57:37', 0, 0, 0, 0, 0, 0, 1420);
+INSERT INTO `mm_order` VALUES (1451, 17, '91328527030425713674616912458089', 0.01, '2019-07-07 20:20:48', '2019-07-07 20:20:48', 1, 0, 0, 0, 0, 0, 1385);
+INSERT INTO `mm_order` VALUES (1461, 45, '95769136008899935203007007424881', 0.01, '2019-07-07 21:14:40', '2019-07-07 21:14:40', 1, 0, 0, 0, 0, 0, 1459);
+INSERT INTO `mm_order` VALUES (1466, 45, '94919096059442130123180360060934', 0.03, '2019-07-08 18:51:20', '2019-07-08 18:51:20', 1, 0, 0, 0, 0, 0, 1459);
+INSERT INTO `mm_order` VALUES (1535, 45, '93772042768500565702013942717024', 120.01, '2019-07-12 03:37:16', '2019-07-12 03:37:16', 0, 0, 0, 0, 0, 0, 1459);
+COMMIT;
 
 -- ----------------------------
 -- Table structure for mm_ordersecret
@@ -1334,7 +653,16 @@ CREATE TABLE `mm_ordersecret` (
   `gmt_modified` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '修改时间',
   `userid` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=1468 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- ----------------------------
+-- Records of mm_ordersecret
+-- ----------------------------
+BEGIN;
+INSERT INTO `mm_ordersecret` VALUES (1452, '9d856180998889e2149f0cc39603d514', 1451, 0, NULL, '2019-07-07 20:21:38', '2019-07-07 20:21:38', 17);
+INSERT INTO `mm_ordersecret` VALUES (1462, 'ed4c03680db0a13895f7a031ddf02bd3', 1461, 0, NULL, '2019-07-07 21:15:09', '2019-07-07 21:15:09', 45);
+INSERT INTO `mm_ordersecret` VALUES (1467, 'ce4e5d38171bc557182b229755f4dad6', 1466, 0, NULL, '2019-07-08 18:51:56', '2019-07-08 18:51:56', 45);
+COMMIT;
 
 -- ----------------------------
 -- Table structure for mm_product
@@ -1348,8 +676,28 @@ CREATE TABLE `mm_product` (
   `content` text COLLATE utf8mb4_general_ci NOT NULL COMMENT '服务主内容',
   `gmt_create` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
   `gmt_modified` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
+  `intro` text COLLATE utf8mb4_general_ci COMMENT '简介',
+  `is_visible` tinyint(1) unsigned NOT NULL DEFAULT '1' COMMENT '是否可见',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=17 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- ----------------------------
+-- Records of mm_product
+-- ----------------------------
+BEGIN;
+INSERT INTO `mm_product` VALUES (3, 3, '擦玻璃+洗沙发+扫地', 'http://image.ruankun.xyz/1.png', '<div contenteditable=\"true\" style=\"width:100%; height:100%;\" class=\"w-e-text\" id=\"text-elem5845575148057394\"><p style=\"text-align: center;\"><span style=\"font-weight: bold; font-size: xx-large;\">家具清洗！</span></p><p style=\"text-align: center;\"><span style=\"font-size: xx-large; font-weight: 700;\">120元，新用户用卷减20元！</span></p><p style=\"text-align: center;\"><span style=\"font-weight: bold; font-size: xx-large;\"><img src=\"http://image.ruankun.xyz/1.png\" style=\"max-width:100%;\"></span><br></p></div>', '2019-07-02 11:41:40', '2019-07-12 16:57:41', '简介', 1);
+INSERT INTO `mm_product` VALUES (4, 4, '厨房保洁', 'http://image.ruankun.xyz/1.png', '<div contenteditable=\"true\" style=\"width:100%; height:100%;\" class=\"w-e-text\" id=\"text-elem5845575148057394\"><p style=\"text-align: center;\"><span style=\"font-weight: bold; font-size: xx-large;\">家具清洗！</span></p><p style=\"text-align: center;\"><span style=\"font-size: xx-large; font-weight: 700;\">120元，新用户用卷减20元！</span></p><p style=\"text-align: center;\"><span style=\"font-weight: bold; font-size: xx-large;\"><img src=\"http://image.ruankun.xyz/1.png\" style=\"max-width:100%;\"></span><br></p></div>', '2019-07-02 11:42:06', '2019-07-12 16:57:43', '简介', 1);
+INSERT INTO `mm_product` VALUES (5, 5, '整房开荒', 'http://image.ruankun.xyz/1.png', '<div contenteditable=\"true\" style=\"width:100%; height:100%;\" class=\"w-e-text\" id=\"text-elem5845575148057394\"><p style=\"text-align: center;\"><span style=\"font-weight: bold; font-size: xx-large;\">家具清洗！</span></p><p style=\"text-align: center;\"><span style=\"font-size: xx-large; font-weight: 700;\">120元，新用户用卷减20元！</span></p><p style=\"text-align: center;\"><span style=\"font-weight: bold; font-size: xx-large;\"><img src=\"http://image.ruankun.xyz/1.png\" style=\"max-width:100%;\"></span><br></p></div>', '2019-07-02 11:42:38', '2019-07-12 16:57:44', '简介', 1);
+INSERT INTO `mm_product` VALUES (6, 6, '三室一厅二次开荒', 'http://image.ruankun.xyz/1.png', '<div contenteditable=\"true\" style=\"width:100%; height:100%;\" class=\"w-e-text\" id=\"text-elem5845575148057394\"><p style=\"text-align: center;\"><span style=\"font-weight: bold; font-size: xx-large;\">家具清洗！</span></p><p style=\"text-align: center;\"><span style=\"font-size: xx-large; font-weight: 700;\">120元，新用户用卷减20元！</span></p><p style=\"text-align: center;\"><span style=\"font-weight: bold; font-size: xx-large;\"><img src=\"http://image.ruankun.xyz/1.png\" style=\"max-width:100%;\"></span><br></p></div>', '2019-07-02 11:43:05', '2019-07-12 16:57:45', '简介', 1);
+INSERT INTO `mm_product` VALUES (7, 3, '测试产品', 'http://image.ruankun.xyz/1.png', '<div contenteditable=\"true\" style=\"width:100%; height:100%;\" class=\"w-e-text\" id=\"text-elem5845575148057394\"><p style=\"text-align: center;\"><span style=\"font-weight: bold; font-size: xx-large;\">家具清洗！</span></p><p style=\"text-align: center;\"><span style=\"font-size: xx-large; font-weight: 700;\">120元，新用户用卷减20元！</span></p><p style=\"text-align: center;\"><span style=\"font-weight: bold; font-size: xx-large;\"><img src=\"http://image.ruankun.xyz/1.png\" style=\"max-width:100%;\"></span><br></p></div>', '2019-07-08 09:19:09', '2019-07-12 16:57:47', '测试产品', 1);
+INSERT INTO `mm_product` VALUES (10, 1, '测试产品2', 'http://image.ruankun.xyz/1.png', '<div contenteditable=\"true\" style=\"width:100%; height:100%;\" class=\"w-e-text\" id=\"text-elem5845575148057394\"><p style=\"text-align: center;\"><span style=\"font-weight: bold; font-size: xx-large;\">家具清洗！</span></p><p style=\"text-align: center;\"><span style=\"font-size: xx-large; font-weight: 700;\">120元，新用户用卷减20元！</span></p><p style=\"text-align: center;\"><span style=\"font-weight: bold; font-size: xx-large;\"><img src=\"http://image.ruankun.xyz/1.png\" style=\"max-width:100%;\"></span><br></p></div>', '2019-07-10 06:31:45', '2019-07-12 16:57:48', 'string', 1);
+INSERT INTO `mm_product` VALUES (11, 0, '测试产品3', 'http://image.ruankun.xyz/1.png', '<div contenteditable=\"true\" style=\"width:100%; height:100%;\" class=\"w-e-text\" id=\"text-elem5845575148057394\"><p style=\"text-align: center;\"><span style=\"font-weight: bold; font-size: xx-large;\">家具清洗！</span></p><p style=\"text-align: center;\"><span style=\"font-size: xx-large; font-weight: 700;\">120元，新用户用卷减20元！</span></p><p style=\"text-align: center;\"><span style=\"font-weight: bold; font-size: xx-large;\"><img src=\"http://image.ruankun.xyz/1.png\" style=\"max-width:100%;\"></span><br></p></div>', '2019-07-10 22:32:10', '2019-07-12 16:57:49', 'string', 1);
+INSERT INTO `mm_product` VALUES (12, 0, '测试产品5', 'http://image.ruankun.xyz/1.png', '<div contenteditable=\"true\" style=\"width:100%; height:100%;\" class=\"w-e-text\" id=\"text-elem5845575148057394\"><p style=\"text-align: center;\"><span style=\"font-weight: bold; font-size: xx-large;\">家具清洗！</span></p><p style=\"text-align: center;\"><span style=\"font-size: xx-large; font-weight: 700;\">120元，新用户用卷减20元！</span></p><p style=\"text-align: center;\"><span style=\"font-weight: bold; font-size: xx-large;\"><img src=\"http://image.ruankun.xyz/1.png\" style=\"max-width:100%;\"></span><br></p></div>', '2019-07-10 09:33:57', '2019-07-12 16:57:51', 'string', 1);
+INSERT INTO `mm_product` VALUES (13, 1, '测试产品6', 'http://image.ruankun.xyz/1.png', '<div contenteditable=\"true\" style=\"width:100%; height:100%;\" class=\"w-e-text\" id=\"text-elem5845575148057394\"><p style=\"text-align: center;\"><span style=\"font-weight: bold; font-size: xx-large;\">家具清洗！</span></p><p style=\"text-align: center;\"><span style=\"font-size: xx-large; font-weight: 700;\">120元，新用户用卷减20元！</span></p><p style=\"text-align: center;\"><span style=\"font-weight: bold; font-size: xx-large;\"><img src=\"http://image.ruankun.xyz/1.png\" style=\"max-width:100%;\"></span><br></p></div>', '2019-07-10 22:43:23', '2019-07-12 16:57:52', '1', 1);
+INSERT INTO `mm_product` VALUES (14, 1, '测试产品7', 'http://image.ruankun.xyz/1.png', '<div contenteditable=\"true\" style=\"width:100%; height:100%;\" class=\"w-e-text\" id=\"text-elem5845575148057394\"><p style=\"text-align: center;\"><span style=\"font-weight: bold; font-size: xx-large;\">家具清洗！</span></p><p style=\"text-align: center;\"><span style=\"font-size: xx-large; font-weight: 700;\">120元，新用户用卷减20元！</span></p><p style=\"text-align: center;\"><span style=\"font-weight: bold; font-size: xx-large;\"><img src=\"http://image.ruankun.xyz/1.png\" style=\"max-width:100%;\"></span><br></p></div>', '2019-07-10 22:47:29', '2019-07-12 22:29:49', '213', 0);
+INSERT INTO `mm_product` VALUES (15, 1, '测试产品8', 'http://image.ruankun.xyz/1.png', '<div contenteditable=\"true\" style=\"width:100%; height:100%;\" class=\"w-e-text\" id=\"text-elem5845575148057394\"><p style=\"text-align: center;\"><span style=\"font-weight: bold; font-size: xx-large;\">家具清洗！</span></p><p style=\"text-align: center;\"><span style=\"font-size: xx-large; font-weight: 700;\">120元，新用户用卷减20元！</span></p><p style=\"text-align: center;\"><span style=\"font-weight: bold; font-size: xx-large;\"><img src=\"http://image.ruankun.xyz/1.png\" style=\"max-width:100%;\"></span><br></p></div>', '2019-07-10 22:51:11', '2019-07-12 22:29:09', '1', 0);
+INSERT INTO `mm_product` VALUES (16, 1, '1', '1', '1', '2019-07-12 17:39:09', '2019-07-12 17:39:09', '1', 1);
+COMMIT;
 
 -- ----------------------------
 -- Table structure for mm_productprops
@@ -1361,8 +709,80 @@ CREATE TABLE `mm_productprops` (
   `servicedate` tinyint(2) unsigned NOT NULL COMMENT '服务日期1-周1,2-周2...以此类推',
   `servicetime` varchar(255) COLLATE utf8mb4_general_ci NOT NULL COMMENT '服务时间，自己填',
   `price` decimal(10,2) NOT NULL COMMENT '服务价格',
+  `is_visible` tinyint(1) unsigned NOT NULL DEFAULT '1' COMMENT '是否可见',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci COMMENT='产品规格';
+) ENGINE=InnoDB AUTO_INCREMENT=1544 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci COMMENT='产品规格';
+
+-- ----------------------------
+-- Records of mm_productprops
+-- ----------------------------
+BEGIN;
+INSERT INTO `mm_productprops` VALUES (30, 3, 1, '8:00', 120.00, 1);
+INSERT INTO `mm_productprops` VALUES (31, 3, 2, '8:00', 120.00, 1);
+INSERT INTO `mm_productprops` VALUES (32, 3, 3, '8:00', 120.00, 1);
+INSERT INTO `mm_productprops` VALUES (33, 3, 4, '8:00', 120.00, 1);
+INSERT INTO `mm_productprops` VALUES (34, 3, 5, '8:00', 120.00, 1);
+INSERT INTO `mm_productprops` VALUES (35, 3, 6, '8:00', 120.00, 1);
+INSERT INTO `mm_productprops` VALUES (36, 3, 7, '8:00', 120.00, 1);
+INSERT INTO `mm_productprops` VALUES (37, 3, 1, '13:00', 120.00, 1);
+INSERT INTO `mm_productprops` VALUES (38, 3, 2, '13:00', 120.00, 1);
+INSERT INTO `mm_productprops` VALUES (39, 3, 3, '13:00', 120.00, 1);
+INSERT INTO `mm_productprops` VALUES (40, 3, 4, '13:00', 120.00, 1);
+INSERT INTO `mm_productprops` VALUES (41, 3, 5, '13:00', 120.00, 1);
+INSERT INTO `mm_productprops` VALUES (42, 3, 6, '13:00', 120.00, 1);
+INSERT INTO `mm_productprops` VALUES (43, 3, 7, '13:00', 120.00, 1);
+INSERT INTO `mm_productprops` VALUES (44, 4, 1, '8:00', 120.00, 1);
+INSERT INTO `mm_productprops` VALUES (45, 4, 2, '8:00', 120.00, 1);
+INSERT INTO `mm_productprops` VALUES (46, 4, 3, '8:00', 120.00, 1);
+INSERT INTO `mm_productprops` VALUES (47, 4, 4, '8:00', 120.00, 1);
+INSERT INTO `mm_productprops` VALUES (48, 4, 5, '8:00', 120.00, 1);
+INSERT INTO `mm_productprops` VALUES (49, 4, 6, '8:00', 120.00, 1);
+INSERT INTO `mm_productprops` VALUES (50, 4, 7, '8:00', 120.00, 1);
+INSERT INTO `mm_productprops` VALUES (51, 4, 1, '13:00', 120.00, 1);
+INSERT INTO `mm_productprops` VALUES (52, 4, 2, '13:00', 120.00, 1);
+INSERT INTO `mm_productprops` VALUES (53, 4, 3, '13:00', 120.00, 1);
+INSERT INTO `mm_productprops` VALUES (54, 4, 4, '13:00', 120.00, 1);
+INSERT INTO `mm_productprops` VALUES (55, 4, 5, '13:00', 120.00, 1);
+INSERT INTO `mm_productprops` VALUES (56, 4, 6, '13:00', 120.00, 1);
+INSERT INTO `mm_productprops` VALUES (57, 4, 7, '13:00', 120.00, 1);
+INSERT INTO `mm_productprops` VALUES (58, 5, 1, '8:00', 120.00, 1);
+INSERT INTO `mm_productprops` VALUES (59, 5, 2, '8:00', 120.00, 1);
+INSERT INTO `mm_productprops` VALUES (60, 5, 3, '8:00', 120.00, 1);
+INSERT INTO `mm_productprops` VALUES (61, 5, 4, '8:00', 120.00, 1);
+INSERT INTO `mm_productprops` VALUES (62, 5, 5, '8:00', 120.00, 1);
+INSERT INTO `mm_productprops` VALUES (63, 5, 6, '8:00', 120.00, 1);
+INSERT INTO `mm_productprops` VALUES (64, 5, 7, '8:00', 120.00, 1);
+INSERT INTO `mm_productprops` VALUES (65, 5, 1, '13:00', 120.00, 1);
+INSERT INTO `mm_productprops` VALUES (66, 5, 2, '13:00', 120.00, 1);
+INSERT INTO `mm_productprops` VALUES (67, 5, 3, '13:00', 120.00, 1);
+INSERT INTO `mm_productprops` VALUES (68, 5, 4, '13:00', 120.00, 1);
+INSERT INTO `mm_productprops` VALUES (69, 5, 5, '13:00', 120.00, 1);
+INSERT INTO `mm_productprops` VALUES (70, 5, 6, '13:00', 120.00, 1);
+INSERT INTO `mm_productprops` VALUES (71, 5, 7, '13:00', 120.00, 1);
+INSERT INTO `mm_productprops` VALUES (72, 6, 1, '8:00', 120.00, 1);
+INSERT INTO `mm_productprops` VALUES (73, 6, 2, '8:00', 120.00, 1);
+INSERT INTO `mm_productprops` VALUES (74, 6, 3, '8:00', 120.00, 1);
+INSERT INTO `mm_productprops` VALUES (75, 6, 4, '8:00', 120.00, 1);
+INSERT INTO `mm_productprops` VALUES (76, 6, 5, '8:00', 120.00, 1);
+INSERT INTO `mm_productprops` VALUES (77, 6, 6, '8:00', 120.00, 1);
+INSERT INTO `mm_productprops` VALUES (78, 6, 7, '8:00', 120.00, 1);
+INSERT INTO `mm_productprops` VALUES (79, 6, 1, '13:00', 120.00, 1);
+INSERT INTO `mm_productprops` VALUES (80, 6, 2, '13:00', 120.00, 1);
+INSERT INTO `mm_productprops` VALUES (81, 6, 3, '13:00', 120.00, 1);
+INSERT INTO `mm_productprops` VALUES (82, 6, 4, '13:00', 120.00, 1);
+INSERT INTO `mm_productprops` VALUES (83, 6, 5, '13:00', 120.00, 1);
+INSERT INTO `mm_productprops` VALUES (84, 6, 6, '13:00', 120.00, 1);
+INSERT INTO `mm_productprops` VALUES (85, 6, 7, '13:00', 120.00, 1);
+INSERT INTO `mm_productprops` VALUES (86, 7, 1, '8:00', 0.01, 1);
+INSERT INTO `mm_productprops` VALUES (1475, 10, 2, '8:00', 11.00, 1);
+INSERT INTO `mm_productprops` VALUES (1481, 11, 0, 'string', 0.00, 1);
+INSERT INTO `mm_productprops` VALUES (1482, 0, 0, 'string', 0.00, 1);
+INSERT INTO `mm_productprops` VALUES (1483, 13, 1, '08:30', 1.00, 1);
+INSERT INTO `mm_productprops` VALUES (1484, 14, 123, '08:45', 123.00, 1);
+INSERT INTO `mm_productprops` VALUES (1485, 14, 123, '09:30', 123.00, 1);
+INSERT INTO `mm_productprops` VALUES (1486, 15, 12, '08:30', 12.00, 1);
+INSERT INTO `mm_productprops` VALUES (1543, 16, 1, '08:30', 1.00, 1);
+COMMIT;
 
 -- ----------------------------
 -- Table structure for mm_reply
@@ -1375,10 +795,25 @@ CREATE TABLE `mm_reply` (
   `reply` varchar(255) COLLATE utf8mb4_general_ci NOT NULL COMMENT '回复内容',
   `gmt_create` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
   `gmt_modified` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '修改时间',
-  `admin_id` int(11) DEFAULT NULL,
   `comment_id` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=1545 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- ----------------------------
+-- Records of mm_reply
+-- ----------------------------
+BEGIN;
+INSERT INTO `mm_reply` VALUES (1, 314445437, 1, '哈哈，谢谢评价，下次给你返现', '2019-06-24 14:08:16', '2019-06-24 14:08:16', 1);
+INSERT INTO `mm_reply` VALUES (1318, 314445437, 1273, '谢谢亲的支持！', '2019-07-02 23:28:17', '2019-07-12 16:58:26', NULL);
+INSERT INTO `mm_reply` VALUES (1500, 314445437, 1304, '谢谢亲的支持！', '2019-07-11 13:12:57', '2019-07-12 16:58:33', NULL);
+INSERT INTO `mm_reply` VALUES (1501, 314445437, 1304, '谢谢亲的支持！', '2019-07-11 13:13:03', '2019-07-12 16:58:34', NULL);
+INSERT INTO `mm_reply` VALUES (1527, 314445437, 1345, '谢谢亲的支持！', '2019-07-11 21:36:16', '2019-07-12 16:58:35', NULL);
+INSERT INTO `mm_reply` VALUES (1528, 314445437, 1345, '谢谢亲的支持！', '2019-07-11 21:36:47', '2019-07-12 16:58:36', NULL);
+INSERT INTO `mm_reply` VALUES (1529, 314445437, 1347, '谢谢亲的支持！', '2019-07-11 21:42:51', '2019-07-12 16:58:37', NULL);
+INSERT INTO `mm_reply` VALUES (1530, 314445437, 1347, '谢谢亲的支持！', '2019-07-11 23:01:37', '2019-07-12 16:58:39', NULL);
+INSERT INTO `mm_reply` VALUES (1532, 314445437, 1359, '谢谢亲的支持！', '2019-07-12 16:05:00', '2019-07-12 16:58:40', NULL);
+INSERT INTO `mm_reply` VALUES (1544, 314445437, 1463, '213123', '2019-07-12 19:06:22', '2019-07-12 19:06:22', NULL);
+COMMIT;
 
 -- ----------------------------
 -- Table structure for mm_sharetemplate
@@ -1388,16 +823,16 @@ CREATE TABLE `mm_sharetemplate` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `imgpath` varchar(255) COLLATE utf8mb4_general_ci NOT NULL COMMENT '生成分享图片的底图地址',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci COMMENT='小程序分享页面，分享的图片的模板地址';
+) ENGINE=InnoDB AUTO_INCREMENT=1475 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci COMMENT='小程序分享页面，分享的图片的模板地址';
 
 -- ----------------------------
 -- Records of mm_sharetemplate
 -- ----------------------------
 BEGIN;
-INSERT INTO `mm_sharetemplate` VALUES (5, 'http://image.ruankun.xyz/31291f79c353f5c2ac334c85ee482344.jpg');
-INSERT INTO `mm_sharetemplate` VALUES (6, 'http://image.ruankun.xyz/3965090422abd1b3c40c299a2bbfdae8.jpg');
-INSERT INTO `mm_sharetemplate` VALUES (7, 'http://image.ruankun.xyz/b6c2e1c7f6ff132c7840a94f24ad3cc8.jpg');
+INSERT INTO `mm_sharetemplate` VALUES (6, 'http://image.ruankun.xyz/88986abe81b24ebbd97323a8d3aa05da.jpg');
+INSERT INTO `mm_sharetemplate` VALUES (7, 'http://image.ruankun.xyz/ed9898791e3acbe5b9c89ea223680dac.jpg');
 INSERT INTO `mm_sharetemplate` VALUES (8, 'http://image.ruankun.xyz/28b6e9d50d1600b080cc4088566cd245.jpg');
+INSERT INTO `mm_sharetemplate` VALUES (1474, 'http://image.ruankun.xyz/c6e683149db8e67babfeeb7026cdf8cf.jpg');
 COMMIT;
 
 -- ----------------------------
@@ -1417,13 +852,17 @@ CREATE TABLE `mm_user` (
   `wxid` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT '微信号，用于提现使用',
   `gmt_modified` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci COMMENT='用户基本信息表';
+) ENGINE=InnoDB AUTO_INCREMENT=47 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci COMMENT='用户基本信息表';
 
 -- ----------------------------
 -- Records of mm_user
 -- ----------------------------
 BEGIN;
-INSERT INTO `mm_user` VALUES (2, 'oVibi5NLksGX7bZUr8y0oyIUVMLI', '阮中华', '2019-06-04 22:56:47', 4, NULL, 'http://image.ruankun.xyz/1.png', 5.00, 5, NULL, '2019-06-04 22:56:47');
+INSERT INTO `mm_user` VALUES (2, 'oVibi5NLksGX7bZUr8y0oyIUVMLI', '阮中华', '2019-06-04 22:56:47', 4, NULL, 'http://image.ruankun.xyz/1.png', 1.00, 1, 'ruankun521', '2019-07-10 05:03:03');
+INSERT INTO `mm_user` VALUES (16, 'oVy725WKocm3P530rT1J1sVUe8C0', 'MR·SUMMER', '2019-06-26 12:31:03', 111, NULL, 'https://wx.qlogo.cn/mmopen/vi_32/Q0j4TwGTfTKicT40ibs2TNatKhM5YGTCGM8qM7JEQHELlrmhVWZ1QKC5ESqFq4UToIWEuCXHzaicpgQ8aCTQpQ5AA/132', 1.00, 5, NULL, '2019-06-28 09:46:27');
+INSERT INTO `mm_user` VALUES (17, 'oVy725aAJ58_GijL87FqgiqRnFUg', '阮中华', '2019-07-03 15:46:52', NULL, NULL, 'https://wx.qlogo.cn/mmopen/vi_32/Q0j4TwGTfTKicT40ibs2TNatKhM5YGTCGM8qM7JEQHELlrmhVWZ1QKC5ESqFq4UToIWEuCXHzaicpgQ8aCTQpQ5AA/132', 5.00, 2, NULL, '2019-07-10 04:54:09');
+INSERT INTO `mm_user` VALUES (27, 'oVy725SnoqjV76D7Lt8ZYtPhl97o', 'Jason', '2019-06-27 21:09:07', 16, '15280302222', 'https://wx.qlogo.cn/mmopen/vi_32/ibIqkxKWjBgzGOLTd1XxPofNcQh9aSGFxXapWutaEhn8wukqDr2e8wKFORFRsYAvGd7piaEZxajbDFSZm04Jc1Lw/132', 1111.00, 2, 'Jason', '2019-07-10 04:54:05');
+INSERT INTO `mm_user` VALUES (45, 'oVy725XAY8TZVWj26k4pnbNdTLFk', 'Eriasan', '2019-07-03 14:05:58', NULL, NULL, 'https://wx.qlogo.cn/mmopen/vi_32/DYAIOgq83eqyNImIJZNghSnXIYzasBR3O3E8bnIX2MqIyqd007sc4jhcia7692CfibsZPkpDOOXibvtUCuxE7nlWw/132', 1.00, 5, NULL, '2019-07-10 04:53:22');
 COMMIT;
 
 -- ----------------------------
@@ -1437,6 +876,56 @@ CREATE TABLE `mm_wallet` (
   `credit` decimal(10,0) unsigned NOT NULL COMMENT '积分数量无小数',
   `gmt_modified` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=1332 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- ----------------------------
+-- Records of mm_wallet
+-- ----------------------------
+BEGIN;
+INSERT INTO `mm_wallet` VALUES (1, 2, 5.00, 20, '2019-06-24 14:09:34');
+INSERT INTO `mm_wallet` VALUES (2, 16, 1.94, 10000, '2019-07-05 06:32:21');
+INSERT INTO `mm_wallet` VALUES (1147, 27, 0.00, 0, '2019-07-04 07:45:21');
+INSERT INTO `mm_wallet` VALUES (1148, 17, 8.00, 0, '2019-07-12 04:20:47');
+INSERT INTO `mm_wallet` VALUES (1324, 45, 90.00, 0, '2019-07-06 00:42:29');
+INSERT INTO `mm_wallet` VALUES (1331, 46, 0.00, 0, '2019-07-03 20:16:08');
+COMMIT;
+
+-- ----------------------------
+-- Table structure for mm_withdraw
+-- ----------------------------
+DROP TABLE IF EXISTS `mm_withdraw`;
+CREATE TABLE `mm_withdraw` (
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `userid` bigint(20) unsigned NOT NULL COMMENT '究竟是哪个孽畜在提现',
+  `recnum` varchar(127) COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT '记录号唯一标示一个记录',
+  `amount` decimal(10,2) unsigned NOT NULL COMMENT '提现金额数',
+  `is_confirm` tinyint(1) unsigned NOT NULL DEFAULT '0' COMMENT '是否提现成功',
+  `is_failed` tinyint(1) unsigned NOT NULL DEFAULT '0' COMMENT '提现是否失败',
+  `gmt_create` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+  `gmt_modified` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '修改时间',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=1542 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- ----------------------------
+-- Records of mm_withdraw
+-- ----------------------------
+BEGIN;
+INSERT INTO `mm_withdraw` VALUES (1, 16, '', 3.00, 0, 0, '2019-06-27 09:41:09', '2019-06-27 09:41:09');
+INSERT INTO `mm_withdraw` VALUES (2, 27, '', 45.20, 0, 0, '2019-06-29 10:20:08', '2019-06-29 10:20:08');
+INSERT INTO `mm_withdraw` VALUES (1329, 16, NULL, 3.00, 0, 0, '2019-07-03 01:17:04', '2019-07-03 01:17:04');
+INSERT INTO `mm_withdraw` VALUES (1369, 45, '58456189415616575765465', 2.99, 1, 0, '2019-07-03 09:39:27', '2019-07-12 16:59:29');
+INSERT INTO `mm_withdraw` VALUES (1376, 27, 'refuse', 0.22, 0, 1, '2019-07-04 07:07:40', '2019-07-04 07:14:08');
+INSERT INTO `mm_withdraw` VALUES (1379, 27, '54562166575213246523859', 0.22, 1, 0, '2019-07-04 07:16:27', '2019-07-12 16:59:37');
+INSERT INTO `mm_withdraw` VALUES (1381, 27, NULL, 2.78, 0, 0, '2019-07-04 07:45:21', '2019-07-04 07:45:21');
+INSERT INTO `mm_withdraw` VALUES (1390, 16, NULL, 0.01, 0, 0, '2019-07-04 21:07:36', '2019-07-04 21:07:36');
+INSERT INTO `mm_withdraw` VALUES (1392, 16, NULL, 0.02, 0, 0, '2019-07-04 21:14:55', '2019-07-04 21:14:55');
+INSERT INTO `mm_withdraw` VALUES (1401, 16, NULL, 0.03, 0, 0, '2019-07-05 06:32:21', '2019-07-05 06:32:21');
+INSERT INTO `mm_withdraw` VALUES (1408, 45, NULL, 1.00, 0, 0, '2019-07-05 22:05:21', '2019-07-05 22:05:21');
+INSERT INTO `mm_withdraw` VALUES (1410, 45, NULL, 1.00, 0, 0, '2019-07-05 22:11:00', '2019-07-05 22:11:00');
+INSERT INTO `mm_withdraw` VALUES (1412, 45, NULL, 0.01, 0, 0, '2019-07-06 00:34:53', '2019-07-06 00:34:53');
+INSERT INTO `mm_withdraw` VALUES (1414, 45, NULL, 2.00, 0, 0, '2019-07-06 00:39:57', '2019-07-06 00:39:57');
+INSERT INTO `mm_withdraw` VALUES (1416, 45, NULL, 3.00, 0, 0, '2019-07-06 00:42:29', '2019-07-06 00:42:29');
+INSERT INTO `mm_withdraw` VALUES (1541, 17, NULL, 2.00, 0, 0, '2019-07-12 04:20:47', '2019-07-12 04:20:47');
+COMMIT;
 
 SET FOREIGN_KEY_CHECKS = 1;

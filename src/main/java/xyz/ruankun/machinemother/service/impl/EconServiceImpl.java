@@ -48,6 +48,7 @@ public class EconServiceImpl implements EconService {
 
     /**
      * 没用 7.12
+     *
      * @param userId
      * @param decouponId
      * @param useCredit
@@ -136,6 +137,7 @@ public class EconServiceImpl implements EconService {
 
     /**
      * 只取未删除数据
+     *
      * @param id
      * @return
      */
@@ -169,7 +171,31 @@ public class EconServiceImpl implements EconService {
             e.printStackTrace();
             return null;
         }
+    }
 
+    @Transactional
+    @Override
+    public Integer cancelOrder(Integer userId, Integer OrderId) {
+        Order order = getOrder(OrderId);
+        if (order.getId() != 0) {
+            if(userId.equals(order.getUserId())){
+                List<Item> items = itemRepository.findAllByOrderNumber(order.getOrderNumber());
+                if(items.size()<0 ||items == null){
+                    return DataCode.DATA_CONFLIC;
+                }else{
+                    for (Item item :items){
+                        item.setOrderNumber(null);
+                        itemRepository.save(item);
+                    }
+                    //todo 还需判断是否使用积分，优惠券，判断优惠券及积分是否过期，判断order是否过期
+                    return 0;
+                }
+            }else{
+                return DataCode.DATA_OPERATION_FAILURE;
+            }
+        }else{
+            return DataCode.DATA_CONFLIC;
+        }
     }
 
     @Override
@@ -194,11 +220,11 @@ public class EconServiceImpl implements EconService {
     @Transactional(rollbackFor = Exception.class)
     public Integer deleteOrder(Integer id) {
         Order order = getOrder(id);
-        if(order.getId()!= 0 ){
+        if (order.getId() != 0) {
             order.setDelete(true);
             orderRepository.save(order);
             return DataCode.DATA_OPERATION_SUCCESS;
-        }else{
+        } else {
             return DataCode.DATA_CONFLIC;
         }
     }
@@ -207,10 +233,10 @@ public class EconServiceImpl implements EconService {
     @Transactional
     public Boolean deleteOrders(int userId) {
         List<Order> order = getOrders(userId);
-        if(order==null){
+        if (order == null) {
             return false;
-        }else{
-            for (Order order1: order){
+        } else {
+            for (Order order1 : order) {
                 order1.setDelete(true);
                 orderRepository.save(order1);
             }
@@ -438,35 +464,36 @@ public class EconServiceImpl implements EconService {
 
     /**
      * 丰富一下order的内容
+     *
      * @param order
      * @return
      */
     @小坏蛋(真的吗 = true)
-    private Order setOrderOfCommentProductPropsProductInfo(Order order){
-        if (order == null){
+    private Order setOrderOfCommentProductPropsProductInfo(Order order) {
+        if (order == null) {
             System.out.println("传入的order为空，不能为order设置comment product等相关信息");
             return null;
         }
         //第一步，设置indentStatus
         Boolean paid = order.getPaid();
         Boolean finished = order.getFinished();
-        if (paid && finished){
+        if (paid && finished) {
             //已完成
             order.setIndentStatus(OrderIndentStatus.FINISHED);
-        }else if (!paid.booleanValue()){
+        } else if (!paid.booleanValue()) {
             //未支付
             order.setIndentStatus(OrderIndentStatus.NOT_PAY);
-        }else if (paid.booleanValue() && !finished.booleanValue()){
+        } else if (paid.booleanValue() && !finished.booleanValue()) {
             //已支付
             order.setIndentStatus(OrderIndentStatus.PAYED);
-        }else if (!paid.booleanValue() && !finished.booleanValue()){
+        } else if (!paid.booleanValue() && !finished.booleanValue()) {
             //未支付
             order.setIndentStatus(OrderIndentStatus.NOT_PAY);
         }
         //第二步，找到items，并为每个item设置comment,productInfo,productPropsInfo
-        List<Item> items = itemRepository.findByUserIdAndOrderNumber(order.getUserId(),order.getOrderNumber());
-        for (Item item:
-             items) {
+        List<Item> items = itemRepository.findByUserIdAndOrderNumber(order.getUserId(), order.getOrderNumber());
+        for (Item item :
+                items) {
             //设置每个item的Comment,productInfo,productPropsInfo
             List<Comment> comments = commentRepository.findByItemId(item.getId());
             Product product = null;
@@ -476,7 +503,7 @@ public class EconServiceImpl implements EconService {
                 productProps = productPropsRepository.findById(item.getProductPropsId().intValue());
 
                 item.setProduct(product);
-                if(!comments.isEmpty())
+                if (!comments.isEmpty())
                     item.setCommentInfo(comments.get(0));
                 item.setProductProps(productProps);
             } catch (Exception e) {

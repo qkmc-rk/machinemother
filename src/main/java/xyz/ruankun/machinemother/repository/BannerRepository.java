@@ -10,6 +10,8 @@ import java.util.List;
 
 public interface BannerRepository extends JpaRepository<Banner,Integer> {
 
+    Banner findById(int id);
+
     /**
      * 找到所有可以用以显示的banner
      * @return banner list

@@ -32,6 +32,7 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public Boolean addProduct(Product product, List<ProductProps> productProps) {
         try {
+            product.setIsVisible(true);
             productRepository.save(product);        //先保存product
             for (ProductProps props : productProps) {
                 props.setProductId(product.getId());        //依次修改props的productId

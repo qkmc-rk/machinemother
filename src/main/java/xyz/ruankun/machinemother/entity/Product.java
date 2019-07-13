@@ -1,5 +1,6 @@
 package xyz.ruankun.machinemother.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 
@@ -31,15 +32,10 @@ public class Product {
     private Date gmtModified;
     @Column(name = "intro")
     private String intro;
+    @JsonIgnore
     @Column(name = "is_visible")
     private Boolean isVisible;
 
-    public Boolean getVisible() {
-        return isVisible;
-    }
-    public void setVisible(Boolean visible) {
-        isVisible = visible;
-    }
     public Boolean getIsVisible() {
         return isVisible;
     }

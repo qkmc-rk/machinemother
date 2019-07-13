@@ -87,7 +87,7 @@ public class HomeServiceImpl implements HomeService {
     @Override
     public boolean alterBanner(Integer id, Banner banner) {
         try {
-            Banner banner1 = bannerRepository.findById(id.intValue()).get();
+            Banner banner1 = bannerRepository.findById(id.intValue());
             if (banner1 != null){
                 EntityUtil.update(banner,banner1);
                 bannerRepository.saveAndFlush(banner);
@@ -141,7 +141,7 @@ public class HomeServiceImpl implements HomeService {
     @Override
     public Advertisement alterAdv(Advertisement advertisement) {
         try {
-            Advertisement advertisement1 = advertisementRepository.findById(advertisement.getId()).get();
+            Advertisement advertisement1 = advertisementRepository.findById(advertisement.getId().intValue());
             EntityUtil.update(advertisement,advertisement1);
             return advertisementRepository.saveAndFlush(advertisement);
         } catch (Exception e) {
@@ -165,7 +165,7 @@ public class HomeServiceImpl implements HomeService {
                     Recommend recommend = iterator.next();
                     Product product = null;
                     try {
-                        product = productRepository.findById(recommend.getProductId()).get();
+                        product = productRepository.findById(recommend.getProductId().intValue());
                     } catch (Exception e) {
                         e.printStackTrace();
                         logger.error("sorry,product not found:" + recommend.getProductId());

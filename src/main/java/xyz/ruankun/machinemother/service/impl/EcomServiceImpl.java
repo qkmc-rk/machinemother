@@ -121,7 +121,7 @@ public class EcomServiceImpl implements EcomService {
         Addr addr = null;
         try {
             addr = addrRepository.findById(addrId.intValue());
-            if (addr.getUserId().intValue() != userId.intValue()) {
+            if (addr.getUserId().intValue() != userId.intValue() ||!addr.getVisible()) {
                 map.put("error", "改收货地址与用户不匹配");
                 map.put("status",-1);
                 return map;

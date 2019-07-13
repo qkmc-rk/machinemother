@@ -19,6 +19,8 @@ public interface EconService {
 
     Order getOrder(String orderNumber);
 
+    Integer cancelOrder(Integer userId, Integer OrderId);
+
     List<Order> getOrders(int userId);
 
     Page<Order> getOrders(Pageable pageable);

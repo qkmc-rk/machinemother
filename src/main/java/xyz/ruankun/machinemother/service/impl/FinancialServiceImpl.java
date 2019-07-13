@@ -496,7 +496,7 @@ public class FinancialServiceImpl implements FinancialService {
     @Override
     public WithDraw getWithDraw(Integer id) {
         try {
-//            WithDraw withDraw = withDrawRepository.findById(id).get();
+//            WithDraw withDraw = withDrawRepository.findById(id));
             WithDraw withDraw = withDrawRepository.findById(id.intValue());
             if (withDraw == null) {
                 withDraw = new WithDraw();

@@ -472,8 +472,8 @@ public class EconServiceImpl implements EconService {
             Product product = null;
             ProductProps productProps = null;
             try {
-                product = productRepository.findById(item.getProductId()).get();
-                productProps = productPropsRepository.findById(item.getProductPropsId()).get();
+                product = productRepository.findById(item.getProductId().intValue());
+                productProps = productPropsRepository.findById(item.getProductPropsId().intValue());
 
                 item.setProduct(product);
                 if(!comments.isEmpty())

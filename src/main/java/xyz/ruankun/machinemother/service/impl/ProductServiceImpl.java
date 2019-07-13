@@ -62,7 +62,7 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public Boolean updateProduct(Product product) {
         Product check = getProduct(product.getId());
-        if (check == null || check.getId() == 0) {
+        if (check == null || check.getId() == 0 ||!check.getIsVisible()) {
             return false;
         } else {
             try {
@@ -93,7 +93,7 @@ public class ProductServiceImpl implements ProductService {
     @Transactional
     public Integer deleteProduct(Integer id) {
         Product product = getProduct(id);
-        if (product == null || product.getId() == 0) {
+        if (product == null || product.getId() == 0||! product.getIsVisible()) {
             return DataCode.DATA_CONFLIC;
         } else {
             try {

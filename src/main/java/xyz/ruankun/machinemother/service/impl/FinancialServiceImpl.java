@@ -261,7 +261,7 @@ public class FinancialServiceImpl implements FinancialService {
     public Map<String, String> getPrepayInfo(Integer orderid, Integer userid, HttpServletRequest request) {
         Map<String, String> rs = new HashMap<>();
         //确认订单是否符合用户
-        if (!orderRepository.findById(orderid).isPresent()) {
+        if (orderRepository.findById(orderid).isPresent()) {
             //订单没有
             rs.put("error", "错误,没有找到符合的订单");
         }

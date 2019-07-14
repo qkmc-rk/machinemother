@@ -295,18 +295,26 @@ public class FinancialServiceImpl implements FinancialService {
         Integer decouponId = order.getDecouponId();//优惠券Id
         Decoupon decoupon = null;
 
+        //这一步的作用是保证优惠券在数据库中存在，与使用与否无关
+        //若是decouponId == null 或者 == 0 则说明没有使用优惠券，则这一步不做
         if (decouponId != null && decouponId.intValue() != 0 && !decouponRepository.findById(order.getDecouponId()).isPresent()) {
             //如果该订单伪造的优惠券，那么这里可以检查出来
             rs.put("error", "错误,订单所使用的优惠券信息有误，无效订单");
             return rs;
         }
+
         BigDecimal decouponAmount = new BigDecimal(0);
+
+        //若是使用了优惠券  就去数据库把优惠券的信息拿出来
+        //若是没有使用(decouponId == null) || decouponId.intValue() == 0 则这一步不做
         if (decouponId != null && decouponId.intValue() != 0) {
             decoupon = decouponRepository.findById(order.getDecouponId().intValue());
+            //上面一个if已经判断了decoupon是否存在，这里不需要在判空
             System.out.println("操你妈的decoupon：" + decoupon.toString());
             decouponAmount = decoupon.getWorth();
         }
-        if (decoupon != null && originAmount.compareTo(decoupon.getMin()) > 0) {
+        //在数据库找到了优惠券
+        if (decoupon != null && originAmount.compareTo(decoupon.getMin()) < 0) {//之前是用的 > 0,反了，改一下
             //有时伪造不合法的优惠券会出现问题，这里进行检查一下
             rs.put("error", "错误,所使用的优惠券明显不符合要求,订单支付拉起失败");
             return rs;

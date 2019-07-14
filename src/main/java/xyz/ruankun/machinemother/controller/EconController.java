@@ -198,16 +198,15 @@ public class EconController {
         return ControllerUtil.getDataResult(orders);
     }
 
-//    //todo 还很麻烦
 //    @PostMapping(value = "/order/{orderId}/back")
-//    @Authentication(role = AuthAopConstant.ADMIN)
-//    @ApiOperation(value="[用户]取消订单")
-//    public ResponseEntity back(@PathVariable(value = "orderId")Integer orderId,
-//                               @RequestHeader(value = "token")String token){
-//        Integer userId = Integer.valueOf(userInfoService.readDataFromRedis(token));
-//        Integer result = econService.cancelOrder(userId, orderId);
-//        return ControllerUtil.parData(result, null);
-//    }
+    @Authentication(role = AuthAopConstant.ADMIN)
+    @ApiOperation(value="[用户]取消订单")
+    public ResponseEntity back(@PathVariable(value = "orderId")Integer orderId,
+                               @RequestHeader(value = "token")String token){
+        Integer userId = Integer.valueOf(userInfoService.readDataFromRedis(token));
+        Integer result = econService.cancelOrder(userId, orderId);
+        return ControllerUtil.parData(result, null);
+    }
 
     @DeleteMapping(value = "/order/{id}")
     @Authentication(role = AuthAopConstant.ADMIN)

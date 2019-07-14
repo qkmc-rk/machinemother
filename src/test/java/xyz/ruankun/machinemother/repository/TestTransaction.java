@@ -70,7 +70,7 @@ public class TestTransaction {
 
         Order order = new Order();
         order.setGmtCreate(new Date());
-        order.setAmount(new BigDecimal(2323.22));
+        order.setAmount(new BigDecimal("2323.22"));
         order.setPaid(false);
         order.setFinished(false);
         order.setUseCredit(false);

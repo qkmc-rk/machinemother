@@ -198,16 +198,15 @@ public class EconController {
         return ControllerUtil.getDataResult(orders);
     }
 
-//    //todo 还很麻烦
-//    @PostMapping(value = "/order/{orderId}/back")
-//    @Authentication(role = AuthAopConstant.ADMIN)
-//    @ApiOperation(value="[用户]取消订单")
-//    public ResponseEntity back(@PathVariable(value = "orderId")Integer orderId,
-//                               @RequestHeader(value = "token")String token){
-//        Integer userId = Integer.valueOf(userInfoService.readDataFromRedis(token));
-//        Integer result = econService.cancelOrder(userId, orderId);
-//        return ControllerUtil.parData(result, null);
-//    }
+    @PostMapping(value = "/order/{orderId}/back")
+    @Authentication(role = AuthAopConstant.USER)
+    @ApiOperation(value="[用户]取消订单")
+    public ResponseEntity back(@PathVariable(value = "orderId")Integer orderId,
+                               @RequestHeader(value = "token")String token){
+        Integer userId = Integer.valueOf(userInfoService.readDataFromRedis(token));
+        Integer result = econService.cancelOrder(userId, orderId);
+        return ControllerUtil.parData(result, null);
+    }
 
     @DeleteMapping(value = "/order/{id}")
     @Authentication(role = AuthAopConstant.ADMIN)
@@ -222,7 +221,7 @@ public class EconController {
         } else {
             Date date = new Date();
             Long time = date.getTime() - order.getGmtCreate().getTime();
-            if (time > 1000 * 60 * 60 * 3 && !order.getPaid()) {
+            if (time > 1000 * 60 * 60 * 3 && !order.getIsPaid()) {
 //            Boolean result = econService.deleteOrder(id);
 //            responseEntity = ControllerUtil.getTrueOrFalseResult(result);
                 responseEntity = ControllerUtil.parData(econService.deleteOrder(id), null);

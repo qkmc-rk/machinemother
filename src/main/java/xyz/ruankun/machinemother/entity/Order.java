@@ -1,5 +1,7 @@
 package xyz.ruankun.machinemother.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 import java.math.BigDecimal;
 import java.util.Date;
@@ -20,7 +22,9 @@ public class Order {
     private Date gmtModified;
     private Boolean isPaid;
     private Boolean isFinished;
+    @JsonIgnore
     private Boolean isDelete;
+    private Boolean isCancle;
 
     //添加
     @Column(name = "is_usedecoupon")
@@ -141,28 +145,36 @@ public class Order {
         this.gmtModified = gmtModified;
     }
 
-    public Boolean getPaid() {
+    public Boolean getIsPaid() {
         return isPaid;
     }
 
-    public void setPaid(Boolean paid) {
+    public void setIsPaid(Boolean paid) {
         isPaid = paid;
     }
 
-    public Boolean getFinished() {
+    public Boolean getIsFinished() {
         return isFinished;
     }
 
-    public void setFinished(Boolean finished) {
+    public void setIsFinished(Boolean finished) {
         isFinished = finished;
     }
 
-    public Boolean getDelete() {
+    public Boolean getIsDelete() {
         return isDelete;
     }
 
-    public void setDelete(Boolean delete) {
+    public void setIsDelete(Boolean delete) {
         isDelete = delete;
+    }
+
+    public Boolean getIsCancle() {
+        return isCancle;
+    }
+
+    public void setIsCancle(Boolean cancle) {
+        isCancle = cancle;
     }
 
     @Override

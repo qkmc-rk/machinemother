@@ -29,6 +29,7 @@ public class ProductServiceImpl implements ProductService {
     @Resource
     private DictProductTypeRepository dictProductTypeRepository;
 
+    @Transactional
     @Override
     public Boolean addProduct(Product product, List<ProductProps> productProps) {
         try {

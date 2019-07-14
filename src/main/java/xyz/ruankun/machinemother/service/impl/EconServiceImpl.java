@@ -60,6 +60,8 @@ public class EconServiceImpl implements EconService {
     @Transactional(rollbackFor = Exception.class)
     public Order addOrder(int userId, int decouponId, Boolean useCredit, Integer credit, Integer addrId) {
         Order order = new Order();
+        order.setIsCancle(false);
+        order.setIsDelete(false);
         BigDecimal youhui = new BigDecimal(0);     //优惠额度
         //如果使用优惠券且优惠券存在
         if (decouponId > 0) {
@@ -75,8 +77,6 @@ public class EconServiceImpl implements EconService {
                 order.setUseDecoupon(true);
                 order.setCredit(new BigDecimal(0));
                 order.setUseCredit(false);
-                order.setDelete(false);
-
             } else {
                 //decoupon状态异常则返回null;
                 return null;
@@ -116,8 +116,8 @@ public class EconServiceImpl implements EconService {
         if (order.getAmount().doubleValue() < 0) {
             order.setAmount(new BigDecimal(0));
         }
-        order.setPaid(false);
-        order.setFinished(false);
+        order.setIsPaid(false);
+        order.setIsFinished(false);
         order.setGmtModified(new Date());
         order.setGmtCreate(new Date());
         order.setAddrId(addrId);
@@ -178,22 +178,14 @@ public class EconServiceImpl implements EconService {
     public Integer cancelOrder(Integer userId, Integer OrderId) {
         Order order = getOrder(OrderId);
         if (order.getId() != 0) {
-            if(userId.equals(order.getUserId())){
-                List<Item> items = itemRepository.findAllByOrderNumber(order.getOrderNumber());
-                if(items.size()<0 ||items == null){
-                    return DataCode.DATA_CONFLIC;
-                }else{
-                    for (Item item :items){
-                        item.setOrderNumber(null);
-                        itemRepository.save(item);
-                    }
-                    //todo 还需判断是否使用积分，优惠券，判断优惠券及积分是否过期，判断order是否过期
-                    return 0;
+            if (userId.equals(order.getUserId())) {
+                if (!order.getIsCancle() || !order.getIsPaid()) {
+                    order.setIsCancle(true);
+                    return DataCode.DATA_OPERATION_SUCCESS;
                 }
-            }else{
-                return DataCode.DATA_OPERATION_FAILURE;
             }
-        }else{
+            return DataCode.DATA_OPERATION_FAILURE;
+        } else {
             return DataCode.DATA_CONFLIC;
         }
     }
@@ -221,7 +213,7 @@ public class EconServiceImpl implements EconService {
     public Integer deleteOrder(Integer id) {
         Order order = getOrder(id);
         if (order.getId() != 0) {
-            order.setDelete(true);
+            order.setIsDelete(true);
             orderRepository.save(order);
             return DataCode.DATA_OPERATION_SUCCESS;
         } else {
@@ -237,7 +229,7 @@ public class EconServiceImpl implements EconService {
             return false;
         } else {
             for (Order order1 : order) {
-                order1.setDelete(true);
+                order1.setIsDelete(true);
                 orderRepository.save(order1);
             }
             return true;
@@ -424,11 +416,16 @@ public class EconServiceImpl implements EconService {
                 e.printStackTrace();
                 return false;
             }
-            order.setFinished(true);//完成订单
-            //事务操作
-            orderRepository.saveAndFlush(order);
-            orderSecretRepository.saveAndFlush(orderSecret1);
-            return true;
+            //order 已付款，未完成，未取消
+            if (order.getIsPaid() && !order.getIsCancle() && !order.getIsFinished()) {
+                //事务
+                order.setIsFinished(true);//完成订单
+                orderRepository.saveAndFlush(order);
+                orderSecretRepository.saveAndFlush(orderSecret1);
+                return true;
+            } else {
+                return false;
+            }
         } else
             return false;
     }
@@ -475,8 +472,9 @@ public class EconServiceImpl implements EconService {
             return null;
         }
         //第一步，设置indentStatus
-        Boolean paid = order.getPaid();
-        Boolean finished = order.getFinished();
+        Boolean paid = order.getIsPaid();
+        Boolean finished = order.getIsFinished();
+        Boolean cancle = order.getIsCancle();       //不知道是什么但还是加一个
         if (paid && finished) {
             //已完成
             order.setIndentStatus(OrderIndentStatus.FINISHED);

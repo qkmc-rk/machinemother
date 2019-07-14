@@ -12,6 +12,8 @@ import java.util.List;
 
 public interface OrderRepository extends JpaRepository<Order, Integer> {
 
+    Order findById(int id);
+
     Order findByIdAndIsDelete(int id, Boolean isDelete);
 
     List<Order> findByIsDelete(Boolean isDelete);

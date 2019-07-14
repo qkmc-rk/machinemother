@@ -129,7 +129,7 @@ public class FinancialServiceImpl implements FinancialService {
         try {
             order = orderRepository.findByIdAndIsDelete(orderid, false);
             orderSecret = orderSecretRepository.findByUserId(order.getUserId());
-            if(order == null || orderSecret==null){
+            if (order == null || orderSecret == null) {
                 return false;
             }
         } catch (Exception e) {
@@ -138,7 +138,7 @@ public class FinancialServiceImpl implements FinancialService {
         }
         if (orderSecret.getSecret() != null && orderSecret.getSecret().equals(secret)) {
             //可以的
-            order.setFinished(true);
+            order.setIsFinished(true);
             try {
                 orderRepository.saveAndFlush(order);
                 return true;
@@ -260,7 +260,7 @@ public class FinancialServiceImpl implements FinancialService {
     public Map<String, String> getPrepayInfo(Integer orderid, Integer userid, HttpServletRequest request) {
         Map<String, String> rs = new HashMap<>();
         //确认订单是否符合用户
-        if (!orderRepository.findById(orderid).isPresent()) {
+        if (orderRepository.findById(orderid).isPresent()) {
             //订单没有
             rs.put("error", "错误,没有找到符合的订单");
         }
@@ -268,8 +268,11 @@ public class FinancialServiceImpl implements FinancialService {
         if (userid.intValue() != order.getUserId().intValue()) {
             rs.put("error", "错误,订单存在，但不是该用户的订单");
         }
-        if (order.getPaid()) {
+        if (order.getIsPaid()) {
             rs.put("error", "错误,订单已经支付，无法再次支付");
+        }
+        if(order.getIsCancle()){
+            rs.put("error", "错误，订单已取消");
         }
         //拿到和订单相关的所有信息
         String orderNum = order.getOrderNumber();//订单号
@@ -283,12 +286,16 @@ public class FinancialServiceImpl implements FinancialService {
             ids.add(i.getProductPropsId());
             quantities.add(i.getQuantity());
         }
-        List<ProductProps> productProps = productPropsRepository.findAllById(ids);
+//        List<ProductProps> productProps = productPropsRepository.findAllById(ids);        //7.14 查找后重新排序
+
         //未优惠之前的价格
-        BigDecimal originAmount = new BigDecimal(0);
-        for (int i=0; i <ids.size(); i++) {
-            originAmount
-                    = originAmount.add(productProps.get(i).getPrice().multiply(new BigDecimal(quantities.get(i).intValue())));
+        BigDecimal originAmount = new BigDecimal("0");
+        for (int i = 0; i < ids.size(); i++) {
+            if (productPropsRepository.findById(ids.get(i)).isPresent()) {
+                ProductProps productProps  = productPropsRepository.findById(ids.get(i).intValue());
+                BigDecimal linshi = productProps.getPrice().multiply(new BigDecimal(String.valueOf(quantities.get(i))));
+                originAmount = originAmount.add(linshi);
+            }
         }
         //拿取优惠券和积分
         BigDecimal credit = order.getCredit();  //积分
@@ -456,14 +463,14 @@ public class FinancialServiceImpl implements FinancialService {
                     resXml = WePayUtil.NOTIFY_FAIL_SERVER_ERROR;
                     logger.error(resXml);
                 }
-                if (order.getPaid()) {
+                if (order.getIsPaid()) {
                     resXml = WePayUtil.NOTIFY_FAIL_REPEAT_ERROR;
                     logger.error(resXml);
                     return resXml;
                 }
-                if (order != null) order.setPaid(true);
+                if (order != null) order.setIsPaid(true);
                 Order order2 = orderRepository.saveAndFlush(order);
-                if (order2 != null && order2.getPaid()) {
+                if (order2 != null && order2.getIsPaid()) {
                     //订单既然支付成功了，就得生成响应的orderSecret
                     OrderSecret orderSecret = new OrderSecret();
                     orderSecret.setUsed(false);

@@ -198,8 +198,8 @@ public class EconController {
         return ControllerUtil.getDataResult(orders);
     }
 
-//    @PostMapping(value = "/order/{orderId}/back")
-    @Authentication(role = AuthAopConstant.ADMIN)
+    @PostMapping(value = "/order/{orderId}/back")
+    @Authentication(role = AuthAopConstant.USER)
     @ApiOperation(value="[用户]取消订单")
     public ResponseEntity back(@PathVariable(value = "orderId")Integer orderId,
                                @RequestHeader(value = "token")String token){
@@ -221,7 +221,7 @@ public class EconController {
         } else {
             Date date = new Date();
             Long time = date.getTime() - order.getGmtCreate().getTime();
-            if (time > 1000 * 60 * 60 * 3 && !order.getPaid()) {
+            if (time > 1000 * 60 * 60 * 3 && !order.getIsPaid()) {
 //            Boolean result = econService.deleteOrder(id);
 //            responseEntity = ControllerUtil.getTrueOrFalseResult(result);
                 responseEntity = ControllerUtil.parData(econService.deleteOrder(id), null);

@@ -475,7 +475,9 @@ public class EconServiceImpl implements EconService {
         Boolean paid = order.getIsPaid();
         Boolean finished = order.getIsFinished();
         Boolean cancle = order.getIsCancle();       //不知道是什么但还是加一个
-        if (paid && finished) {
+        if (cancle) {
+            order.setIndentStatus(OrderIndentStatus.CANCLE);
+        } else if (paid && finished) {
             //已完成
             order.setIndentStatus(OrderIndentStatus.FINISHED);
         } else if (!paid.booleanValue()) {

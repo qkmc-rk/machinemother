@@ -162,6 +162,7 @@ public class FinancialServiceImpl implements FinancialService {
     }
 
     @Override
+    @Transactional
     public Decoupon convertDecoupon(Integer userid, String decouponKey) {
         DecouponCDKey decouponCDKey;
         //key是否存在或者过期
@@ -756,6 +757,9 @@ public class FinancialServiceImpl implements FinancialService {
      */
     private Decoupon getDecouponWithDecouponCDKey(DecouponCDKey decouponCDKey, Integer userid) {
         Decoupon decoupon = new Decoupon();
+        decoupon.setGmtCreate(new Date());
+        //有效期
+        decoupon.setGmtPast(new Date(decoupon.getGmtCreate().getTime()+1000*60*60*24*3));
         decoupon.setFromexchange(true);
         decoupon.setMin(decouponCDKey.getMin());
         decoupon.setPast(decouponCDKey.isPast());

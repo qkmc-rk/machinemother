@@ -420,6 +420,8 @@ public class EconServiceImpl implements EconService {
             if (order.getIsPaid() && !order.getIsCancle() && !order.getIsFinished()) {
                 //事务
                 order.setIsFinished(true);//完成订单
+                order.setIsDelete(false);
+                order.setIsCancle(false);
                 orderRepository.saveAndFlush(order);
                 orderSecretRepository.saveAndFlush(orderSecret1);
                 return true;

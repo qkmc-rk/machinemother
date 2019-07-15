@@ -10,7 +10,9 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.web.bind.annotation.*;
 import xyz.ruankun.machinemother.annotation.Authentication;
+import xyz.ruankun.machinemother.entity.Order;
 import xyz.ruankun.machinemother.entity.User;
+import xyz.ruankun.machinemother.repository.OrderRepository;
 import xyz.ruankun.machinemother.service.UserInfoService;
 import xyz.ruankun.machinemother.util.Constant;
 import xyz.ruankun.machinemother.util.code.UserCode;
@@ -18,7 +20,9 @@ import xyz.ruankun.machinemother.util.constant.AuthAopConstant;
 import xyz.ruankun.machinemother.vo.ResponseEntity;
 
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @CrossOrigin
@@ -28,6 +32,9 @@ public class UserController {
 
     @Autowired
     UserInfoService userInfoService;
+
+    @Autowired
+    OrderRepository orderRepository;
 
     /**
      * 用户登录方法
@@ -215,6 +222,35 @@ public class UserController {
         try {
             int userId = Integer.valueOf(userInfoService.readDataFromRedis(token));
             User user = userInfoService.getUser(userId);
+            //获取order信息
+            List<Order> orders = orderRepository.findByUserIdAndIsDelete(userId,false);
+            Map<String,Integer> ordersNum = new HashMap<>();
+            int daifukuan = 0;
+            int yifukuan = 0;
+            int yiwancheng = 0;
+            for (Order o :
+                    orders) {
+                if (!o.getIsDelete()){//未被删除
+                    if (!o.getIsCancle()){//未被取消
+                        //三态    待付款  已付款  已完成
+                        if (!o.getIsPaid()){
+                            //待付款
+                            daifukuan++;
+                        }else if (o.getIsPaid() && !o.getIsFinished()){
+                            //已付款
+                            yifukuan++;
+                        }else if (o.getIsFinished() && o.getIsPaid()){
+                            //已完成
+                            yiwancheng++;
+                        }
+                    }
+                }
+            }
+            ordersNum.put("daifukuan",daifukuan);
+            ordersNum.put("yifukuan",yifukuan);
+            ordersNum.put("yiwancheng",yiwancheng);
+            user.setExtras(ordersNum);
+
             if (user.getId() == 0) {
                 responseEntity.error(-1, "用户不存在", null);
             } else if (user == null) {

@@ -6,6 +6,7 @@ import org.hibernate.annotations.DynamicUpdate;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Date;
+import java.util.Map;
 
 @Entity
 @Table(name = "mm_user")
@@ -42,6 +43,17 @@ public class User implements Serializable {
     //修改by mrruan
     @Column(name = "gmt_modified")
     private Date gmtModified;
+
+    @Transient
+    private Map<String,Integer> extras;
+
+    public Map<String, Integer> getExtras() {
+        return extras;
+    }
+
+    public void setExtras(Map<String, Integer> extras) {
+        this.extras = extras;
+    }
 
     public Integer getId() {
         return id;

@@ -179,7 +179,7 @@ public class EconServiceImpl implements EconService {
         Order order = getOrder(OrderId);
         if (order.getId() != 0) {
             if (userId.equals(order.getUserId())) {
-                if (!order.getIsCancle() || !order.getIsPaid()) {
+                if (!order.getIsCancle() && !order.getIsPaid()&&!order.getIsDelete()) {
                     order.setIsCancle(true);
                     return DataCode.DATA_OPERATION_SUCCESS;
                 }

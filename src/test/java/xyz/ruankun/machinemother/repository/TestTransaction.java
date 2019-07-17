@@ -71,8 +71,8 @@ public class TestTransaction {
         Order order = new Order();
         order.setGmtCreate(new Date());
         order.setAmount(new BigDecimal("2323.22"));
-        order.setPaid(false);
-        order.setFinished(false);
+        order.setIsPaid(false);
+        order.setIsFinished(false);
         order.setUseCredit(false);
         order.setUseDecoupon(false);
         order.setGmtModified(new Date());

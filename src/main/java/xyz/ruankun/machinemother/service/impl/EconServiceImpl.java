@@ -409,6 +409,9 @@ public class EconServiceImpl implements EconService {
         if (orderSecret1.getSecret().equals(orderSecret)) {
             orderSecret1.setUsed(true);
             orderSecret1.setEmployee(employee);
+            //设置无关字段
+            System.out.println("正在准备确认订单，获取的orderSecret对象：" + orderSecret1.toString());
+
             Order order = null;
             try {
                 order = getOrder(orderId);
@@ -422,14 +425,20 @@ public class EconServiceImpl implements EconService {
                 order.setIsFinished(true);//完成订单
                 order.setIsDelete(false);
                 order.setIsCancle(false);
+                System.out.println("将要保存order：" + order.toString());
                 orderRepository.saveAndFlush(order);
+
                 orderSecretRepository.saveAndFlush(orderSecret1);
+
                 return true;
             } else {
+                System.out.println("this order is not the status : paid && !cancel && !finished");
                 return false;
             }
-        } else
+        } else{
+            System.out.println("没有找到orderSecret");
             return false;
+        }
     }
 
     @Override

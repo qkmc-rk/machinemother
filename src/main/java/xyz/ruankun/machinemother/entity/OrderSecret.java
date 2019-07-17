@@ -81,4 +81,19 @@ public class OrderSecret {
     public void setGmtModified(Date gmtModified) {
         this.gmtModified = gmtModified;
     }
+
+
+    @Override
+    public String toString() {
+        return "OrderSecret{" +
+                "id=" + id +
+                ", secret='" + secret + '\'' +
+                ", orderid=" + orderid +
+                ", userId=" + userId +
+                ", isUsed=" + isUsed +
+                ", employee='" + employee + '\'' +
+                ", gmtCreate=" + gmtCreate +
+                ", gmtModified=" + gmtModified +
+                '}';
+    }
 }

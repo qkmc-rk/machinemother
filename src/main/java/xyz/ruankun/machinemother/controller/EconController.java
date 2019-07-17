@@ -170,12 +170,18 @@ public class EconController {
         return responseEntity;
     }
 
-    @PostMapping(value = "/order/{orderId}")
+    @PostMapping(value = "/order/{orderId}/finish")
     @Authentication(role = AuthAopConstant.ADMIN)
     @ApiOperation(value = "[管理员]确认order完成， 从用户获取orderSecret")
     public ResponseEntity verifyOrder(@RequestParam(value = "orderSecret") String orderSecret,
                                       @RequestParam(value = "employee") String employee,
                                       @PathVariable(value = "orderId") Integer orderId) {
+        if (orderId == null)
+            return ControllerUtil.getFalseResultMsgBySelf("你的订单ID被你吃了??? you have ate your orderId?");
+        if (orderSecret == null)
+            return ControllerUtil.getFalseResultMsgBySelf("你的orderSecret被你吃了??? you have ate your orderSecret?");
+        if (employee == null)
+            return ControllerUtil.getFalseResultMsgBySelf("你的employee被你吃了??? you have ate your employee?");
         Boolean rs = econService.confirmOrder(orderSecret, employee, orderId);
         return ControllerUtil.getTrueOrFalseResult(rs);
     }

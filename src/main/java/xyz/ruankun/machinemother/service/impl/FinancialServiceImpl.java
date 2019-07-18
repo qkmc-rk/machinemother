@@ -479,7 +479,9 @@ public class FinancialServiceImpl implements FinancialService {
                     orderSecret.setGmtCreate(new Date());
                     orderSecret.setGmtModified(new Date());
                     orderSecret.setOrderid(order2.getId());
-                    orderSecret.setSecret(MD5Util.md5(String.valueOf(new Date().getTime()).toUpperCase()));
+                    String orderSecStr = MD5Util.md5(String.valueOf(new Date().getTime()).toUpperCase());
+                    orderSecStr = orderSecStr.substring(0,12).toUpperCase();
+                    orderSecret.setSecret(orderSecStr);
                     orderSecret.setUserId(order2.getUserId());
                     try {
                         orderSecretRepository.save(orderSecret);

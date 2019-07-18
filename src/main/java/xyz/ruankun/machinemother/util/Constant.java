@@ -67,5 +67,6 @@ public interface Constant {
     Integer FORMAT_SUCCESS = 1;
     Integer FORMAT_ERROR = -1;
 
-
+    //单次交易最多能使用多少积分
+    Integer MAX_CREDIT = 100;
 }

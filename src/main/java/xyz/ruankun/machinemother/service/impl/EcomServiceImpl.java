@@ -182,11 +182,23 @@ public class EcomServiceImpl implements EcomService {
                 Integer credit = wallet.getCredit();
                 if (credit == null || credit.intValue() == 0)
                     break label1;
+
                 //减少一定金钱
-                amountFen -= credit;
-                wallet.setCredit(0);
                 creditRecord = new CreditRecord();
-                creditRecord.setAmount(credit);
+                if(credit <= Constant.MAX_CREDIT && credit > 0){
+                    //如果积分少于 MAX_CREDIT 分
+                    amountFen -= credit;
+                    wallet.setCredit(0);
+                    creditRecord.setAmount(credit);
+                }else if (credit > Constant.MAX_CREDIT){
+                    //如果积分大于 MAX_CREDIT
+                    amountFen -= Constant.MAX_CREDIT;
+                    wallet.setCredit(wallet.getCredit() - Constant.MAX_CREDIT);
+                    creditRecord.setAmount(Constant.MAX_CREDIT);
+                }
+                //amountFen -= credit;
+                //wallet.setCredit(0);
+                //creditRecord.setAmount(credit);
                 creditRecord.setSave(false);
                 creditRecord.setUserId(userId);
                 creditRecord.setGmtCreate(new Date());//

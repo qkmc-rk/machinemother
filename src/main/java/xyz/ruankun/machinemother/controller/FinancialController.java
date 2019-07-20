@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.*;
 import sun.security.provider.MD5;
 import xyz.ruankun.machinemother.annotation.Authentication;
 import xyz.ruankun.machinemother.entity.Decoupon;
+import xyz.ruankun.machinemother.entity.Wallet;
 import xyz.ruankun.machinemother.entity.WithDraw;
 import xyz.ruankun.machinemother.service.FinancialService;
 import xyz.ruankun.machinemother.service.UserInfoService;
@@ -294,14 +295,6 @@ public class FinancialController {
                                    @ApiParam(value = "是否确认, true为确认,false为拒绝") @RequestParam(value = "option") Boolean option,
                                    @ApiParam(value = "微信支付账单号, 若管理员拒绝，则忽略此字段；") @RequestParam(value = "orderStr", required = false, defaultValue = "refuse") String orderStr) {
         ResponseEntity responseEntity = new ResponseEntity();
-        //7.4修改为在提现是就扣除佣金以及增加数据记录
-//        Map<Boolean, String> result = financialService.alterWithDraw(withdrawId, option, orderStr);
-
-//        if (result.containsKey(true)) {
-//            responseEntity.success(null);
-//        } else {
-//            responseEntity.error(-1, result.get(false), null);
-//        }
         Boolean result = financialService.updateWithDraw(withdrawId, option, orderStr);
         if (result) {
             responseEntity.success(null);
@@ -309,6 +302,26 @@ public class FinancialController {
             responseEntity.error(-1, "操作失败", null);
         }
         return responseEntity;
+    }
+
+    /**
+     * 回调函数，用户分享到朋友圈之后回调，会增加积分
+     * @param token
+     * @return
+     */
+    @PutMapping("/share/callback")
+    @Authentication(role = AuthAopConstant.USER)
+    @ApiOperation(value = "分享小程序成功的回调函数，用于增加用户积分")
+    public ResponseEntity shareCallback(@RequestHeader String token){
+        Integer userId = Integer.valueOf(userInfoService.readDataFromRedis(token));
+        //将对应用户的积分增加一定数量
+        Wallet wallet = financialService.selectWallet(userId);
+        if (wallet == null)
+            return ControllerUtil.getFalseResultMsgBySelf("没有找到对应的钱包信息");
+        Map<String,String> result = financialService.addShareCredit(wallet);
+        if (result.get("error") != null)
+            return ControllerUtil.getFalseResultMsgBySelf(result.toString());
+        return ControllerUtil.getSuccessResultBySelf(result);
     }
 
 }

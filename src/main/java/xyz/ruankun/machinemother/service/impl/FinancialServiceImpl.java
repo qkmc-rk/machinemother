@@ -44,6 +44,8 @@ public class FinancialServiceImpl implements FinancialService {
     @Value("${weixin.pay_url}")
     private String url;
 
+    @Value("${machinemother.shareCreditNum}")
+    private Integer shareCreditNum;
     @Autowired
     CommissionRecordRepository commissionRecordRepository;
     @Autowired
@@ -669,6 +671,33 @@ public class FinancialServiceImpl implements FinancialService {
                 }
             }
         }
+    }
+
+    @Override
+    @Transactional
+    public Map<String, String> addShareCredit(Wallet wallet) {
+        Map<String, String> resultMap = new HashMap<>();
+        if (wallet == null){
+            resultMap.put("error","传入的wallet为kong");
+        }
+        //为wallet增加积分，并增加一条积分记录
+        wallet.setCredit(wallet.getCredit() + shareCreditNum);//增加积分数量
+
+        CreditRecord creditRecord = new CreditRecord();
+        creditRecord.setUserId(wallet.getUserId());
+        creditRecord.setGmtCreate(new Date());
+        creditRecord.setSave(true);
+        creditRecord.setAmount(shareCreditNum);
+        try {
+            walletRepository.saveAndFlush(wallet);
+            creditRecordRepository.save(creditRecord);
+            resultMap.put("success","成功增加积分");
+        } catch (Exception e) {
+            e.printStackTrace();
+            resultMap.put("error","保存失败:" + e.getMessage());
+        }
+        return resultMap;
+
     }
 
 

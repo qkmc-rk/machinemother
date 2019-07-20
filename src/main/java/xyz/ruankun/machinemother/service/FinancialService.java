@@ -77,4 +77,6 @@ public interface FinancialService {
     Boolean deleteWithDraw(Integer id);
 
     Boolean updateWithDraw(Integer id, Boolean option, String orderStr);
+
+    Map<String,String> addShareCredit(Wallet wallet);
 }

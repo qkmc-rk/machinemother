@@ -339,7 +339,7 @@ public class UserController {
 
     @PostMapping(value = "/{userId}/weixin")
     @Authentication(role = AuthAopConstant.USER)
-    @ApiOperation(value = "[用户]用户绑定微信", notes = "若用户已绑定，则返回失败")
+    @ApiOperation(value = "[用户]用户绑定微信721测试", notes = "若用户已绑定，则返回失败")
     public ResponseEntity saveWX(@RequestParam(value = "weixinId") String wxId, @PathVariable(value = "userId") int userId) {
         ResponseEntity responseEntity = new ResponseEntity();
         User user = userInfoService.getUser(userId);

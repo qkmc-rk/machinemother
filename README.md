@@ -111,4 +111,4 @@
 - 修改订单secret的长度为大写字母加数字，12位
 
 ### 7月19日
-- 增肌接口，FinancialController  分享成功的回调
+- 增加接口，FinancialController  分享成功的回调

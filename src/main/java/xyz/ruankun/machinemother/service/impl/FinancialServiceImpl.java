@@ -182,17 +182,21 @@ public class FinancialServiceImpl implements FinancialService {
                 }
                 */
                 if (user != null && user.getInvitorId() != null){
+                    logger.info("判断是否是新用户下单...");
                     if (!user.getOrdered()){
+                        logger.info("是新用户...");
                         Integer invitorId = user.getInvitorId();
+                        logger.info("用户ID：" + user.getId() + ",邀请者ID：" + user.getInvitorId());
                         //增加一笔佣金
                         //通过算法算出该用户邀请的人下的这笔订单该获得多少佣金
-                        BigDecimal amount = generateCommissionNum(user.getInvitorId(), order.getAmount());
+                        BigDecimal amount = generateCommissionNum(invitorId, order.getAmount());
+                        logger.info("邀请者可以得到的佣金：" + amount.floatValue());
                         //增加佣金，继续增加积分200
-                        addCommissionCreditToUser(amount, invitorGetCreditNum, user.getInvitorId());
-
+                        addCommissionCreditToUser(amount, invitorGetCreditNum, invitorId);
                         user.setOrdered(true);
-
                         userRepository.saveAndFlush(user);
+                    }else {
+                        logger.info("不是新用户...");
                     }
                 }
                 return true;
@@ -915,8 +919,10 @@ public class FinancialServiceImpl implements FinancialService {
      * @return
      */
     public Boolean addCommissionCreditToUser(BigDecimal commissionAmount, Integer creditAmount, Integer userId) {
+        logger.info("这是一个增加邀请者的佣金和积分的方法, 开始执行....");
         Wallet wallet = walletRepository.findByUserId(userId);
         if (wallet == null){
+            logger.error("没有找到邀请者的钱包信息");
             return false;
         }
         wallet.setCommission(wallet.getCommission().add(commissionAmount));
@@ -937,13 +943,16 @@ public class FinancialServiceImpl implements FinancialService {
         creditRecord.setUserId(userId);
 
         try {
+            logger.info("开始保存commision与credit...");
             walletRepository.saveAndFlush(wallet);
             commissionRecordRepository.save(commissionRecord);
             creditRecordRepository.save(creditRecord);
+            logger.info("保存成功！");
             return true;
         } catch (Exception e) {
+            logger.error("保存失败！");
+            logger.error("保存wallet或者commisionrecord出错，请参照以下程序抛出的错误日志");
             e.printStackTrace();
-            logger.error("保存wallet或者commisionrecord出错，请参照以上程序抛出的错误日志");
             return false;
         }
     }

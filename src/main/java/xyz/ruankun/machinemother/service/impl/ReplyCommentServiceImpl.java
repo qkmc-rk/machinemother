@@ -70,18 +70,18 @@ public class ReplyCommentServiceImpl implements ReplyCommentService {
             for (Item item : items) {
                 //如果用户已评价，则获取评价信息
                 if (item.getComment()) {
+                    //每个item只能有一个评论
                     List<Comment> result = commentRepository.findByItemId(item.getId());
-                    if (result.size() >= 0) {
-                        Iterator<Comment> iterator = comments.iterator();
-                        while (iterator.hasNext()) {
-                            Comment comment = iterator.next();
+                    if (result.size() > 0) {
+                        for (Comment comment:result){
                             try {
                                 User user = userRepository.findById(comment.getUserId().intValue());
                                 if(user.getId()!=0) {
                                     comment.setUsername(user.getName());
+                                    comment.setUserAvatar(user.getAvator());
                                     List<Reply> reply = replyRepository.findAllByCommentId(comment.getId());
                                     replies.addAll(reply);
-                                    comments.addAll(result);
+                                    comments.add(comment);
                                 }else{
 
                                 }

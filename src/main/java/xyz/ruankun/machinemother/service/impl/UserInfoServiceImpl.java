@@ -342,6 +342,7 @@ public class UserInfoServiceImpl implements UserInfoService {
         logger.info("要修改的user的参数：" + user.toString());
         User check = getUser(user.getId());
         if (check == null || check.getId() == 0) {
+            System.out.println("没有找到要修改的user，id:" + user.getId());
             return null;
         } else {
             EntityUtil.update(user, check);

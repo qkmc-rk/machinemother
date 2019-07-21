@@ -44,6 +44,9 @@ public class User implements Serializable {
     @Column(name = "gmt_modified")
     private Date gmtModified;
 
+    @Column(name = "ordered")
+    private Boolean ordered;
+
     @Transient
     private Map<String,Integer> extras;
 
@@ -143,4 +146,11 @@ public class User implements Serializable {
         this.gmtModified = gmtModified;
     }
 
+    public Boolean getOrdered() {
+        return ordered;
+    }
+
+    public void setOrdered(Boolean ordered) {
+        this.ordered = ordered;
+    }
 }

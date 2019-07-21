@@ -54,4 +54,5 @@ public interface UserRepository extends JpaRepository<User, Integer> {
     int countByInvitorId(int invitorId);
 
 
+
 }

@@ -10,6 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 import xyz.ruankun.machinemother.entity.*;
 import xyz.ruankun.machinemother.repository.*;
 import xyz.ruankun.machinemother.service.FinancialService;
+import xyz.ruankun.machinemother.service.UserInfoService;
 import xyz.ruankun.machinemother.util.MD5Util;
 import xyz.ruankun.machinemother.util.WePayUtil;
 
@@ -20,6 +21,8 @@ import java.io.BufferedOutputStream;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.math.BigDecimal;
+import java.time.LocalDate;
+import java.time.Month;
 import java.util.*;
 import java.util.regex.Pattern;
 
@@ -43,6 +46,24 @@ public class FinancialServiceImpl implements FinancialService {
     private String key;
     @Value("${weixin.pay_url}")
     private String url;
+
+    /**
+     * 佣金获得相关参数
+     */
+    @Value("${machinemother.vip.level1.exp}")
+    private Integer level1Exp;
+    @Value("${machinemother.vip.level1.ratio}")
+    private Integer level1Ratio;
+    @Value("${machinemother.vip.level2.exp}")
+    private Integer level2Exp;
+    @Value("${machinemother.vip.level2.ratio}")
+    private Integer level2Ratio;
+    @Value("${machinemother.vip.level3.exp}")
+    private Integer level3Exp;
+    @Value("${machinemother.vip.level3.ratio}")
+    private Integer level3Ratio;
+    @Value("${machinemother.vip.credit}")
+    private Integer invitorGetCreditNum;
 
     @Value("${machinemother.shareCreditNum}")
     private Integer shareCreditNum;
@@ -124,7 +145,14 @@ public class FinancialServiceImpl implements FinancialService {
         }
     }
 
+    /**
+     * 确认订单，确认订单后，需要判断用户是否是第一次下单，若是则需要ordered=true，然后邀请者需要得到佣金，佣金数目是付款的10分之1，或者20分之1
+     * @param orderid
+     * @param secret
+     * @return
+     */
     @Override
+    @Transactional
     public boolean confirmOrder(Integer orderid, String secret) {
         Order order;
         OrderSecret orderSecret;
@@ -143,6 +171,30 @@ public class FinancialServiceImpl implements FinancialService {
             order.setIsFinished(true);
             try {
                 orderRepository.saveAndFlush(order);
+                User user = userRepository.findById(order.getUserId().intValue());
+                /*
+                有邀请人{
+                    第一次下单{
+                        获取邀请人ID
+                        邀请人增加佣金
+                        用户ordered字段=true
+                    }
+                }
+                */
+                if (user != null && user.getInvitorId() != null){
+                    if (!user.getOrdered()){
+                        Integer invitorId = user.getInvitorId();
+                        //增加一笔佣金
+                        //通过算法算出该用户邀请的人下的这笔订单该获得多少佣金
+                        BigDecimal amount = generateCommissionNum(user.getInvitorId(), order.getAmount());
+                        //增加佣金，继续增加积分200
+                        addCommissionCreditToUser(amount, invitorGetCreditNum, user.getInvitorId());
+
+                        user.setOrdered(true);
+
+                        userRepository.saveAndFlush(user);
+                    }
+                }
                 return true;
             } catch (Exception e) {
                 e.printStackTrace();
@@ -852,6 +904,90 @@ public class FinancialServiceImpl implements FinancialService {
             wallet.setCount(0);
         } else {
             wallet.setCount(count);
+        }
+    }
+
+    /**
+     * 顺带增加积分
+     * @param commissionAmount
+     * @param creditAmount
+     * @param userId
+     * @return
+     */
+    public Boolean addCommissionCreditToUser(BigDecimal commissionAmount, Integer creditAmount, Integer userId) {
+        Wallet wallet = walletRepository.findByUserId(userId);
+        if (wallet == null){
+            return false;
+        }
+        wallet.setCommission(wallet.getCommission().add(commissionAmount));
+        wallet.setCredit(wallet.getCredit() + creditAmount);
+        //创建记录
+        CommissionRecord commissionRecord = new CommissionRecord();
+        CreditRecord creditRecord = new CreditRecord();
+
+        commissionRecord.setAmount(commissionAmount);
+        commissionRecord.setGmtCreate(new Date());
+        commissionRecord.setReason("粉丝第一次下单");
+        commissionRecord.setSave(true);
+        commissionRecord.setUserId(userId);
+
+        creditRecord.setAmount(creditAmount);
+        creditRecord.setSave(true);
+        creditRecord.setGmtCreate(new Date());
+        creditRecord.setUserId(userId);
+
+        try {
+            walletRepository.saveAndFlush(wallet);
+            commissionRecordRepository.save(commissionRecord);
+            creditRecordRepository.save(creditRecord);
+            return true;
+        } catch (Exception e) {
+            e.printStackTrace();
+            logger.error("保存wallet或者commisionrecord出错，请参照以上程序抛出的错误日志");
+            return false;
+        }
+    }
+    /**
+     * 该方法计算出邀请者该获得多少佣金
+     * @param invitorId
+     * @param amount
+     * @return
+     */
+    BigDecimal generateCommissionNum(Integer invitorId, BigDecimal amount){
+        BigDecimal commission = new BigDecimal(0);
+        List<User> fans = userRepository.findByInvitorId(invitorId);
+        List<User> fansOfThisMonth = new ArrayList<>();
+        if (!fans.isEmpty()){
+            //获取本月是多少月
+            Month month = LocalDate.now().getMonth();
+            //获得这个月邀请的粉丝
+            for (User u :
+                    fans) {
+                //这个月以内的才算
+                if ((u.getGmtCreate().getMonth() +1) == month.getValue()){
+                    fansOfThisMonth.add(u);
+                }
+            }
+            //计算出粉丝数目
+            int fansNum = fansOfThisMonth.size();
+            //判断会员等级
+            if (fansNum > 0 && fansNum <= level1Exp){
+                //等级1的邀请者
+                commission = commission.add(amount.multiply(new BigDecimal(((float)level1Ratio)/100.0)));
+            }else if(fansNum > level1Exp && fansNum <= level2Exp){
+                //等级2的邀请者
+                commission = commission.add(amount.multiply(new BigDecimal(((float)level2Ratio)/100.0)));
+            }else if(fansNum > level2Exp){
+                //等级3的邀请者
+                commission = commission.add(amount.multiply(new BigDecimal(((float)level3Ratio)/100.0)));
+            }else{
+                logger.error("光棍一个,没有粉丝的人!");
+                return null;
+            }
+            return commission;
+        }else{
+            logger.error("老光棍，没有粉丝!");
+            return commission;
         }
     }
 

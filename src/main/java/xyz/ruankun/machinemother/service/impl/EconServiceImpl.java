@@ -1,6 +1,9 @@
 package xyz.ruankun.machinemother.service.impl;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -17,10 +20,34 @@ import xyz.ruankun.machinemother.util.constant.OrderIndentStatus;
 
 import javax.annotation.Resource;
 import java.math.BigDecimal;
+import java.time.LocalDate;
+import java.time.Month;
 import java.util.*;
 
 @Service
 public class EconServiceImpl implements EconService {
+
+    private Logger logger = LoggerFactory.getLogger(EconServiceImpl.class);
+
+    /**
+     * 佣金获得相关参数
+     */
+    @Value("${machinemother.vip.level1.exp}")
+    private Integer level1Exp;
+    @Value("${machinemother.vip.level1.ratio}")
+    private Integer level1Ratio;
+    @Value("${machinemother.vip.level2.exp}")
+    private Integer level2Exp;
+    @Value("${machinemother.vip.level2.ratio}")
+    private Integer level2Ratio;
+    @Value("${machinemother.vip.level3.exp}")
+    private Integer level3Exp;
+    @Value("${machinemother.vip.level3.ratio}")
+    private Integer level3Ratio;
+    @Value("${machinemother.vip.credit}")
+    private Integer invitorGetCreditNum;
+
+
 
     @Resource
     private OrderRepository orderRepository;
@@ -45,6 +72,15 @@ public class EconServiceImpl implements EconService {
 
     @Autowired
     private CommentRepository commentRepository;
+
+    @Autowired
+    UserRepository userRepository;
+
+    @Autowired
+    CommissionRecordRepository commissionRecordRepository;
+
+    @Autowired
+    WalletRepository walletRepository;
 
     /**
      * 没用 7.12
@@ -427,8 +463,37 @@ public class EconServiceImpl implements EconService {
                 order.setIsCancle(false);
                 System.out.println("将要保存order：" + order.toString());
                 orderRepository.saveAndFlush(order);
-
                 orderSecretRepository.saveAndFlush(orderSecret1);
+
+                orderRepository.saveAndFlush(order);
+                /*
+                有邀请人{
+                    第一次下单{
+                        获取邀请人ID
+                        邀请人增加佣金
+                        用户ordered字段=true
+                    }
+                }
+                */
+                User user = userRepository.findById(order.getUserId().intValue());
+                if (user != null && user.getInvitorId() != null){
+                    logger.info("判断是否是新用户下单...");
+                    if (!user.getOrdered()){
+                        logger.info("是新用户...");
+                        Integer invitorId = user.getInvitorId();
+                        logger.info("用户ID：" + user.getId() + ",邀请者ID：" + user.getInvitorId());
+                        //增加一笔佣金
+                        //通过算法算出该用户邀请的人下的这笔订单该获得多少佣金
+                        BigDecimal amount = generateCommissionNum(invitorId, order.getAmount());
+                        logger.info("邀请者可以得到的佣金：" + amount.floatValue());
+                        //增加佣金，继续增加积分200
+                        addCommissionCreditToUser(amount, invitorGetCreditNum, invitorId);
+                        user.setOrdered(true);
+                        userRepository.saveAndFlush(user);
+                    }else {
+                        logger.info("不是新用户...");
+                    }
+                }
 
                 return true;
             } else {
@@ -531,5 +596,94 @@ public class EconServiceImpl implements EconService {
         //第三步，设置order的items信息
         order.setItems(items);
         return order;
+    }
+
+    /**
+     * 顺带增加积分
+     * @param commissionAmount
+     * @param creditAmount
+     * @param userId
+     * @return
+     */
+    public Boolean addCommissionCreditToUser(BigDecimal commissionAmount, Integer creditAmount, Integer userId) {
+        logger.info("这是一个增加邀请者的佣金和积分的方法, 开始执行....");
+        Wallet wallet = walletRepository.findByUserId(userId);
+        if (wallet == null){
+            logger.error("没有找到邀请者的钱包信息");
+            return false;
+        }
+        wallet.setCommission(wallet.getCommission().add(commissionAmount));
+        wallet.setCredit(wallet.getCredit() + creditAmount);
+        //创建记录
+        CommissionRecord commissionRecord = new CommissionRecord();
+        CreditRecord creditRecord = new CreditRecord();
+
+        commissionRecord.setAmount(commissionAmount);
+        commissionRecord.setGmtCreate(new Date());
+        commissionRecord.setReason("粉丝第一次下单");
+        commissionRecord.setSave(true);
+        commissionRecord.setUserId(userId);
+
+        creditRecord.setAmount(creditAmount);
+        creditRecord.setSave(true);
+        creditRecord.setGmtCreate(new Date());
+        creditRecord.setUserId(userId);
+
+        try {
+            logger.info("开始保存commision与credit...");
+            walletRepository.saveAndFlush(wallet);
+            commissionRecordRepository.save(commissionRecord);
+            creditRecordRepository.save(creditRecord);
+            logger.info("保存成功！");
+            return true;
+        } catch (Exception e) {
+            logger.error("保存失败！");
+            logger.error("保存wallet或者commisionrecord出错，请参照以下程序抛出的错误日志");
+            e.printStackTrace();
+            return false;
+        }
+    }
+    /**
+     * 该方法计算出邀请者该获得多少佣金
+     * @param invitorId
+     * @param amount
+     * @return
+     */
+    BigDecimal generateCommissionNum(Integer invitorId, BigDecimal amount){
+        BigDecimal commission = new BigDecimal(0);
+        List<User> fans = userRepository.findByInvitorId(invitorId);
+        List<User> fansOfThisMonth = new ArrayList<>();
+        if (!fans.isEmpty()){
+            //获取本月是多少月
+            Month month = LocalDate.now().getMonth();
+            //获得这个月邀请的粉丝
+            for (User u :
+                    fans) {
+                //这个月以内的才算
+                if ((u.getGmtCreate().getMonth() +1) == month.getValue()){
+                    fansOfThisMonth.add(u);
+                }
+            }
+            //计算出粉丝数目
+            int fansNum = fansOfThisMonth.size();
+            //判断会员等级
+            if (fansNum > 0 && fansNum <= level1Exp){
+                //等级1的邀请者
+                commission = commission.add(amount.multiply(new BigDecimal(((float)level1Ratio)/100.0)));
+            }else if(fansNum > level1Exp && fansNum <= level2Exp){
+                //等级2的邀请者
+                commission = commission.add(amount.multiply(new BigDecimal(((float)level2Ratio)/100.0)));
+            }else if(fansNum > level2Exp){
+                //等级3的邀请者
+                commission = commission.add(amount.multiply(new BigDecimal(((float)level3Ratio)/100.0)));
+            }else{
+                logger.error("光棍一个,没有粉丝的人!");
+                return null;
+            }
+            return commission;
+        }else{
+            logger.error("老光棍，没有粉丝!");
+            return commission;
+        }
     }
 }

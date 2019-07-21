@@ -190,11 +190,17 @@ public class EcomServiceImpl implements EcomService {
                     amountFen -= credit;
                     wallet.setCredit(0);
                     creditRecord.setAmount(credit);
+                    //设置order
+                    order.setCredit(new BigDecimal(credit));
+                    order.setUseCredit(true);
                 }else if (credit > Constant.MAX_CREDIT){
                     //如果积分大于 MAX_CREDIT
                     amountFen -= Constant.MAX_CREDIT;
                     wallet.setCredit(wallet.getCredit() - Constant.MAX_CREDIT);
                     creditRecord.setAmount(Constant.MAX_CREDIT);
+                    //设置order
+                    order.setCredit(new BigDecimal(Constant.MAX_CREDIT));
+                    order.setUseCredit(true);
                 }
                 //amountFen -= credit;
                 //wallet.setCredit(0);
@@ -203,8 +209,8 @@ public class EcomServiceImpl implements EcomService {
                 creditRecord.setUserId(userId);
                 creditRecord.setGmtCreate(new Date());//
                 //设置order
-                order.setCredit(new BigDecimal(credit));
-                order.setUseCredit(true);
+                //order.setCredit(new BigDecimal(credit));
+                //order.setUseCredit(true);
             }
         }
         if (decouponId != null && decouponId.intValue() /* <= */ > 0) {
@@ -244,6 +250,7 @@ public class EcomServiceImpl implements EcomService {
                 map.put("error", "优惠券已经被使用");
                 return map;
             }
+            if (amountFen < 0) amountFen = 1;
             amountFen -= (int) (decoupon.getWorth().doubleValue() * 100);
             decoupon.setUsed(true);
             order.setUseDecoupon(true);

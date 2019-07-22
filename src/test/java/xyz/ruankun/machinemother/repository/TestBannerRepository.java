@@ -55,4 +55,13 @@ public class TestBannerRepository {
         System.out.println(bigDecimal14.divide(bigDecimal15));
     }
 
+    @Test
+    public void dssa(){
+        String mes = "sd:sd:dsa:dsfa:";
+        System.out.println(mes.split(":").length);
+//        for (String str :mes.split(":")){
+//            System.out.println(str);
+//        }
+    }
+
 }

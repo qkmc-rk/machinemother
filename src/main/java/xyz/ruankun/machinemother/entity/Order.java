@@ -22,7 +22,6 @@ public class Order {
     private Date gmtModified;
     private Boolean isPaid;
     private Boolean isFinished;
-    @JsonIgnore
     private Boolean isDelete;
     private Boolean isCancle;
 

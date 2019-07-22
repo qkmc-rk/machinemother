@@ -24,12 +24,8 @@ import xyz.ruankun.machinemother.util.constant.WxAccessTokenReturnConstant;
 import xyz.ruankun.machinemother.vo.weixin.WxAccessToken;
 import xyz.ruankun.machinemother.vo.weixin.WxServerResult;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.UnsupportedEncodingException;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.io.*;
+import java.util.*;
 
 @Service
 public class QrCodeServiceImpl implements QrCodeService {
@@ -63,15 +59,18 @@ public class QrCodeServiceImpl implements QrCodeService {
         uri.append("?access_token=");
         uri.append(accessToken);
         //准备参数
-        Map<String,String> params = new HashMap<>();
+        Map<String,Object> params = new HashMap<>();
+        //params.put("access_token",accessToken);
         //这个参数至关重要，在小程序通过scene获取userId
-        params.put("scene",userId.toString());
-        params.put("width","300");
-        params.put("is_hyaline","true");
-        params.put("auto_color","true");
+        Integer uid = Integer.parseInt(userId.toString());
+        params.put("scene",uid.intValue());
+        params.put("width",300);
+        params.put("is_hyaline",true);
+        params.put("auto_color",true);
         System.out.println("获取二维码的uri:" + uri.toString());
         System.out.println("获取二维码的参数:" + params.toString());
-        return postforImg(uri.toString(),params);
+        return QrCodeUtil.getInstance().getminiqrQr(uri.toString(),params);
+        //return postforImg(uri.toString(),params);
     }
 
     @Override
@@ -211,10 +210,11 @@ public class QrCodeServiceImpl implements QrCodeService {
         HttpPost httpPost = new HttpPost(uri);  // 接口
         httpPost.addHeader("content-type", "application/json");
         ObjectMapper objectMapper = new ObjectMapper();
-        String body = null;
-        StringEntity entity = null;
+        String body;
+        StringEntity entity;
         try {
              body = objectMapper.writeValueAsString(params);
+             System.out.println("请求携带的参数化为JSON后:" + body);
             entity= new StringEntity(body);
         } catch (JsonProcessingException e) {
             e.printStackTrace();
@@ -227,7 +227,7 @@ public class QrCodeServiceImpl implements QrCodeService {
             map.put("error","无法生成StringEntity，检查传入参数");
             return (map);
         }
-        entity.setContentType("img/png");
+        //entity.setContentType("img/png");
 
         httpPost.setEntity(entity);
         HttpResponse response;
@@ -243,14 +243,16 @@ public class QrCodeServiceImpl implements QrCodeService {
          * 我没做处理，最后可能得到错误的结果，再说吧
          * 2019.7.3 看来这个验证不做不行，不然前台搞不明白为什么出错，出错了还要赖在我的身上
          */
-        byte[] b = new byte[10240];
+        byte[] b = new byte[1024];
         try {
-            inputStream.read(b);
+            b =QrCodeUtil.readInputStream(inputStream);
         } catch (IOException e) {
             e.printStackTrace();
             logger.error("错误！！读取输入流出错");
             map.put("error","错误！！读取输入流出错");
             return (map);
+        } catch (Exception e) {
+            e.printStackTrace();
         }
         String bStr = new String(b);
         ObjectMapper o = new ObjectMapper();
@@ -258,10 +260,7 @@ public class QrCodeServiceImpl implements QrCodeService {
         try {
             wxServerResult = o.readValue(bStr,WxServerResult.class);
         } catch (IOException e) {
-            e.printStackTrace();
-            logger.error("错误！！输入流无法转换成JsonObject");
-            map.put("error","错误！！输入流无法转换成JsonObject");
-            return (map);
+            logger.info("不是Json数据，那应该是图片二进制数据");
         }
         if(null != wxServerResult && wxServerResult.getErrcode() != null){
             logger.error("发生了错误信息:" + wxServerResult.getErrcode() + wxServerResult.getErrmsg());
@@ -269,8 +268,8 @@ public class QrCodeServiceImpl implements QrCodeService {
             return (map);
         }
         //调用七牛云对象存储存上图片
-        System.out.println("获取小程序码返回的数据：" + inputStream.toString());
-        String imgUrl = QiNiuFileUtil.uploadToQiNiu(inputStream,MD5Util.md5("") + ".png");
+        System.out.println("获取小程序码返回的数据：" + b.toString());
+        String imgUrl = QiNiuFileUtil.uploadToQiNiu(inputStream,MD5Util.md5(new Date().toString()) + ".png");
         if (imgUrl == null){
             logger.info("图片上传失败了,七牛云文件助手返回了NULL值");
             map.put("error","图片上传失败了,七牛云文件助手返回了NULL值");
@@ -280,4 +279,5 @@ public class QrCodeServiceImpl implements QrCodeService {
         map.put("imgUrl",imgUrl);
         return (map);
     }
+
 }

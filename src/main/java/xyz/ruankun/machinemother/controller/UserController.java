@@ -343,18 +343,41 @@ public class UserController {
     public ResponseEntity saveWX(@RequestParam(value = "weixinId") String wxId, @PathVariable(value = "userId") int userId) {
         ResponseEntity responseEntity = new ResponseEntity();
         User user = userInfoService.getUser(userId);
-        if (user.getId() == 0) {
+        if (user != null && user.getId().equals(0)) {
             responseEntity.error(-1, "用户不存在", null);
         } else if (user == null) {
-//            responseEntity.error(UserCode.NO_EXIST, UserCode.NO_SUCH_USER, null);
-            responseEntity.serverError();
+            responseEntity.error(UserCode.NO_EXIST, UserCode.NO_SUCH_USER, null);
         } else {
 
             if (user.getWxId() != null) {
                 responseEntity.error(-1, UserCode.INVALID_DATA, null);
-                //responseEntity.serverError();
             } else {
                 user.setWxId(wxId);
+                user.setGmtModified(new Date());
+                userInfoService.update(user);
+                responseEntity.success(null);
+            }
+        }
+        return responseEntity;
+    }
+
+    @PostMapping(value = "/{userId}/phone")
+    @Authentication(role = AuthAopConstant.USER)
+    @ApiOperation(value = "[用户]用户绑定手机号测试", notes = "若用户已绑定，则返回失败")
+    public ResponseEntity savePhone(@RequestParam(value = "phone") String phone, @PathVariable(value = "userId") int userId) {
+        //做一个手机号码验证
+        ResponseEntity responseEntity = new ResponseEntity();
+        User user = userInfoService.getUser(userId);
+        if (user != null && user.getId().equals(0)) {
+            responseEntity.error(-1, "用户不存在", null);
+        } else if (user == null) {
+            responseEntity.error(UserCode.NO_EXIST, UserCode.NO_SUCH_USER, null);
+        } else {
+
+            if (user.getPhone() != null) {
+                responseEntity.error(-1, UserCode.DONE, null);
+            } else {
+                user.setPhone(phone);
                 user.setGmtModified(new Date());
                 userInfoService.update(user);
                 responseEntity.success(null);
@@ -370,6 +393,14 @@ public class UserController {
         ResponseEntity responseEntity = new ResponseEntity();
         Integer userId = Integer.valueOf(userInfoService.readDataFromRedis(token));
         List<User> users = userInfoService.getUsers(userId);
+        //去除敏感信息
+        for (User u :
+                users) {
+            u.setOpenId(null);
+            u.setIntegration(null);
+            u.setAward(null);
+            u.setId(null);
+        }
         if (users == null) {
             responseEntity.serverError();
         } else {
@@ -377,13 +408,6 @@ public class UserController {
         }
         return responseEntity;
     }
-
-//    @GetMapping("/test")
-//    @ApiOperation(value = "勿动")
-//    public String test(@RequestParam(value = "openId")String openId){
-//        Boolean result = userInfoService.delete(openId);
-//        return String.valueOf(result);
-//    }
 
     private Pageable pageable(int page, int size, String column, Boolean sort) {
         if (column == null) {

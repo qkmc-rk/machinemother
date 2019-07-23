@@ -1,5 +1,6 @@
 package xyz.ruankun.machinemother.service.impl;
 
+import org.apache.tomcat.jni.Local;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import xyz.ruankun.machinemother.entity.DictProductType;
@@ -13,6 +14,8 @@ import xyz.ruankun.machinemother.util.DataCode;
 import xyz.ruankun.machinemother.util.EntityUtil;
 
 import javax.annotation.Resource;
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -82,13 +85,16 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public List<Product> getProducts() {
+        System.out.println("记录查询产品时间：" + LocalTime.now());
         List<Product> products = productRepository.findAll();
+        System.out.println("记录从数据库查询产品完成时间：" + LocalTime.now());
         List<Product> products1 = new ArrayList<>();
         for (Product p :
                 products) {
             if (p.getIsVisible())
                 products1.add(p);
         }
+        System.out.println("记录查询产品完成时间：" + LocalTime.now());
         return products1;
     }
 

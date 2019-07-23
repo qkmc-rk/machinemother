@@ -16,5 +16,6 @@ public interface UserCode {
     String INVALID_MSG = "非法操作！";
     String INVALID_DATA = "非法数据请求";
     String LOST_DATA = "数据错误";
+    String DONE = "已经绑定";
 
 }

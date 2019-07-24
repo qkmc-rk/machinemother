@@ -21,9 +21,9 @@ public interface EconService {
 
     Integer cancelOrder(Integer userId, Integer OrderId);
 
-    List<Order> getOrders(int userId);
+    Map<String, Object> getOrders(int userId);
 
-    Page<Order> getOrders(Pageable pageable);
+    Map<String, Object> getOrders(Pageable pageable);
 
     Integer deleteOrder(Integer id);
 

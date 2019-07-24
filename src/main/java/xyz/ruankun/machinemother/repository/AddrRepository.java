@@ -22,7 +22,7 @@ public interface AddrRepository extends JpaRepository<Addr,Integer> {
 
     Addr findById(int id);
 
-    Page<Addr> findAllByVisible(Pageable pageable, Boolean visible);
+    Page<Addr> findAllByIsVisible(Pageable pageable, Boolean visible);
 
     @Query(value = "delete from mm_addr where userid=?1", nativeQuery = true)
     @Transactional

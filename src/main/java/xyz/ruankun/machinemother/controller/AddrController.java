@@ -126,7 +126,10 @@ public class AddrController {
     @Authentication(role = AuthAopConstant.ADMIN)
     @ApiOperation(value = "[admin]获取所有地址数据")
     public ResponseEntity get(@RequestParam(value = "page", required = false, defaultValue = "0") Integer page) {
-        Pageable pageable = PageRequest.of(page, 10);
+        if (page < 1) {
+            page = 1;
+        }
+        Pageable pageable = PageRequest.of(page - 1, 10);
         ResponseEntity responseEntity = new ResponseEntity();
         Page<Addr> addrs = addrService.addrs(pageable);
         if (addrs == null) {

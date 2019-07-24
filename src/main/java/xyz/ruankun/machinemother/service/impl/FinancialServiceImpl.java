@@ -1,6 +1,5 @@
 package xyz.ruankun.machinemother.service.impl;
 
-import io.swagger.models.auth.In;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,8 +20,6 @@ import java.io.BufferedOutputStream;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.math.BigDecimal;
-import java.time.LocalDate;
-import java.time.Month;
 import java.util.*;
 import java.util.regex.Pattern;
 
@@ -130,6 +127,7 @@ public class FinancialServiceImpl implements FinancialService {
 
     /**
      * 确认订单，确认订单后，需要判断用户是否是第一次下单，若是则需要ordered=true，然后邀请者需要得到佣金，佣金数目是付款的10分之1，或者20分之1
+     *
      * @param orderid
      * @param secret
      * @return
@@ -164,10 +162,25 @@ public class FinancialServiceImpl implements FinancialService {
         }
     }
 
+    @Transactional
     @Override
     public List<Decoupon> findAllDecouponByUserId(Integer userid) {
         try {
-            return decouponRepository.findAllByUserId(userid);
+            List<Decoupon> decoupons = decouponRepository.findAllByUserId(userid);
+            if (decoupons == null) {
+                return null;
+            } else {
+                Iterator<Decoupon> iterator = decoupons.iterator();
+                while (iterator.hasNext()) {
+                    Decoupon decoupon = iterator.next();
+                    if (!decoupon.getUsed() && decoupon.getGmtPast().getTime() <= System.currentTimeMillis()) {
+                        decoupon.setPast(true);
+                        //todo
+                        decouponRepository.save(decoupon);
+                    }
+                }
+                return decoupons;
+            }
         } catch (Exception e) {
             e.printStackTrace();
             return null;
@@ -285,7 +298,7 @@ public class FinancialServiceImpl implements FinancialService {
         if (order.getIsPaid()) {
             rs.put("error", "错误,订单已经支付，无法再次支付");
         }
-        if(order.getIsCancle()){
+        if (order.getIsCancle()) {
             rs.put("error", "错误，订单已取消");
         }
         //拿到和订单相关的所有信息
@@ -306,7 +319,7 @@ public class FinancialServiceImpl implements FinancialService {
         BigDecimal originAmount = new BigDecimal("0");
         for (int i = 0; i < ids.size(); i++) {
             if (productPropsRepository.findById(ids.get(i)).isPresent()) {
-                ProductProps productProps  = productPropsRepository.findById(ids.get(i).intValue());
+                ProductProps productProps = productPropsRepository.findById(ids.get(i).intValue());
                 BigDecimal linshi = productProps.getPrice().multiply(new BigDecimal(String.valueOf(quantities.get(i))));
                 originAmount = originAmount.add(linshi);
             }
@@ -493,7 +506,7 @@ public class FinancialServiceImpl implements FinancialService {
                     orderSecret.setGmtModified(new Date());
                     orderSecret.setOrderid(order2.getId());
                     String orderSecStr = MD5Util.md5(String.valueOf(new Date().getTime()).toUpperCase());
-                    orderSecStr = orderSecStr.substring(0,12).toUpperCase();
+                    orderSecStr = orderSecStr.substring(0, 12).toUpperCase();
                     orderSecret.setSecret(orderSecStr);
                     orderSecret.setUserId(order2.getUserId());
                     try {
@@ -688,8 +701,8 @@ public class FinancialServiceImpl implements FinancialService {
     @Transactional
     public Map<String, String> addShareCredit(Wallet wallet) {
         Map<String, String> resultMap = new HashMap<>();
-        if (wallet == null){
-            resultMap.put("error","传入的wallet为kong");
+        if (wallet == null) {
+            resultMap.put("error", "传入的wallet为kong");
         }
         //为wallet增加积分，并增加一条积分记录
         wallet.setCredit(wallet.getCredit() + shareCreditNum);//增加积分数量
@@ -702,10 +715,10 @@ public class FinancialServiceImpl implements FinancialService {
         try {
             walletRepository.saveAndFlush(wallet);
             creditRecordRepository.save(creditRecord);
-            resultMap.put("success","成功增加积分");
+            resultMap.put("success", "成功增加积分");
         } catch (Exception e) {
             e.printStackTrace();
-            resultMap.put("error","保存失败:" + e.getMessage());
+            resultMap.put("error", "保存失败:" + e.getMessage());
         }
         return resultMap;
 
@@ -801,7 +814,7 @@ public class FinancialServiceImpl implements FinancialService {
         Decoupon decoupon = new Decoupon();
         decoupon.setGmtCreate(new Date());
         //有效期
-        decoupon.setGmtPast(new Date(decoupon.getGmtCreate().getTime()+1000*60*60*24*3));
+        decoupon.setGmtPast(new Date(decoupon.getGmtCreate().getTime() + 1000 * 60 * 60 * 24 * 3));
         decoupon.setFromexchange(true);
         decoupon.setMin(decouponCDKey.getMin());
         decoupon.setPast(decouponCDKey.isPast());
@@ -865,7 +878,6 @@ public class FinancialServiceImpl implements FinancialService {
             wallet.setCount(count);
         }
     }
-
 
 
 }

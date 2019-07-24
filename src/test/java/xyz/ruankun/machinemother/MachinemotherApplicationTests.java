@@ -6,17 +6,20 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 import xyz.ruankun.machinemother.util.MD5Util;
 
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+
 @RunWith(SpringRunner.class)
 @SpringBootTest
 public class MachinemotherApplicationTests {
 
-	@Test
-	public void contextLoads() {
-	}
+    @Test
+    public void contextLoads() {
+    }
 
-	@Test
-	public void teee(){
-		String str = MD5Util.trueMd5(12+"limo"+232.32);
-	}
-
+    @Test
+    public void teee() {
+        String str = MD5Util.trueMd5(12 + "limo" + 232.32);
+    }
 }

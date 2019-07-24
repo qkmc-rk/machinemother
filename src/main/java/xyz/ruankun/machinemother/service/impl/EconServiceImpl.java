@@ -48,6 +48,8 @@ public class EconServiceImpl implements EconService {
     private Integer invitorGetCreditNum;
 
 
+    @Resource
+    private AddrRepository addrRepository;
 
     @Resource
     private OrderRepository orderRepository;
@@ -215,7 +217,7 @@ public class EconServiceImpl implements EconService {
         Order order = getOrder(OrderId);
         if (order.getId() != 0) {
             if (userId.equals(order.getUserId())) {
-                if (!order.getIsCancle() && !order.getIsPaid()&&!order.getIsDelete()) {
+                if (!order.getIsCancle() && !order.getIsPaid() && !order.getIsDelete()) {
                     order.setIsCancle(true);
                     return DataCode.DATA_OPERATION_SUCCESS;
                 }
@@ -227,21 +229,46 @@ public class EconServiceImpl implements EconService {
     }
 
     @Override
-    public List<Order> getOrders(int userId) {
+    public Map<String, Object> getOrders(int userId) {
+        Map<String, Object> map = new LinkedHashMap<>();
         List<Order> orders = orderRepository.findByUserIdAndIsDelete(userId, false);
         if (orders == null) return null;
         List<Order> orders1 = new ArrayList<>();
+        Set<Addr> addrs = new HashSet<>();
         for (Order order :
                 orders) {
-            orders1.add(setOrderOfCommentProductPropsProductInfo(order));
+
+            Addr addr = addrRepository.findById(order.getAddrId().intValue());
+            if (addr == null) {
+                logger.warn("order:" + order.getId() + " has error addr msg");
+            } else {
+                orders1.add(setOrderOfCommentProductPropsProductInfo(order));
+                addrs.add(addr);
+            }
         }
-        return orders1;
+        map.put("orders", orders);
+        map.put("addrs", addrs);
+        return map;
     }
 
     @Override
-    public Page<Order> getOrders(Pageable pageable) {
+    public Map<String, Object> getOrders(Pageable pageable) {
+        Map<String, Object> map = new LinkedHashMap<>();
         Page<Order> orders = orderRepository.findAll(pageable);
-        return orders;
+        Set<Addr> addrs = new HashSet<>();
+        for (Order order : orders) {
+            Addr addr = addrRepository.findById(order.getAddrId().intValue());
+            if (addr == null) {
+                logger.warn("order:" + order.getId() + " has error addr msg");
+            } else {
+                setOrderOfCommentProductPropsProductInfo(order);
+
+                addrs.add(addr);
+            }
+        }
+        map.put("order", orders);
+        map.put("addrs", addrs);
+        return map;
     }
 
     @Override
@@ -260,7 +287,7 @@ public class EconServiceImpl implements EconService {
     @Override
     @Transactional
     public Boolean deleteOrders(int userId) {
-        List<Order> order = getOrders(userId);
+        List<Order> order = orderRepository.findByUserIdAndIsDelete(userId, false);
         if (order == null) {
             return false;
         } else {
@@ -476,9 +503,9 @@ public class EconServiceImpl implements EconService {
                 }
                 */
                 User user = userRepository.findById(order.getUserId().intValue());
-                if (user != null && user.getInvitorId() != null){
+                if (user != null && user.getInvitorId() != null) {
                     logger.info("判断是否是新用户下单...");
-                    if (!user.getOrdered()){
+                    if (!user.getOrdered()) {
                         logger.info("是新用户...");
                         Integer invitorId = user.getInvitorId();
                         logger.info("用户ID：" + user.getId() + ",邀请者ID：" + user.getInvitorId());
@@ -490,7 +517,7 @@ public class EconServiceImpl implements EconService {
                         addCommissionCreditToUser(amount, invitorGetCreditNum, invitorId);
                         user.setOrdered(true);
                         userRepository.saveAndFlush(user);
-                    }else {
+                    } else {
                         logger.info("不是新用户...");
                     }
                 }
@@ -500,7 +527,7 @@ public class EconServiceImpl implements EconService {
                 System.out.println("this order is not the status : paid && !cancel && !finished");
                 return false;
             }
-        } else{
+        } else {
             System.out.println("没有找到orderSecret");
             return false;
         }
@@ -600,6 +627,7 @@ public class EconServiceImpl implements EconService {
 
     /**
      * 顺带增加积分
+     *
      * @param commissionAmount
      * @param creditAmount
      * @param userId
@@ -608,7 +636,7 @@ public class EconServiceImpl implements EconService {
     public Boolean addCommissionCreditToUser(BigDecimal commissionAmount, Integer creditAmount, Integer userId) {
         logger.info("这是一个增加邀请者的佣金和积分的方法, 开始执行....");
         Wallet wallet = walletRepository.findByUserId(userId);
-        if (wallet == null){
+        if (wallet == null) {
             logger.error("没有找到邀请者的钱包信息");
             return false;
         }
@@ -643,45 +671,47 @@ public class EconServiceImpl implements EconService {
             return false;
         }
     }
+
     /**
      * 该方法计算出邀请者该获得多少佣金
+     *
      * @param invitorId
      * @param amount
      * @return
      */
-    BigDecimal generateCommissionNum(Integer invitorId, BigDecimal amount){
+    BigDecimal generateCommissionNum(Integer invitorId, BigDecimal amount) {
         BigDecimal commission = new BigDecimal(0);
         List<User> fans = userRepository.findByInvitorId(invitorId);
         List<User> fansOfThisMonth = new ArrayList<>();
-        if (!fans.isEmpty()){
+        if (!fans.isEmpty()) {
             //获取本月是多少月
             Month month = LocalDate.now().getMonth();
             //获得这个月邀请的粉丝
             for (User u :
                     fans) {
                 //这个月以内的才算
-                if ((u.getGmtCreate().getMonth() +1) == month.getValue()){
+                if ((u.getGmtCreate().getMonth() + 1) == month.getValue()) {
                     fansOfThisMonth.add(u);
                 }
             }
             //计算出粉丝数目
             int fansNum = fansOfThisMonth.size();
             //判断会员等级
-            if (fansNum > 0 && fansNum <= level1Exp){
+            if (fansNum > 0 && fansNum <= level1Exp) {
                 //等级1的邀请者
-                commission = commission.add(amount.multiply(new BigDecimal(((float)level1Ratio)/100.0)));
-            }else if(fansNum > level1Exp && fansNum <= level2Exp){
+                commission = commission.add(amount.multiply(new BigDecimal(((float) level1Ratio) / 100.0)));
+            } else if (fansNum > level1Exp && fansNum <= level2Exp) {
                 //等级2的邀请者
-                commission = commission.add(amount.multiply(new BigDecimal(((float)level2Ratio)/100.0)));
-            }else if(fansNum > level2Exp){
+                commission = commission.add(amount.multiply(new BigDecimal(((float) level2Ratio) / 100.0)));
+            } else if (fansNum > level2Exp) {
                 //等级3的邀请者
-                commission = commission.add(amount.multiply(new BigDecimal(((float)level3Ratio)/100.0)));
-            }else{
+                commission = commission.add(amount.multiply(new BigDecimal(((float) level3Ratio) / 100.0)));
+            } else {
                 logger.error("光棍一个,没有粉丝的人!");
                 return null;
             }
             return commission;
-        }else{
+        } else {
             logger.error("老光棍，没有粉丝!");
             return commission;
         }

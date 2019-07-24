@@ -140,7 +140,7 @@ public class EconController {
     @ApiOperation(value = "[用户]获取用户所有order", notes = "通过token获取userId, 筛选")
     public ResponseEntity getOrders(@RequestHeader(value = "token") String token) {
         int userId = Integer.valueOf(userInfoService.readDataFromRedis(token));
-        List<Order> orders = econService.getOrders(userId);
+        Map<String, Object> orders = econService.getOrders(userId);
         return ControllerUtil.getDataResult(orders);
     }
 
@@ -190,25 +190,27 @@ public class EconController {
     @Authentication(role = AuthAopConstant.ADMIN)
     @ApiOperation(value = "[管理员]通过用户id查询所有order")
     public ResponseEntity getOrder(@PathVariable(value = "userId") Integer userId) {
-        List<Order> orders = econService.getOrders(userId);
+        Map<String, Object> orders = econService.getOrders(userId);
         return ControllerUtil.getDataResult(orders);
     }
 
     @GetMapping(value = "/orders")
     @Authentication(role = AuthAopConstant.ADMIN)
     @ApiOperation(value = "[管理员]获取全部order")
-    public ResponseEntity getOrders(@RequestParam(value = "page") Integer page,
-                                    @RequestParam(value = "limit") Integer limit) {
-        Pageable pageable = PageRequest.of(page - 1, limit);
-        Page<Order> orders = econService.getOrders(pageable);
+    public ResponseEntity getOrders(@RequestParam(value = "page") Integer page) {
+        if (page < 1) {
+            page = 1;
+        }
+        Pageable pageable = PageRequest.of(page - 1, 10);
+        Map<String, Object> orders = econService.getOrders(pageable);
         return ControllerUtil.getDataResult(orders);
     }
 
     @PostMapping(value = "/order/{orderId}/back")
     @Authentication(role = AuthAopConstant.USER)
-    @ApiOperation(value="[用户]取消订单")
-    public ResponseEntity back(@PathVariable(value = "orderId")Integer orderId,
-                               @RequestHeader(value = "token")String token){
+    @ApiOperation(value = "[用户]取消订单")
+    public ResponseEntity back(@PathVariable(value = "orderId") Integer orderId,
+                               @RequestHeader(value = "token") String token) {
         Integer userId = Integer.valueOf(userInfoService.readDataFromRedis(token));
         Integer result = econService.cancelOrder(userId, orderId);
         return ControllerUtil.parData(result, null);
@@ -221,7 +223,7 @@ public class EconController {
         //需order创建时间超过三小时,且状态为unpaid的才可进行该操作
         Order order = econService.getOrder(id);
         if (order == null) {
-            responseEntity.error(Constant.FAILURE_CODE,"没有这个订单",null);
+            responseEntity.error(Constant.FAILURE_CODE, "没有这个订单", null);
         } else if (order.getId() == 0) {
             responseEntity.error(-1, "数据不存在", null);
         } else {

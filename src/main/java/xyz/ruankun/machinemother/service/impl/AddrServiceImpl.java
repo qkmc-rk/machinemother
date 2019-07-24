@@ -78,7 +78,7 @@ public class AddrServiceImpl implements AddrService {
 
     @Override
     public Page<Addr> addrs(Pageable pageable) {
-        return addrRepository.findAllByVisible(pageable, true);
+        return addrRepository.findAllByIsVisible(pageable, true);
     }
 
     @Override

@@ -1,5 +1,7 @@
 package xyz.ruankun.machinemother.service.impl;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import xyz.ruankun.machinemother.entity.Addr;
 import xyz.ruankun.machinemother.repository.AddrRepository;
@@ -72,6 +74,11 @@ public class AddrServiceImpl implements AddrService {
                 addrs1.add(a);
         }
         return addrs1;
+    }
+
+    @Override
+    public Page<Addr> addrs(Pageable pageable) {
+        return addrRepository.findAllByVisible(pageable, true);
     }
 
     @Override

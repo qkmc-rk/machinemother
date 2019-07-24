@@ -5,6 +5,9 @@ import io.swagger.annotations.ApiOperation;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.context.request.RequestAttributes;
 import org.springframework.web.context.request.RequestContextHolder;
@@ -55,7 +58,7 @@ public class AddrController {
         ResponseEntity responseEntity = new ResponseEntity();
         Addr addr = addrService.getAddr(addrId);
         if (addr == null) {
-            responseEntity.error(Constant.FAILURE_CODE,"没有找到这个addr",null);
+            responseEntity.error(Constant.FAILURE_CODE, "没有找到这个addr", null);
         } else if (addr.getId() == 0) {
             responseEntity.error(-1, AddrCode.NO_SUCH_Addr, null);
         } else {
@@ -115,6 +118,36 @@ public class AddrController {
             responseEntity.error(-1, AddrCode.NO_SUCH_Addr, null);
         } else {
             responseEntity = ControllerUtil.parData(addrService.delete(addrId), null);
+        }
+        return responseEntity;
+    }
+
+    @GetMapping(value = "/addrs")
+    @Authentication(role = AuthAopConstant.ADMIN)
+    @ApiOperation(value = "[admin]获取所有地址数据")
+    public ResponseEntity get(@RequestParam(value = "page", required = false, defaultValue = "0") Integer page) {
+        Pageable pageable = PageRequest.of(page, 10);
+        ResponseEntity responseEntity = new ResponseEntity();
+        Page<Addr> addrs = addrService.addrs(pageable);
+        if (addrs == null) {
+            responseEntity.error(-1, "获取地址数据失败", null);
+        } else {
+            responseEntity.success(1, "操作成功", addrs);
+        }
+
+        return responseEntity;
+    }
+
+    @GetMapping(value = "/addrs/{userId}")
+    @Authentication(role = AuthAopConstant.ADMIN)
+    @ApiOperation(value = "[admin]获取指定用户地址数据")
+    public ResponseEntity addrs(@PathVariable(value = "userId") Integer userId) {
+        ResponseEntity responseEntity = new ResponseEntity();
+        List<Addr> addrs = addrService.myAddr(userId);
+        if (addrs == null) {
+            responseEntity.error(-1, "获取地址数据失败", null);
+        } else {
+            responseEntity.success(1, "操作成功", addrs);
         }
         return responseEntity;
     }

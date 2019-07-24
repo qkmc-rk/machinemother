@@ -1,5 +1,7 @@
 package xyz.ruankun.machinemother.repository;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -19,6 +21,8 @@ public interface AddrRepository extends JpaRepository<Addr,Integer> {
     Addr save(Addr addr);
 
     Addr findById(int id);
+
+    Page<Addr> findAllByVisible(Pageable pageable, Boolean visible);
 
     @Query(value = "delete from mm_addr where userid=?1", nativeQuery = true)
     @Transactional

@@ -5,6 +5,9 @@ import io.swagger.annotations.ApiOperation;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.context.request.RequestAttributes;
 import org.springframework.web.context.request.RequestContextHolder;
@@ -27,7 +30,6 @@ import java.util.Map;
 
 @RestController
 @CrossOrigin
-@RequestMapping(value = "/addr")
 @Api(value = "与用户地址相关的API")
 public class AddrController {
 
@@ -39,7 +41,7 @@ public class AddrController {
 
     private Log logger = LogFactory.getLog(AddrController.class);
 
-    @GetMapping(value = {"", "/"})
+    @GetMapping(value = "/addr")
     @Authentication(role = AuthAopConstant.USER)
     @ApiOperation(value = "[用户]获取制定获取的所有收货地址信息", notes = "确保传入的是有效的用户id值")
     public ResponseEntity getUserAddrs(@RequestHeader(value = "token") String token) {
@@ -48,14 +50,14 @@ public class AddrController {
         return ControllerUtil.getDataResult(addrs);
     }
 
-    @GetMapping(value = "/{addrId}")
+    @GetMapping(value = "/addr/{addrId}")
     @Authentication(role = AuthAopConstant.USER)
     @ApiOperation(value = "[用户]查看指定地址的详细信息", notes = "返回单个地址")
     public ResponseEntity getAddr(@PathVariable(value = "addrId") int addrId) {
         ResponseEntity responseEntity = new ResponseEntity();
         Addr addr = addrService.getAddr(addrId);
         if (addr == null) {
-            responseEntity.error(Constant.FAILURE_CODE,"没有找到这个addr",null);
+            responseEntity.error(Constant.FAILURE_CODE, "没有找到这个addr", null);
         } else if (addr.getId() == 0) {
             responseEntity.error(-1, AddrCode.NO_SUCH_Addr, null);
         } else {
@@ -64,7 +66,7 @@ public class AddrController {
         return responseEntity;
     }
 
-    @PostMapping(value = "")
+    @PostMapping(value = "/addr")
     @Authentication(role = AuthAopConstant.USER)
     @ApiOperation(value = "[用户]增加用户接口信息", notes = "切记别上传id")
     public ResponseEntity add(@RequestBody Addr addr) {
@@ -103,7 +105,7 @@ public class AddrController {
         return responseEntity;
     }
 
-    @DeleteMapping(value = "/{addrId}")
+    @DeleteMapping(value = "/addr/{addrId}")
     @Authentication(role = AuthAopConstant.USER)
     @ApiOperation(value = "[用户]删除某条地址数据")
     public ResponseEntity delete(@PathVariable(value = "addrId") int addrId) {
@@ -119,4 +121,36 @@ public class AddrController {
         return responseEntity;
     }
 
+    @GetMapping(value = "/addrs")
+    @Authentication(role = AuthAopConstant.ADMIN)
+    @ApiOperation(value = "[admin]获取所有地址数据")
+    public ResponseEntity get(@RequestParam(value = "page", required = false, defaultValue = "0") Integer page) {
+        if (page < 1) {
+            page = 0;
+        }
+        Pageable pageable = PageRequest.of(page , 10);
+        ResponseEntity responseEntity = new ResponseEntity();
+        Page<Addr> addrs = addrService.addrs(pageable);
+        if (addrs == null) {
+            responseEntity.error(-1, "获取地址数据失败", null);
+        } else {
+            responseEntity.success(1, "操作成功", addrs);
+        }
+
+        return responseEntity;
+    }
+
+    @GetMapping(value = "/addrs/{userId}")
+    @Authentication(role = AuthAopConstant.ADMIN)
+    @ApiOperation(value = "[admin]获取指定用户地址数据")
+    public ResponseEntity addrs(@PathVariable(value = "userId") Integer userId) {
+        ResponseEntity responseEntity = new ResponseEntity();
+        List<Addr> addrs = addrService.myAddr(userId);
+        if (addrs == null) {
+            responseEntity.error(-1, "获取地址数据失败", null);
+        } else {
+            responseEntity.success(1, "操作成功", addrs);
+        }
+        return responseEntity;
+    }
 }

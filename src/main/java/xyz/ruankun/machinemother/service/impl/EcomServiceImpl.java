@@ -9,6 +9,7 @@ import xyz.ruankun.machinemother.repository.*;
 import xyz.ruankun.machinemother.service.EcomService;
 import xyz.ruankun.machinemother.util.Constant;
 
+import javax.annotation.Resource;
 import java.math.BigDecimal;
 import java.util.*;
 
@@ -25,7 +26,7 @@ public class EcomServiceImpl implements EcomService {
     WalletRepository walletRepository;
     @Autowired
     DecouponRepository decouponRepository;
-    @Autowired
+    @Resource
     OrderRepository orderRepository;
     @Autowired
     CreditRecordRepository creditRecordRepository;

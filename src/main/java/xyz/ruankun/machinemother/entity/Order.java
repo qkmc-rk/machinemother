@@ -1,15 +1,14 @@
 package xyz.ruankun.machinemother.entity;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
 import javax.persistence.*;
+import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 
 @Entity
 @Table(name = "mm_order")
-public class Order {
+public class Order implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer id;
@@ -36,6 +35,8 @@ public class Order {
     private BigDecimal credit;
     private Integer addrId;
     //transient props
+//    @OneToMany(mappedBy = "orderNumber")
+//    @JoinColumn(name = "ordernumber", referencedColumnName = "orderid")
     @Transient
     private List<Item> items;
     @Transient

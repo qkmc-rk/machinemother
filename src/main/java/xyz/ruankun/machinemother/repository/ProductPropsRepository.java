@@ -13,6 +13,9 @@ public interface ProductPropsRepository extends JpaRepository<ProductProps, Inte
 
     ProductProps findById(int id);
 
+    @Query(value = "select id, productid, servicedate, servicetime from mm_productprops where id=?1", nativeQuery = true)
+    ProductProps getById(int id);
+
     @Modifying
     @Transactional
     @Query(value = "delete from mm_productprops where productid=?1", nativeQuery = true)

@@ -46,54 +46,56 @@ public class AuthenticationAspect {
     UserRepository userRepository;
 
     @Pointcut(value = "@annotation(xyz.ruankun.machinemother.annotation.Authentication)")
-    public void pointcut() {}
+    public void pointcut() {
+    }
 
     /**
      * 与被注释方法正确返回之后执行
-     //* @param joinPoint 方法执行前的参数
-     //* @param result 方法返回值 后续观察，是否保存
+     * //* @param joinPoint 方法执行前的参数
+     * //* @param result 方法返回值 后续观察，是否保存
      */
     @AfterReturning(/*returning = "result",*/ value = "@annotation(xyz.ruankun.machinemother.annotation.Authentication)")
     public void after(/*JoinPoint joinPoint, Object result*/) {
         logger.info("refreshing token");
-        HttpServletRequest request = ((ServletRequestAttributes)RequestContextHolder
+        HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder
                 .getRequestAttributes()).getRequest();
         String token = request.getHeader("token");
         if (token != null && userInfoService.readDataFromRedis(token) != null) {
             //通过token获取id值更新token有效期
             int userId = Integer.valueOf(userInfoService.readDataFromRedis(token));
             String sessionKey = userInfoService.readDataFromRedis("session_key" + userId);
-            if (null == sessionKey){
+            if (null == sessionKey) {
                 //管理员是没有sessionkey的哟
-                adminService.updateSession(String.valueOf(userId),token,15);
-            }else
-                userInfoService.updateSession(userId,sessionKey, token,15);
+                adminService.updateSession(String.valueOf(userId), token, 15);
+            } else
+                userInfoService.updateSession(userId, sessionKey, token, 15);
             logger.info("refreshed token");
-        }else{
+        } else {
             logger.info("not refreshed token");
         }
     }
+
     @Around("pointcut() && @annotation(authentication)")
-    public  Object interceptor(ProceedingJoinPoint proceedingJoinPoint, Authentication authentication){
+    public Object interceptor(ProceedingJoinPoint proceedingJoinPoint, Authentication authentication) {
 
         boolean pass = authentication.pass();
         //要验证权限
         AuthAopConstant role = authentication.role();
-        if(pass && !role.equals(AuthAopConstant.ANON)){ // ！-> 不等于
+        if (pass && !role.equals(AuthAopConstant.ANON)) { // ！-> 不等于
             //通过拿到的role,我们可以知道能处理这个请求的角色是什么
             //如果是匿名者，直接放行，如果是用户，就需要用户的权限才行，管理员则需要管理员的角色才行
             //规定一致，token放在header中
-            HttpServletRequest request = ((ServletRequestAttributes)RequestContextHolder
+            HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder
                     .getRequestAttributes()).getRequest();
             String token = request.getHeader("token");
-            if(token == null){
+            if (token == null) {
                 //请求时没有token
                 //权限错误，返回错误
                 ResponseEntity responseEntity = new ResponseEntity();
                 responseEntity.success(Constant.AUTH_ERROR, "permission denied,forbidden access", null);
                 return responseEntity;
             }
-            AuthAopConstant realRole = authenticate(token);
+            AuthAopConstant realRole = authenticate(token, request.getRequestURI());
             if (realRole == role) {
                 //权限正确，去访问吧
                 try {
@@ -105,13 +107,13 @@ public class AuthenticationAspect {
                     logger.error("aop鉴权完成，但是程序执行出错");
                     return responseEntity;
                 }
-            }else{
+            } else {
                 //权限错误，返回错误
                 ResponseEntity responseEntity = new ResponseEntity();
                 responseEntity.success(Constant.AUTH_ERROR, "permission denied,forbidden access", null);
                 return responseEntity;
             }
-        }else{
+        } else {
             //不验证权限
             try {
                 return proceedingJoinPoint.proceed();
@@ -126,41 +128,43 @@ public class AuthenticationAspect {
 
     /**
      * 这个方法用于判断该token所属的到底是谁(管理员？ 用户？ 匿名？)
+     *
      * @param token
      * @return
      */
-    private AuthAopConstant authenticate(String token){
+    private AuthAopConstant authenticate(String token, String path) {
         String userId = null;
         try {
             userId = userInfoService.readDataFromRedis(token);
         } catch (Exception e) {
             e.printStackTrace();
             //读取userId错误(最大的可能是请求的header中没有token)，直接返回匿名错误
-            return  AuthAopConstant.ANON;
+            return AuthAopConstant.ANON;
         }
-        if(userId == null){
+        if (userId == null) {
             //匿名的或者说用户过期的，没有找到session
             return AuthAopConstant.ANON;
-        }else{
+        } else {
             Integer id;
             try {
                 id = Integer.parseInt(userId);
-                logger.info("userId:" + id);
             } catch (Exception e) {
                 e.printStackTrace();
                 //都抛出了异常了，这个userId是假的，直接匿名者
                 return AuthAopConstant.ANON;
             }
-            if(adminRepository.findById(id).isPresent()){
+            if (adminRepository.findById(id).isPresent()) {
                 //是管理员
+                logger.info("admin:" + id + ";path:" + path);
                 return AuthAopConstant.ADMIN;
-            }else{
-                if (userRepository.findById(id).isPresent()){
+            } else {
+                if (userRepository.findById(id).isPresent()) {
                     //是用户
+                    logger.info("user:" + id + ";path:" + path);
                     return AuthAopConstant.USER;
-                }else{
+                } else {
                     //没有发现它是用户，假的
-                   return AuthAopConstant.ANON;
+                    return AuthAopConstant.ANON;
                 }
             }
         }

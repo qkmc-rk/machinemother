@@ -31,10 +31,16 @@ public class Item {
     private Boolean isComment;
 
     //transient
+//    @OneToOne
+//    @JoinColumn(name = "id", referencedColumnName = "itemid", insertable = false, updatable = false)
     @Transient
     private Comment commentInfo;
+    //    @OneToOne
+//    @JoinColumn(name = "productid", referencedColumnName = "id", insertable = false, updatable = false)
     @Transient
     private Product product;
+    //    @OneToOne
+//    @JoinColumn(name = "productpropsid", referencedColumnName = "id", insertable = false, updatable = false)
     @Transient
     private ProductProps productProps;
 

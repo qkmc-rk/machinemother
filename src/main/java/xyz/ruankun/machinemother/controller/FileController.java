@@ -28,8 +28,16 @@ public class FileController {
     UserInfoService userInfoService;
 
     @PutMapping("/image")
-    @ApiOperation("[匿名]上传图片，不是图片的话就会返回不想得到的喔")
+    @ApiOperation("上传图片，不是图片的话就会返回不想得到的喔")
         public ResponseEntity uploadFile(@RequestParam String token, @RequestParam MultipartFile image){
+        if (userInfoService.readDataFromRedis(token) == null ||userInfoService.readDataFromRedis(token).equals(""))
+            return getTrueOrFalseResult(false);
+        return  getDataResult(QiNiuFileUtil.uploadImageToQiNiu(image));
+    }
+
+    @PostMapping("/image")
+    @ApiOperation("上传图片，不是图片的话就会返回不想得到的喔")
+    public ResponseEntity uploadFileByPost(@RequestParam String token, @RequestParam MultipartFile image){
         if (userInfoService.readDataFromRedis(token) == null ||userInfoService.readDataFromRedis(token).equals(""))
             return getTrueOrFalseResult(false);
         return  getDataResult(QiNiuFileUtil.uploadImageToQiNiu(image));

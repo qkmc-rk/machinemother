@@ -3,6 +3,9 @@ package xyz.ruankun.machinemother.util;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.springframework.beans.factory.annotation.Value;
 
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 /**
  * MD5通用类
  *
@@ -14,6 +17,9 @@ public class MD5Util {
 
     @Value("${md5util.key}")
     private static String key;
+
+    @Value("${machinemother.phone.regex")
+    private static String regex;
 
     /**
      * MD5方法
@@ -65,4 +71,14 @@ public class MD5Util {
         return str;
     }
 
+    /**
+     * 手机号正则判断
+     * @param phone
+     * @return
+     */
+    public static Boolean parsePhone(String phone){
+        Pattern pattern = Pattern.compile(regex);
+        Matcher matcher = pattern.matcher(phone);
+        return matcher.matches()&& (phone.length()==11);
+    }
 }

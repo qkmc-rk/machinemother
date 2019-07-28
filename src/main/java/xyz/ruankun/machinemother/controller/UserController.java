@@ -15,6 +15,7 @@ import xyz.ruankun.machinemother.entity.User;
 import xyz.ruankun.machinemother.repository.OrderRepository;
 import xyz.ruankun.machinemother.service.UserInfoService;
 import xyz.ruankun.machinemother.util.Constant;
+import xyz.ruankun.machinemother.util.MD5Util;
 import xyz.ruankun.machinemother.util.code.UserCode;
 import xyz.ruankun.machinemother.util.constant.AuthAopConstant;
 import xyz.ruankun.machinemother.vo.ResponseEntity;
@@ -116,25 +117,25 @@ public class UserController {
     /**
      * 获取所有用户信息
      *
-     * @param page   page.range(0, maxSize);
-     * @param size
-     * @param column
-     * @param sort
+     * @param page page.range(0, maxSize);
      * @return
      */
-    @GetMapping(value = {"", "/all", "/"})
+    @GetMapping(value = "/all")
     @Authentication(role = AuthAopConstant.ADMIN)
     @ApiOperation(value = "[管理员]获取所有用户信息", notes = "传入请求的用户所需的相关分页数据，page取值范围为(0,length-1),默认按照id排序")
-    public ResponseEntity getUsers(@ApiParam(value = "页号") @RequestParam(value = "page", defaultValue = "0") int page, @RequestParam(value = "size") Integer size,
+    public ResponseEntity getUsers(@ApiParam(value = "页号") @RequestParam(value = "page", defaultValue = "0") Integer page/*, @RequestParam(value = "size") Integer size,
                                    @ApiParam(value = "排序所需的列名") @RequestParam(value = "column", required = false, defaultValue = "id") String column,
-                                   @ApiParam(value = "排序方式") @RequestParam(value = "sort", required = false, defaultValue = "true") Boolean sort) {
+                                   @ApiParam(value = "排序方式") @RequestParam(value = "sort", required = false, defaultValue = "true") Boolean sort*/) {
         ResponseEntity responseEntity = new ResponseEntity();
-        Pageable pageable = pageable(page, size, column, sort);
+//        Pageable pageable = pageable(page, size, column, sort);
+        if (page < 1) {
+            page = 1;
+        }
+        Pageable pageable = PageRequest.of(page - 1, 10);
         Page<User> users = userInfoService.getAll(pageable);
-        if (users.getTotalPages() < page) {
-//            responseEntity.error(UserCode.ERROR_PARAMS, UserCode.INVALID_DATA, null);
+        if (users == null) {
             responseEntity.serverError();
-        } else {
+        } else{
             responseEntity.success(users);
         }
         return responseEntity;
@@ -223,32 +224,32 @@ public class UserController {
             int userId = Integer.valueOf(userInfoService.readDataFromRedis(token));
             User user = userInfoService.getUser(userId);
             //获取order信息
-            List<Order> orders = orderRepository.findByUserIdAndIsDelete(userId,false);
-            Map<String,Integer> ordersNum = new HashMap<>();
+            List<Order> orders = orderRepository.findByUserIdAndIsDelete(userId, false);
+            Map<String, Integer> ordersNum = new HashMap<>();
             int daifukuan = 0;
             int yifukuan = 0;
             int yiwancheng = 0;
             for (Order o :
                     orders) {
-                if (!o.getIsDelete()){//未被删除
-                    if (!o.getIsCancle()){//未被取消
+                if (!o.getIsDelete()) {//未被删除
+                    if (!o.getIsCancle()) {//未被取消
                         //三态    待付款  已付款  已完成
-                        if (!o.getIsPaid()){
+                        if (!o.getIsPaid()) {
                             //待付款
                             daifukuan++;
-                        }else if (o.getIsPaid() && !o.getIsFinished()){
+                        } else if (o.getIsPaid() && !o.getIsFinished()) {
                             //已付款
                             yifukuan++;
-                        }else if (o.getIsFinished() && o.getIsPaid()){
+                        } else if (o.getIsFinished() && o.getIsPaid()) {
                             //已完成
                             yiwancheng++;
                         }
                     }
                 }
             }
-            ordersNum.put("daifukuan",daifukuan);
-            ordersNum.put("yifukuan",yifukuan);
-            ordersNum.put("yiwancheng",yiwancheng);
+            ordersNum.put("daifukuan", daifukuan);
+            ordersNum.put("yifukuan", yifukuan);
+            ordersNum.put("yiwancheng", yiwancheng);
             user.setExtras(ordersNum);
 
             if (user.getId() == 0) {
@@ -368,6 +369,10 @@ public class UserController {
         //做一个手机号码验证
         ResponseEntity responseEntity = new ResponseEntity();
         User user = userInfoService.getUser(userId);
+        if (!MD5Util.parsePhone(phone)) {
+            responseEntity.error(-1, "非法手机号", null);
+            return responseEntity;
+        }
         if (user != null && user.getId().equals(0)) {
             responseEntity.error(-1, "用户不存在", null);
         } else if (user == null) {
@@ -409,16 +414,19 @@ public class UserController {
         return responseEntity;
     }
 
-    private Pageable pageable(int page, int size, String column, Boolean sort) {
-        if (column == null) {
-            return PageRequest.of(page, size);
-        } else {
-            //如果sort为真则从小到大
-            if (sort) {
-                return PageRequest.of(page, size, Sort.Direction.ASC, column);
-            } else {
-                return PageRequest.of(page, size, Sort.Direction.DESC, column);
-            }
-        }
-    }
+    /**
+     * 都是用默认排序  Jason   2019-07-28
+     */
+//    private Pageable pageable(int page, int size, String column, Boolean sort) {
+//        if (column == null) {
+//            return PageRequest.of(page, size);
+//        } else {
+//            //如果sort为真则从小到大
+//            if (sort) {
+//                return PageRequest.of(page, size, Sort.Direction.ASC, column);
+//            } else {
+//                return PageRequest.of(page, size, Sort.Direction.DESC, column);
+//            }
+//        }
+//    }
 }

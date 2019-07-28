@@ -28,6 +28,7 @@ public class QiNiuFileUtil {
     private static String accessKey;
     private static String secretKey;
     private static String dns;
+    private static String dns2;
 
     /**
      * 加载七牛云的配置文件
@@ -41,6 +42,7 @@ public class QiNiuFileUtil {
             accessKey = properties.getProperty("accessKey");
             secretKey = properties.getProperty("secretKey");
             dns = properties.getProperty("dns");
+            dns2 = properties.getProperty("dns2");
         } catch (IOException e) {
             logger.error("qiniu cloud load properties[name:qiniuyun.properties] in classpath failed.");
             e.printStackTrace();
@@ -77,6 +79,42 @@ public class QiNiuFileUtil {
         }
         logger.info("请求时发生了错误信息");
         return null;
+    }
+
+    /**
+     * qrcode需要使用https
+     * @param inputStream
+     * @param key
+     * @return
+     */
+    public static String uploadQrCodeToQiNiu(InputStream inputStream,String key){
+
+        if(inputStream == null){
+            logger.info("传入的图片二进制流不存在忽略上传过程");
+            return null;
+        }
+        //zone0表示华东区域，该bucket在华东
+        Configuration configuration = new Configuration(Zone.zone0());
+        UploadManager uploadManager = new UploadManager(configuration);
+        String bucket = "public";
+        Auth auth = Auth.create(accessKey, secretKey);
+        String upToken = auth.uploadToken(bucket);
+        //System.out.println(upToken);
+        try {
+            Response response = uploadManager.put(inputStream,key,upToken,null,null);
+            DefaultPutRet putRet = new Gson().fromJson(response.bodyString(), DefaultPutRet.class);
+            System.out.println(putRet.key);
+            System.out.println(putRet.hash);
+            return getDns2() + "/" + putRet.key;
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        logger.info("请求时发生了错误信息");
+        return null;
+    }
+
+    public static String getDns2() {
+        return dns2;
     }
 
     public static String getDns(){

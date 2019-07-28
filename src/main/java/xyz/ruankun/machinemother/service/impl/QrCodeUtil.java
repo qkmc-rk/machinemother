@@ -57,7 +57,7 @@ public class QrCodeUtil {
                 return (map);
             }
 
-            String imgUrl = QiNiuFileUtil.uploadToQiNiu(inputStream, MD5Util.md5(new Date().toString()) + ".png");
+            String imgUrl = QiNiuFileUtil.uploadQrCodeToQiNiu(inputStream, MD5Util.md5(new Date().toString()) + ".png");
             if (imgUrl == null){
                 map.put("error","图片上传失败了,七牛云文件助手返回了NULL值");
                 return (map);

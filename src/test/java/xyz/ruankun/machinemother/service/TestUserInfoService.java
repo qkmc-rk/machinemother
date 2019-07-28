@@ -9,7 +9,9 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.transaction.annotation.Transactional;
+import xyz.ruankun.machinemother.entity.Order;
 import xyz.ruankun.machinemother.entity.User;
+import xyz.ruankun.machinemother.repository.OrderRepository;
 import xyz.ruankun.machinemother.repository.UserRepository;
 import xyz.ruankun.machinemother.util.MD5Util;
 
@@ -35,6 +37,8 @@ public class TestUserInfoService {
 
     @Resource
     UserRepository userRepository;
+    @Resource
+    OrderRepository orderRepository;
 
     @Test
     public void m1() {
@@ -43,39 +47,8 @@ public class TestUserInfoService {
 
     @Test
     public void Jason0603() {
-        User user = new User();
-        user.setOpenId("1234567890");
-        user.setName("Rothschild");
-        user.setGmtCreate(new Date());
-        user.setIntegration(integration);
-        user.setInvitorId(invitor);
-        user.setAward(6.0);
-        user.setAvator("/image/Rothschild");
-        user.setPhone("12345654321");
-        user.setWxId("Rothschild");
-        user.setGmtModified(new Date());
-        userRepository.save(user);
-
-//        PageRequest pageable = PageRequest.of(10, 4, Sort.Direction.DESC, "id");
-//        /**
-//         * 输出所有数据
-//         */
-//        for (User user1 : userRepository.findAll(pageable)) {
-//            System.out.println(user1);
-//            System.out.println("---------------------------------------------------------------------------");
-//        }
-//
-//        Page<User> users = userRepository.findByNameLike("%R%", pageable);
-//        System.out.println(users.getTotalElements());
-//        System.out.println(users.getTotalPages());
-//        System.out.println(users.getNumber());
-//        System.out.println(users.getSize());
-//        for (User user1 : users) {
-//
-//            System.out.println(user1 + "================== ");
-//        }
-//        System.out.println(users);
-
+        Order order = orderRepository.findById(5126);
+        System.out.println(order);
     }
 
     @Test

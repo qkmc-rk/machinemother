@@ -58,7 +58,7 @@ public class QiNiuFileUtil {
     public static String uploadToQiNiu(InputStream inputStream,String key){
 
         if(inputStream == null){
-            logger.info("传入的图片二进制流不存在，忽略上传过程");
+            logger.info("传入的图片二进制流不存在,忽略上传过程");
             return null;
         }
         //zone0表示华东区域，该bucket在华东
@@ -87,10 +87,10 @@ public class QiNiuFileUtil {
      * @param key
      * @return
      */
-    public static String uploadQrCodeToQiNiu(InputStream inputStream,String key){
+    public static String uploadToQiNiuWithHttps(InputStream inputStream,String key){
 
         if(inputStream == null){
-            logger.info("传入的图片二进制流不存在忽略上传过程");
+            logger.info("传入的图片二进制流不存在, 忽略上传过程");
             return null;
         }
         //zone0表示华东区域，该bucket在华东
@@ -145,6 +145,23 @@ public class QiNiuFileUtil {
         }
         String tail = getTail(file.getOriginalFilename());
         return uploadToQiNiu(inputStream,MD5Util.md5(new Date().toString()) + tail);
+    }
+
+    /**
+     * 获取图片时使用https
+     * @param file
+     * @return
+     */
+    public static String uploadImageToQiNiuWithHttps(MultipartFile file){
+        InputStream inputStream = null;
+        try {
+            inputStream = file.getInputStream();
+        } catch (IOException e) {
+            e.printStackTrace();
+            return null;
+        }
+        String tail = getTail(file.getOriginalFilename());
+        return uploadToQiNiuWithHttps(inputStream,MD5Util.md5(new Date().toString()) + tail);
     }
 
     /**

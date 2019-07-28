@@ -126,3 +126,4 @@
 
 ### 7月28日
 - 修改qrcode通过https获取
+- 修改qrcode template通过https获取

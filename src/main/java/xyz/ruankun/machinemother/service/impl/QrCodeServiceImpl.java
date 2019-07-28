@@ -128,7 +128,7 @@ public class QrCodeServiceImpl implements QrCodeService {
     public Boolean putTemplate(MultipartFile img, Integer... id) {
         //第一步上传到七牛云
         String imgPath;
-        imgPath = QiNiuFileUtil.uploadImageToQiNiu(img);
+        imgPath = QiNiuFileUtil.uploadImageToQiNiuWithHttps(img);
         if (imgPath == null){
             logger.info("上传到七牛云出现错误");
             return false;

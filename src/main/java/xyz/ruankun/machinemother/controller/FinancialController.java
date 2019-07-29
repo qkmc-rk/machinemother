@@ -101,6 +101,7 @@ public class FinancialController {
     }
 
     //管理员确认订单
+    @Deprecated
     @Authentication(role = AuthAopConstant.ADMIN)
     @PostMapping("/order/{orderid}")
     @ApiOperation(value = "[管理员]管理员确认订单")

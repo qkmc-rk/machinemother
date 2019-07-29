@@ -13,6 +13,7 @@ import xyz.ruankun.machinemother.annotation.Authentication;
 import xyz.ruankun.machinemother.entity.Order;
 import xyz.ruankun.machinemother.entity.User;
 import xyz.ruankun.machinemother.repository.OrderRepository;
+import xyz.ruankun.machinemother.service.EconService;
 import xyz.ruankun.machinemother.service.UserInfoService;
 import xyz.ruankun.machinemother.util.Constant;
 import xyz.ruankun.machinemother.util.MD5Util;
@@ -35,7 +36,7 @@ public class UserController {
     UserInfoService userInfoService;
 
     @Autowired
-    OrderRepository orderRepository;
+    EconService econService;
 
     /**
      * 用户登录方法
@@ -120,7 +121,7 @@ public class UserController {
      * @param page page.range(0, maxSize);
      * @return
      */
-    @GetMapping(value = "/all")
+    @GetMapping(value = {"/all", "", "/"})
     @Authentication(role = AuthAopConstant.ADMIN)
     @ApiOperation(value = "[管理员]获取所有用户信息", notes = "传入请求的用户所需的相关分页数据，page取值范围为(0,length-1),默认按照id排序")
     public ResponseEntity getUsers(@ApiParam(value = "页号") @RequestParam(value = "page", defaultValue = "0") Integer page/*, @RequestParam(value = "size") Integer size,
@@ -135,7 +136,7 @@ public class UserController {
         Page<User> users = userInfoService.getAll(pageable);
         if (users == null) {
             responseEntity.serverError();
-        } else{
+        } else {
             responseEntity.success(users);
         }
         return responseEntity;
@@ -224,7 +225,7 @@ public class UserController {
             int userId = Integer.valueOf(userInfoService.readDataFromRedis(token));
             User user = userInfoService.getUser(userId);
             //获取order信息
-            List<Order> orders = orderRepository.findByUserIdAndIsDelete(userId, false);
+            List<Order> orders = econService.getOrders(userId);
             Map<String, Integer> ordersNum = new HashMap<>();
             int daifukuan = 0;
             int yifukuan = 0;

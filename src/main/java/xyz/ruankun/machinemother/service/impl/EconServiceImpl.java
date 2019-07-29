@@ -48,7 +48,6 @@ public class EconServiceImpl implements EconService {
     private Integer invitorGetCreditNum;
 
 
-
     @Resource
     private OrderRepository orderRepository;
 
@@ -178,13 +177,21 @@ public class EconServiceImpl implements EconService {
      * @return
      */
     @Override
-    @Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
+    @Transactional
     public Order getOrder(int id) {
         try {
             Order order = orderRepository.findByIdAndIsDelete(id, false);
             if (order == null) {
                 order = new Order();
                 order.setId(0);
+            } else {
+                //若本单未支付且未取消，创建时间已过30分钟则自动取消
+                if (!order.getIsPaid() && !order.getIsCancle() &&
+                        order.getGmtCreate().getTime() <= System.currentTimeMillis() - 1000 * 60 * 30) {
+                    order.setIsCancle(true);
+                    order.setGmtModified(new Date());
+                    orderRepository.save(order);
+                }
             }
             return setOrderOfCommentProductPropsProductInfo(order);
         } catch (Exception e) {
@@ -215,7 +222,7 @@ public class EconServiceImpl implements EconService {
         Order order = getOrder(OrderId);
         if (order.getId() != 0) {
             if (userId.equals(order.getUserId())) {
-                if (!order.getIsCancle() && !order.getIsPaid()&&!order.getIsDelete()) {
+                if (!order.getIsCancle() && !order.getIsPaid() && !order.getIsDelete()) {
                     order.setIsCancle(true);
                     return DataCode.DATA_OPERATION_SUCCESS;
                 }
@@ -231,16 +238,30 @@ public class EconServiceImpl implements EconService {
         List<Order> orders = orderRepository.findByUserIdAndIsDelete(userId, false);
         if (orders == null) return null;
         List<Order> orders1 = new ArrayList<>();
-        for (Order order :
-                orders) {
+        for (Order order : orders) {
+            if (!order.getIsPaid() && !order.getIsCancle() &&
+                    order.getGmtCreate().getTime() <= System.currentTimeMillis() - 1000 * 60 * 30) {
+                order.setIsCancle(true);
+                order.setGmtModified(new Date());
+                orderRepository.save(order);
+            }
             orders1.add(setOrderOfCommentProductPropsProductInfo(order));
         }
         return orders1;
     }
 
     @Override
+    @Transactional
     public Page<Order> getOrders(Pageable pageable) {
         Page<Order> orders = orderRepository.findAll(pageable);
+        for (Order order : orders) {
+            if (!order.getIsPaid() && !order.getIsCancle() &&
+                    order.getGmtCreate().getTime() <= System.currentTimeMillis() - 1000 * 60 * 30) {
+                order.setIsCancle(true);
+                order.setGmtModified(new Date());
+                orderRepository.save(order);
+            }
+        }
         return orders;
     }
 
@@ -476,9 +497,9 @@ public class EconServiceImpl implements EconService {
                 }
                 */
                 User user = userRepository.findById(order.getUserId().intValue());
-                if (user != null && user.getInvitorId() != null){
+                if (user != null && user.getInvitorId() != null) {
                     logger.info("判断是否是新用户下单...");
-                    if (!user.getOrdered()){
+                    if (!user.getOrdered()) {
                         logger.info("是新用户...");
                         Integer invitorId = user.getInvitorId();
                         logger.info("用户ID：" + user.getId() + ",邀请者ID：" + user.getInvitorId());
@@ -490,7 +511,7 @@ public class EconServiceImpl implements EconService {
                         addCommissionCreditToUser(amount, invitorGetCreditNum, invitorId);
                         user.setOrdered(true);
                         userRepository.saveAndFlush(user);
-                    }else {
+                    } else {
                         logger.info("不是新用户...");
                     }
                 }
@@ -500,7 +521,7 @@ public class EconServiceImpl implements EconService {
                 System.out.println("this order is not the status : paid && !cancel && !finished");
                 return false;
             }
-        } else{
+        } else {
             System.out.println("没有找到orderSecret");
             return false;
         }
@@ -546,6 +567,8 @@ public class EconServiceImpl implements EconService {
         if (order == null) {
             System.out.println("传入的order为空，不能为order设置comment product等相关信息");
             return null;
+        } else if (order.getId() == 0) {
+            return order;
         }
         //第一步，设置indentStatus
         Boolean paid = order.getIsPaid();
@@ -600,6 +623,7 @@ public class EconServiceImpl implements EconService {
 
     /**
      * 顺带增加积分
+     *
      * @param commissionAmount
      * @param creditAmount
      * @param userId
@@ -608,7 +632,7 @@ public class EconServiceImpl implements EconService {
     public Boolean addCommissionCreditToUser(BigDecimal commissionAmount, Integer creditAmount, Integer userId) {
         logger.info("这是一个增加邀请者的佣金和积分的方法, 开始执行....");
         Wallet wallet = walletRepository.findByUserId(userId);
-        if (wallet == null){
+        if (wallet == null) {
             logger.error("没有找到邀请者的钱包信息");
             return false;
         }
@@ -643,45 +667,47 @@ public class EconServiceImpl implements EconService {
             return false;
         }
     }
+
     /**
      * 该方法计算出邀请者该获得多少佣金
+     *
      * @param invitorId
      * @param amount
      * @return
      */
-    BigDecimal generateCommissionNum(Integer invitorId, BigDecimal amount){
+    BigDecimal generateCommissionNum(Integer invitorId, BigDecimal amount) {
         BigDecimal commission = new BigDecimal(0);
         List<User> fans = userRepository.findByInvitorId(invitorId);
         List<User> fansOfThisMonth = new ArrayList<>();
-        if (!fans.isEmpty()){
+        if (!fans.isEmpty()) {
             //获取本月是多少月
             Month month = LocalDate.now().getMonth();
             //获得这个月邀请的粉丝
             for (User u :
                     fans) {
                 //这个月以内的才算
-                if ((u.getGmtCreate().getMonth() +1) == month.getValue()){
+                if ((u.getGmtCreate().getMonth() + 1) == month.getValue()) {
                     fansOfThisMonth.add(u);
                 }
             }
             //计算出粉丝数目
             int fansNum = fansOfThisMonth.size();
             //判断会员等级
-            if (fansNum > 0 && fansNum <= level1Exp){
+            if (fansNum > 0 && fansNum <= level1Exp) {
                 //等级1的邀请者
-                commission = commission.add(amount.multiply(new BigDecimal(((float)level1Ratio)/100.0)));
-            }else if(fansNum > level1Exp && fansNum <= level2Exp){
+                commission = commission.add(amount.multiply(new BigDecimal(((float) level1Ratio) / 100.0)));
+            } else if (fansNum > level1Exp && fansNum <= level2Exp) {
                 //等级2的邀请者
-                commission = commission.add(amount.multiply(new BigDecimal(((float)level2Ratio)/100.0)));
-            }else if(fansNum > level2Exp){
+                commission = commission.add(amount.multiply(new BigDecimal(((float) level2Ratio) / 100.0)));
+            } else if (fansNum > level2Exp) {
                 //等级3的邀请者
-                commission = commission.add(amount.multiply(new BigDecimal(((float)level3Ratio)/100.0)));
-            }else{
+                commission = commission.add(amount.multiply(new BigDecimal(((float) level3Ratio) / 100.0)));
+            } else {
                 logger.error("光棍一个,没有粉丝的人!");
                 return null;
             }
             return commission;
-        }else{
+        } else {
             logger.error("老光棍，没有粉丝!");
             return commission;
         }

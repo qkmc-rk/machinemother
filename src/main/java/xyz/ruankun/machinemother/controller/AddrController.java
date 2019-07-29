@@ -129,7 +129,7 @@ public class AddrController {
         return responseEntity;
     }
 
-    @GetMapping(value = "/addrs")
+//    @GetMapping(value = "/addrs")
     @Authentication(role = AuthAopConstant.ADMIN)
     @ApiOperation(value = "[admin]获取所有地址数据")
     public ResponseEntity get(@RequestParam(value = "page", required = false, defaultValue = "0") Integer page) {
@@ -163,7 +163,7 @@ public class AddrController {
         return responseEntity;
     }
 
-    @GetMapping(value = "/addrs/{userId}")
+//    @GetMapping(value = "/addrs/{userId}")
     @Authentication(role = AuthAopConstant.ADMIN)
     @ApiOperation(value = "[admin]获取指定用户地址数据")
     public ResponseEntity addrs(@PathVariable(value = "userId") Integer userId) {

@@ -127,3 +127,7 @@
 ### 7月28日
 - 修改qrcode通过https获取
 - 修改qrcode template通过https获取
+### 7月29日
+- 新增decoupon和cdkey的定时扫描任务
+- 修改由cdkey兑换的优惠券的默认有效期及时间范围
+- 新增获取order时的过期检测动作及order支付限时操作，规定时间内(30minutes)未付款则自动取消order

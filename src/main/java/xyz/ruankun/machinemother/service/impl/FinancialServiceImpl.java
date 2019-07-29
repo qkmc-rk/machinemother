@@ -285,6 +285,7 @@ public class FinancialServiceImpl implements FinancialService {
 
     }
 
+    @Transactional
     @Override
     public Map<String, String> getPrepayInfo(Integer orderid, Integer userid, HttpServletRequest request) {
         Map<String, String> rs = new HashMap<>();
@@ -294,6 +295,14 @@ public class FinancialServiceImpl implements FinancialService {
             rs.put("error", "错误,没有找到符合的订单");
         }
         Order order = orderRepository.findByIdAndIsDelete(orderid, false);
+        //校验order是否过期
+        if (!order.getIsPaid() && !order.getIsCancle() &&
+                order.getGmtCreate().getTime() <= System.currentTimeMillis() - 1000 * 60 * 30) {
+            order.setIsCancle(true);
+            order.setGmtModified(new Date());
+            orderRepository.save(order);
+        }
+
         if (userid.intValue() != order.getUserId().intValue()) {
             rs.put("error", "错误,订单存在，但不是该用户的订单");
         }
@@ -809,14 +818,21 @@ public class FinancialServiceImpl implements FinancialService {
      * 用于把复制对象
      * 这是一种低效率的方法，
      * 可以使用cglib的属性复制器
+     * 7.29     Jason修改有效期时间
      *
      * @param decouponCDKey
      */
     private Decoupon getDecouponWithDecouponCDKey(DecouponCDKey decouponCDKey, Integer userid) {
         Decoupon decoupon = new Decoupon();
-        decoupon.setGmtCreate(new Date());
+        //开始日期
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(Calendar.HOUR, 0);
+        calendar.set(Calendar.MINUTE, 0);
+        calendar.set(Calendar.SECOND, 0);
+        decoupon.setGmtCreate(calendar.getTime());
         //有效期
-        decoupon.setGmtPast(new Date(decoupon.getGmtCreate().getTime() + 1000 * 60 * 60 * 24 * 3));
+        calendar.set(Calendar.DATE, calendar.get(Calendar.DATE) + 3);
+        decoupon.setGmtPast(calendar.getTime());
         decoupon.setFromexchange(true);
         decoupon.setMin(decouponCDKey.getMin());
         decoupon.setPast(decouponCDKey.isPast());
@@ -826,14 +842,19 @@ public class FinancialServiceImpl implements FinancialService {
         return decoupon;
     }
 
+    //todo 兑换优惠券规范
     private DecouponCDKey getDecouponCDKeyWithDecoupon(Decoupon decoupon) {
         DecouponCDKey decouponCDKey = new DecouponCDKey();
         decouponCDKey.setCdkey(MD5Util.md5(MD5Util.randStr()));
         decouponCDKey.setExchanged(false);
-        decouponCDKey.setGmtCreate(new Date());
+
+        Calendar calendar = Calendar.getInstance();
+
+        decouponCDKey.setGmtCreate(calendar.getTime());
         decouponCDKey.setWorth(decoupon.getWorth());
         decouponCDKey.setMin(decoupon.getMin());
         decouponCDKey.setPast(false);
+
         decouponCDKey.setGmtPast(decoupon.getGmtPast());
         return decouponCDKey;
     }

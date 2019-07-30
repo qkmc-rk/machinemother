@@ -55,7 +55,7 @@ public class MysqlDumpJob {
             }
             String result = sb.toString();
             //获得结果再说
-            System.out.println(result);
+            System.out.println("输出结果:" + result);
         } catch (IOException | InterruptedException e) {
             e.printStackTrace();
             logger.error("执行命令时发生了未知异常，请参照异常 ↓");

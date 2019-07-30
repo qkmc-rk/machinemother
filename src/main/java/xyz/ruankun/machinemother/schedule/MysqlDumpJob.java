@@ -58,7 +58,8 @@ public class MysqlDumpJob {
             System.out.println(result);
         } catch (IOException | InterruptedException e) {
             e.printStackTrace();
-            logger.error("执行命令时发生了未知异常，请参照上述异常 ↑");
+            logger.error("执行命令时发生了未知异常，请参照异常 ↓");
+            logger.error(e.getMessage());
         }
         logger.info("备份数据库完成");
         //备份完成后进行邮件发送

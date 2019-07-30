@@ -39,7 +39,7 @@ public class MysqlDumpJob {
 
     private Logger logger = LoggerFactory.getLogger(MysqlDumpJob.class);
 
-    @Scheduled(cron = "0 0/1 * * * ?")
+    @Scheduled(cron = "40 0 0 * * ?")
     public void mysqlDump(){
         logger.info("开始备份数据库");
         //String shellPath = "/root/mysqldump.sh";

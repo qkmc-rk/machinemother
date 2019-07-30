@@ -18,6 +18,8 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.ArrayList;
+import java.util.List;
 
 @Component
 @EnableScheduling
@@ -50,10 +52,11 @@ public class MysqlDumpJob {
             BufferedReader br = new BufferedReader(new InputStreamReader(process.getInputStream()));
             StringBuffer sb = new StringBuffer();
             String line = null;
+            List<String> strs = new ArrayList<>();
             while ((line = br.readLine()) != null) {
-                //只取最一行
+                strs.add(line);
             }
-            sb.append(line);
+            sb.append(strs.get(strs.size() - 1));
             String result = sb.toString();
             //获得结果再说
             logger.info("输出结果:" + result);

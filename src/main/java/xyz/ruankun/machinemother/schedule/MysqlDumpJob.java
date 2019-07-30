@@ -4,7 +4,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.core.io.ClassPathResource;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
@@ -25,9 +24,9 @@ import java.io.InputStreamReader;
 public class MysqlDumpJob {
 
     @Value("${spring.mail.username}")
-    private static String from;
+    private String from;
     @Value("${spring.mail.receiver}")
-    private static String usermail;
+    private String usermail;
 
     @Autowired
     private JavaMailSender mailSender;
@@ -41,7 +40,8 @@ public class MysqlDumpJob {
     @Scheduled(cron = "0 0/1 * * * ?")
     public void mysqlDump(){
         logger.info("开始备份数据库");
-        String shellPath = "/root/mysqldump.sh";
+        //String shellPath = "/root/mysqldump.sh";
+        String shellPath = "/Users/ruan/mysqldump.sh";
         try {
             Process process = Runtime.getRuntime().exec(shellPath);
 
@@ -56,14 +56,16 @@ public class MysqlDumpJob {
             String result = sb.toString();
             //获得结果再说
             System.out.println("输出结果:" + result);
+            //备份完成后进行邮件发送
+            String path = "/Users/ruan/Desktop/";
+            doSendDataBase(result);
         } catch (IOException | InterruptedException e) {
             e.printStackTrace();
             logger.error("执行命令时发生了未知异常，请参照异常 ↓");
             logger.error(e.getMessage());
         }
         logger.info("备份数据库完成");
-        //备份完成后进行邮件发送
-        //doSendDataBase("");
+
 
     }
 

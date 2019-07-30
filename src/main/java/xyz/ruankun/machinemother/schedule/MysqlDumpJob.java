@@ -49,10 +49,11 @@ public class MysqlDumpJob {
 
             BufferedReader br = new BufferedReader(new InputStreamReader(process.getInputStream()));
             StringBuffer sb = new StringBuffer();
-            String line;
+            String line = null;
             while ((line = br.readLine()) != null) {
-                sb.append(line).append("\n");
+                //只取最一行
             }
+            sb.append(line);
             String result = sb.toString();
             //获得结果再说
             logger.info("输出结果:" + result);

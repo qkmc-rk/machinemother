@@ -55,9 +55,8 @@ public class MysqlDumpJob {
             }
             String result = sb.toString();
             //获得结果再说
-            System.out.println("输出结果:" + result);
+            logger.info("输出结果:" + result);
             //备份完成后进行邮件发送
-            String path = "/Users/ruan/Desktop/";
             doSendDataBase(result);
         } catch (IOException | InterruptedException e) {
             e.printStackTrace();

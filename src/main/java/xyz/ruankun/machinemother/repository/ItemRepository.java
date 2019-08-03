@@ -12,6 +12,10 @@ import java.util.List;
 public interface ItemRepository extends JpaRepository<Item, Integer> {
     List<Item> findAllByOrderNumber(String orderNumber);
 
+    List<Item> findAllByProductId(Integer productId);
+
+    Integer countByProductIdIsAndOrderNumberIsNotNull(Integer productId);
+
     List<Item> findByUserId(Integer userId);
 
     List<Item> findByUserIdAndOrderNumber(int userId, String orderNumber);

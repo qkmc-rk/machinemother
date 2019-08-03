@@ -36,6 +36,18 @@ public class Product {
     @Column(name = "is_visible")
     private Boolean isVisible;
 
+    @Transient
+    //这是销量
+    private Integer soldNumber;
+
+    public Integer getSoldNumber() {
+        return soldNumber;
+    }
+
+    public void setSoldNumber(Integer soldNumber) {
+        this.soldNumber = soldNumber;
+    }
+
     public Boolean getIsVisible() {
         return isVisible;
     }

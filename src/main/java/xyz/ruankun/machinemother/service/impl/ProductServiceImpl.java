@@ -4,9 +4,11 @@ import org.apache.tomcat.jni.Local;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import xyz.ruankun.machinemother.entity.DictProductType;
+import xyz.ruankun.machinemother.entity.Item;
 import xyz.ruankun.machinemother.entity.Product;
 import xyz.ruankun.machinemother.entity.ProductProps;
 import xyz.ruankun.machinemother.repository.DictProductTypeRepository;
+import xyz.ruankun.machinemother.repository.ItemRepository;
 import xyz.ruankun.machinemother.repository.ProductPropsRepository;
 import xyz.ruankun.machinemother.repository.ProductRepository;
 import xyz.ruankun.machinemother.service.ProductService;
@@ -31,6 +33,9 @@ public class ProductServiceImpl implements ProductService {
 
     @Resource
     private DictProductTypeRepository dictProductTypeRepository;
+
+    @Resource
+    private ItemRepository itemRepository;
 
     @Transactional
     @Override
@@ -57,6 +62,20 @@ public class ProductServiceImpl implements ProductService {
             if (product == null) {
                 product = new Product();
                 product.setId(0);
+            }else{
+                //真正地找到了product，找到product后还要找到对应的销量
+                //销量在item中orderNum不为空的数量
+                Integer productId = product.getId();
+                if (productId != null && productId.intValue() > 0){
+                    //存在定律
+                    try {
+                        Integer count = itemRepository.countByProductIdIsAndOrderNumberIsNotNull(productId);
+                        product.setSoldNumber(count);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                        product.setSoldNumber(0);
+                    }
+                }
             }
             return product;
         } catch (Exception e) {

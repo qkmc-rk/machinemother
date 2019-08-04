@@ -1,22 +1,14 @@
 package xyz.ruankun.machinemother.service.impl;
 
-import org.apache.tomcat.jni.Local;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import xyz.ruankun.machinemother.entity.DictProductType;
-import xyz.ruankun.machinemother.entity.Item;
-import xyz.ruankun.machinemother.entity.Product;
-import xyz.ruankun.machinemother.entity.ProductProps;
-import xyz.ruankun.machinemother.repository.DictProductTypeRepository;
-import xyz.ruankun.machinemother.repository.ItemRepository;
-import xyz.ruankun.machinemother.repository.ProductPropsRepository;
-import xyz.ruankun.machinemother.repository.ProductRepository;
+import xyz.ruankun.machinemother.entity.*;
+import xyz.ruankun.machinemother.repository.*;
 import xyz.ruankun.machinemother.service.ProductService;
 import xyz.ruankun.machinemother.util.DataCode;
 import xyz.ruankun.machinemother.util.EntityUtil;
 
 import javax.annotation.Resource;
-import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.Date;
@@ -27,6 +19,9 @@ public class ProductServiceImpl implements ProductService {
 
     @Resource
     private ProductRepository productRepository;
+
+    @Resource
+    private YxRepository yxRepository;
 
     @Resource
     private ProductPropsRepository productPropsRepository;
@@ -47,6 +42,12 @@ public class ProductServiceImpl implements ProductService {
                 props.setProductId(product.getId());        //依次修改props的productId
                 props.setIsVisible(true);
             }
+            //添加营销表数据，默认 count为0
+            Yingxiao  data = new Yingxiao();
+            data.setProductId(product.getId());
+            data.setCount(0);
+            yxRepository.save(data);
+
             productPropsRepository.saveAll(productProps);
             return true;
         } catch (Exception e) {
@@ -71,9 +72,15 @@ public class ProductServiceImpl implements ProductService {
                     try {
                         Integer count = itemRepository.countByProductIdIsAndOrderNumberIsNotNull(productId);
                         product.setSoldNumber(count);
+                        //添加营销数据
+                        Yingxiao data = yxRepository.findByProductId(productId);
+                        if(data != null){
+                            product.setMonthSold(data.getCount());
+                        }
                     } catch (Exception e) {
                         e.printStackTrace();
                         product.setSoldNumber(0);
+//                        product.setMonthSold();
                     }
                 }
             }
@@ -85,12 +92,21 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
+    @Transactional
     public Boolean updateProduct(Product product) {
         Product check = getProduct(product.getId());
         if (check == null || check.getId() == 0 ||!check.getIsVisible()) {
             return false;
         } else {
             try {
+                //如果product的营销数量正确且已改变,则更新
+                if(product.getMonthSold() != null && product.getMonthSold()>0){
+                    Yingxiao data = yxRepository.findByProductId(product.getId());
+                    if(!data.getCount().equals(product.getMonthSold()) && data !=null) {
+                        data.setCount(product.getMonthSold());
+                        yxRepository.save(data);
+                    }
+                }
                 product.setGmtModified(new Date());
                 EntityUtil.update(product, check);
                 productRepository.save(product);
@@ -144,6 +160,23 @@ public class ProductServiceImpl implements ProductService {
             }
         }
 
+    }
+
+    @Override
+    public Boolean updateYx(Integer productId, Integer count) {
+        if(productRepository.findById(productId.intValue()) != null ) {
+            Yingxiao data = yxRepository.findByProductId(productId);
+            if (data != null) {
+                data.setCount(count);
+                try {
+                    yxRepository.save(data);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                return true;
+            }
+        }
+            return false;
     }
 
     @Override

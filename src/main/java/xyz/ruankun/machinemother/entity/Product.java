@@ -40,6 +40,18 @@ public class Product {
     //这是销量
     private Integer soldNumber;
 
+    @Transient
+    //营销销量      假数据
+    private Integer monthSold;
+
+    public Integer getMonthSold() {
+        return monthSold;
+    }
+
+    public void setMonthSold(Integer monthSold) {
+        this.monthSold = monthSold;
+    }
+
     public Integer getSoldNumber() {
         return soldNumber;
     }

@@ -3,6 +3,7 @@ package xyz.ruankun.machinemother.service;
 import xyz.ruankun.machinemother.entity.DictProductType;
 import xyz.ruankun.machinemother.entity.Product;
 import xyz.ruankun.machinemother.entity.ProductProps;
+import xyz.ruankun.machinemother.entity.Yingxiao;
 
 import java.util.List;
 
@@ -21,6 +22,8 @@ public interface ProductService {
     List<ProductProps> getProps(int id);
 
     Integer deleteProduct(Integer id);
+
+    Boolean updateYx(Integer productId, Integer count);
 
     DictProductType getProductType(String type);
 

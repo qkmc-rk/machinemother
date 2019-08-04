@@ -3,17 +3,18 @@ package xyz.ruankun.machinemother.controller;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import xyz.ruankun.machinemother.annotation.Authentication;
-import xyz.ruankun.machinemother.entity.AddtionalProduct;
-import xyz.ruankun.machinemother.entity.DictProductType;
-import xyz.ruankun.machinemother.entity.Product;
-import xyz.ruankun.machinemother.entity.ProductProps;
+import xyz.ruankun.machinemother.entity.*;
+import xyz.ruankun.machinemother.repository.ProductRepository;
+import xyz.ruankun.machinemother.repository.YxRepository;
 import xyz.ruankun.machinemother.service.ProductService;
 import xyz.ruankun.machinemother.util.Constant;
 import xyz.ruankun.machinemother.util.constant.AuthAopConstant;
 import xyz.ruankun.machinemother.vo.ResponseEntity;
 
+import javax.annotation.Resource;
 import java.util.Date;
 import java.util.List;
 
@@ -66,6 +67,20 @@ public class ProductController {
             } else {
                 responseEntity.error(Constant.PRODUCT_ERROR, "修改失败", null);
             }
+        }
+        return responseEntity;
+    }
+
+    @PutMapping(value = "yxiao/{productId}")
+    @Authentication(role = AuthAopConstant.ADMIN)
+    @ApiOperation(value="[管理员]修改某产品销量")
+    public ResponseEntity updateYX(@PathVariable(value = "productId")Integer  productId,
+                                   @RequestParam(value = "count")Integer count){
+        if(productService.updateYx(productId, count)){
+            Product product = productService.getProduct(productId);
+            responseEntity.success(product);
+        }else{
+            responseEntity.error(-1, "no such product", null);
         }
         return responseEntity;
     }

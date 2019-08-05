@@ -43,7 +43,7 @@ public class MailUtil {
         MimeMessageHelper helper;
 
         try {
-            helper = new MimeMessageHelper(message, false);
+            helper = new MimeMessageHelper(message, true);
             //设置内容
             helper.setSubject("下单成功通知");
             helper.setTo(whoShouldBeNotified);

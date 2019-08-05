@@ -530,7 +530,9 @@ public class FinancialServiceImpl implements FinancialService {
                         resXml = WePayUtil.NOTIFY_SUCCESS;
                         logger.error(resXml);
                         //此处添加付款成功的邮件通知
+                        logger.info("支付回调执行成功，开始调用发送邮件任务");
                         new MailUtil().doOrderNotify("",order2);
+                        logger.info("调用发送邮件任务成功");
                     } catch (Exception e) {
                         e.printStackTrace();
                         resXml = WePayUtil.NOTIFY_FAIL_SERVER_ERROR;

@@ -12,6 +12,7 @@ import xyz.ruankun.machinemother.repository.*;
 import xyz.ruankun.machinemother.service.FinancialService;
 import xyz.ruankun.machinemother.service.UserInfoService;
 import xyz.ruankun.machinemother.util.MD5Util;
+import xyz.ruankun.machinemother.util.MailUtil;
 import xyz.ruankun.machinemother.util.WePayUtil;
 
 import javax.annotation.Resource;
@@ -46,6 +47,9 @@ public class FinancialServiceImpl implements FinancialService {
     private String key;
     @Value("${weixin.pay_url}")
     private String url;
+
+    @Value("${machinemother.admin.order.whoShouldBeNotified}")
+    private String whoShouldBeNotified;
 
     @Value("${machinemother.shareCreditNum}")
     private Integer shareCreditNum;
@@ -525,6 +529,8 @@ public class FinancialServiceImpl implements FinancialService {
                         //通知微信回调业务已经完成成功
                         resXml = WePayUtil.NOTIFY_SUCCESS;
                         logger.error(resXml);
+                        //此处添加付款成功的邮件通知
+                        new MailUtil().doOrderNotify("",order2);
                     } catch (Exception e) {
                         e.printStackTrace();
                         resXml = WePayUtil.NOTIFY_FAIL_SERVER_ERROR;

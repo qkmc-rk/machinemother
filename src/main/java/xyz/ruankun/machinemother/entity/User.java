@@ -47,6 +47,25 @@ public class User implements Serializable {
     @Column(name = "ordered")
     private Boolean ordered;
 
+    @Column(name = "is_black")
+    private Boolean isBlack = false;  //初始化
+
+    public Boolean getBlack() {
+        return isBlack;
+    }
+
+    public void setIsBlack(Boolean black) {
+        isBlack = black;
+    }
+
+    public Boolean getIsBlack() {
+        return isBlack;
+    }
+
+    public void setBlack(Boolean black) {
+        isBlack = black;
+    }
+
     @Transient
     private Map<String,Integer> extras;
 

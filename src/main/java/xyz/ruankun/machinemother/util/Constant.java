@@ -31,6 +31,8 @@ public interface Constant {
     //服务器在处理一些操作的时候发生了异常
     Integer LOGIN_SERVER_ERROR = -3;
 
+    Integer LOGIN_BLACK_USER = -4;
+
     //注册时要用的CODE
 
     //成功注册
@@ -69,4 +71,5 @@ public interface Constant {
 
     //单次交易最多能使用多少积分
     Integer MAX_CREDIT = 100;
+
 }

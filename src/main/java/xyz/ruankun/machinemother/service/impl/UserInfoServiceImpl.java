@@ -96,6 +96,9 @@ public class UserInfoServiceImpl implements UserInfoService {
         User user = userRepository.findByOpenId(wxServerResult.getOpenid());
         if (null == user) return Constant.LOGIN_NO_USER;
         else {
+            if (user.getBlack()){
+                return Constant.LOGIN_BLACK_USER;
+            }
             //成功后还要缓存session_key和token
             String token = MD5Util.md5(new Date().toString());
             String session_key = wxServerResult.getSession_key();

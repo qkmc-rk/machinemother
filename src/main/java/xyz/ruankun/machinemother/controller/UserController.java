@@ -66,7 +66,10 @@ public class UserController {
             responseEntity.error(Constant.LOGIN_CODE_USED, "login failed cause code has been used", null);
         } else if (rs.equals(Constant.LOGIN_SERVER_ERROR)) {
             responseEntity.error(Constant.LOGIN_SERVER_ERROR, "login failed cause cache failed", null);
-        } else {
+        } else if(rs.equals(Constant.LOGIN_BLACK_USER)){
+            responseEntity.error(Constant.LOGIN_BLACK_USER, "login failed cause you are black man", null);
+        }
+        else {
             //登录成功 返回的是userid
             String token = userInfoService.readDataFromRedis("token" + rs.intValue());
             responseEntity.success(Constant.LOGIN_SUCCESS, "login success", token);

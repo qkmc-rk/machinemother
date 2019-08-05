@@ -4,6 +4,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.io.ClassPathResource;
+import org.springframework.core.io.Resource;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
@@ -43,36 +45,51 @@ public class MysqlDumpJob {
     public void mysqlDump(){
         logger.info("开始备份数据库");
         //String shellPath = "/root/mysqldump.sh";
-        String shellPath = "/Users/ruan/mysqldump.sh";
+       // String shellPath = "/Users/ruan/mysqldump.sh";
+        Resource resource = new ClassPathResource("script/mysqldump.sh");
+        String shellPath = null;
+        //找到文件的路径
         try {
-            Process process = Runtime.getRuntime().exec(shellPath);
+            shellPath = resource.getURI().getPath();
+            try {
+                Process process = Runtime.getRuntime().exec(shellPath);
 
-            process.waitFor();
+                process.waitFor();
 
-            BufferedReader br = new BufferedReader(new InputStreamReader(process.getInputStream()));
-            StringBuffer sb = new StringBuffer();
-            String line = null;
-            List<String> strs = new ArrayList<>();
-            while ((line = br.readLine()) != null) {
-                strs.add(line);
+                BufferedReader br = new BufferedReader(new InputStreamReader(process.getInputStream()));
+                StringBuffer sb = new StringBuffer();
+                String line = null;
+                List<String> strs = new ArrayList<>();
+                while ((line = br.readLine()) != null) {
+                    strs.add(line);
+                }
+                sb.append(strs.get(strs.size() - 1));
+                String result = sb.toString();
+                //获得结果再说
+                logger.info("输出结果:" + result);
+                //备份完成后进行邮件发送
+                doSendDataBase(result);
+                logger.info("备份数据库完成");
+            } catch (IOException | InterruptedException e) {
+                e.printStackTrace();
+                logger.error("执行命令时发生了未知异常，请参照异常 ↓");
+                logger.error(e.getMessage());
+                logger.info("备份数据库失败");
             }
-            sb.append(strs.get(strs.size() - 1));
-            String result = sb.toString();
-            //获得结果再说
-            logger.info("输出结果:" + result);
-            //备份完成后进行邮件发送
-            doSendDataBase(result);
-        } catch (IOException | InterruptedException e) {
+        } catch (IOException e) {
             e.printStackTrace();
-            logger.error("执行命令时发生了未知异常，请参照异常 ↓");
-            logger.error(e.getMessage());
+            logger.error("读取shell脚本位置时发生错误，请确保shell脚本是否存在！");
+            logger.info("备份数据库失败");
         }
-        logger.info("备份数据库完成");
 
 
     }
 
-    public void doSendDataBase(String attachmentPath){
+    /**
+     * 做发送数据库的操作
+     * @param attachmentPath
+     */
+    private void doSendDataBase(String attachmentPath){
         //定义邮件发送器
         JavaMailSenderImpl sender = (JavaMailSenderImpl) mailSender;
         //定义mime message

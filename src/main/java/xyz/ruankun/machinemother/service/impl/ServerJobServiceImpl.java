@@ -45,11 +45,12 @@ public class ServerJobServiceImpl implements ServerJobService {
         Map<String, String> map = new HashMap<>();
 
         logger.info("开始备份数据库");
-        Resource resource = new ClassPathResource("script/mysqldump.sh");
-        String shellPath;
+        //Resource resource = new ClassPathResource("script/mysqldump.sh");
+        //String shellPath;
+        String shellPath = "/Users/ruan/mysqldump.sh";
         //找到文件的路径
         try {
-            shellPath = resource.getURI().getPath();
+            //shellPath = resource.getURI().getPath();
             logger.info("shell脚本的位置：" + shellPath);
             try {
                 Process process = Runtime.getRuntime().exec(shellPath);
@@ -76,7 +77,7 @@ public class ServerJobServiceImpl implements ServerJobService {
                 logger.error(e.getMessage());
                 logger.error("备份数据库失败");
             }
-        } catch (IOException e) {
+        } catch (Exception e) {
             e.printStackTrace();
             logger.error("读取shell脚本位置时发生错误，请确保shell脚本是否存在！");
             map.put("error","读取shell脚本位置时发生错误，请确保shell脚本是否存在！");

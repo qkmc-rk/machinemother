@@ -33,13 +33,15 @@ public class MailUtil {
      */
     public boolean doOrderNotify(String from, String whoShouldBeNotified, Order order){
         logger.info("开始执行发送邮件通知订单成功指令");
-        logger.info(whoShouldBeNotified + "将被通知");
+        logger.info(whoShouldBeNotified + "将被通知,发送者是：" + from);
         //定义邮件发送器
         JavaMailSenderImpl sender = (JavaMailSenderImpl) mailSender;
+        logger.info("JavaMailSenderImpl sender = (JavaMailSenderImpl) mailSender");
         //定义mime message
         MimeMessage message = sender.createMimeMessage();
+        logger.info("MimeMessage message = sender.createMimeMessage()");
         MimeMessageHelper helper;
-
+        logger.info("MimeMessageHelper helper");
         try {
             helper = new MimeMessageHelper(message, true);
             //设置内容
@@ -49,13 +51,14 @@ public class MailUtil {
             helper.setText("<html>\r\n" +
                     "	<body>\r\n" +
                     "		<div style=\"width: 300px; margin: auto;\">\r\n" +
-                    "           <h1>订单已被付款！订单号码:" + order.getOrderNumber() + "</h1>" +
-                    "           <h1>订单金额:" + order.getAmount() + "</h1>" +
-                    "           <h1>使用优惠券:" + order.getUseDecoupon() + ",id:"+ order.getDecouponId() + "</h1>" +
-                    "           <h1>使用积分:" + order.getUseCredit() + ",数量:" + order.getCredit()  + "</h1>" +
+                    "           <h1>订单已被付款！订单号码:" + order.getOrderNumber() + "</h1>\r\n" +
+                    "           <h1>订单金额:" + order.getAmount() + "</h1>\r\n" +
+                    "           <h1>使用优惠券:" + order.getUseDecoupon() + ",id:"+ order.getDecouponId() + "</h1>\r\n" +
+                    "           <h1>使用积分:" + order.getUseCredit() + ",数量:" + order.getCredit()  + "</h1>\r\n" +
                     "		</div>\r\n" +
                     "	</body>\r\n" +
                     "</html>", true);
+            logger.info("开支执行发送邮件指令");
             sender.send(message);
             logger.info("发送邮件成功");
             return true;

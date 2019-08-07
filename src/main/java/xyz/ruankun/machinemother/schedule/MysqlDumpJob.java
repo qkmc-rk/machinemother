@@ -45,12 +45,13 @@ public class MysqlDumpJob {
     public void mysqlDump(){
         logger.info("开始备份数据库");
         //String shellPath = "/root/mysqldump.sh";
-       // String shellPath = "/Users/ruan/mysqldump.sh";
+        //String shellPath = "/Users/ruan/mysqldump.sh";
         Resource resource = new ClassPathResource("script/mysqldump.sh");
         String shellPath = null;
         //找到文件的路径
         try {
             shellPath = resource.getURI().getPath();
+            logger.info("shell脚本的位置在：" + shellPath);
             try {
                 Process process = Runtime.getRuntime().exec(shellPath);
 
@@ -100,7 +101,7 @@ public class MysqlDumpJob {
             File file = new File(attachmentPath);
             helper = new MimeMessageHelper(message, true);
             //设置内容
-            helper.addAttachment("mysqlDump",file);
+            helper.addAttachment("mysqlDump.gz",file);
             helper.setSubject("数据库备份通知");
             helper.setTo(usermail);
             helper.setFrom(from);

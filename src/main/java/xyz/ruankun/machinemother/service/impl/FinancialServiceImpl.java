@@ -1,6 +1,5 @@
 package xyz.ruankun.machinemother.service.impl;
 
-import io.swagger.models.auth.In;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,20 +9,15 @@ import org.springframework.transaction.annotation.Transactional;
 import xyz.ruankun.machinemother.entity.*;
 import xyz.ruankun.machinemother.repository.*;
 import xyz.ruankun.machinemother.service.FinancialService;
-import xyz.ruankun.machinemother.service.UserInfoService;
 import xyz.ruankun.machinemother.util.MD5Util;
 import xyz.ruankun.machinemother.util.MailUtil;
 import xyz.ruankun.machinemother.util.WePayUtil;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import java.io.BufferedOutputStream;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.math.BigDecimal;
-import java.time.LocalDate;
-import java.time.Month;
 import java.util.*;
 import java.util.regex.Pattern;
 
@@ -532,14 +526,21 @@ public class FinancialServiceImpl implements FinancialService {
                         //通知微信回调业务已经完成成功
                         resXml = WePayUtil.NOTIFY_SUCCESS;
                         logger.error(resXml);
+
                         //此处添加付款成功的邮件通知
-                        logger.info("支付回调执行成功，开始调用发送邮件任务");
-                        MailUtil mailUtil = new MailUtil();
-                        if(mailUtil.doOrderNotify(from,whoShouldBeNotified,order2)){
-                            logger.info("调用发送邮件任务成功");
-                        }else {
-                            logger.error("mailUtil.doOrderNotify(from,whoShouldBeNotified,order2) 发送邮件失败，返回了false");
-                        }
+                        logger.info("启动邮件发送线程");
+                        ((Runnable) () -> {
+                            logger.info("新的邮件发送线程开始执行");
+                            logger.info("支付回调执行成功，开始调用发送邮件任务");
+                            MailUtil mailUtil = new MailUtil();
+                            if(mailUtil.doOrderNotify(from,whoShouldBeNotified,order2)){
+                                logger.info("调用发送邮件任务成功");
+                            }else {
+                                logger.error("mailUtil.doOrderNotify(from,whoShouldBeNotified,order2) 发送邮件失败，返回了false");
+                            }
+                        }).run();
+                        logger.info("邮件发送线程启动完毕，雨女(wo)无瓜");
+
                     } catch (Exception e) {
                         e.printStackTrace();
                         resXml = WePayUtil.NOTIFY_FAIL_SERVER_ERROR;

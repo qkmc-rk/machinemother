@@ -101,7 +101,7 @@ public class ServerJobServiceImpl implements ServerJobService {
             helper = new MimeMessageHelper(message, true);
             //设置内容
             helper.addAttachment("mysqlDump.gz",file);
-            helper.setSubject("数据库备份通知");
+            helper.setSubject("[手动]数据库备份通知");
             helper.setTo(usermail);
             helper.setFrom(from);
 

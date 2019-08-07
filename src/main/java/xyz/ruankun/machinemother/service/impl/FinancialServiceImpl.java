@@ -4,6 +4,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.mail.SimpleMailMessage;
+import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.JavaMailSenderImpl;
+import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import xyz.ruankun.machinemother.entity.*;
@@ -14,6 +18,8 @@ import xyz.ruankun.machinemother.util.MailUtil;
 import xyz.ruankun.machinemother.util.WePayUtil;
 
 import javax.annotation.Resource;
+import javax.mail.MessagingException;
+import javax.mail.internet.MimeMessage;
 import javax.servlet.http.HttpServletRequest;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
@@ -51,6 +57,11 @@ public class FinancialServiceImpl implements FinancialService {
     @Value("${machinemother.shareCreditNum}")
     private Integer shareCreditNum;
 
+    @Autowired
+    private JavaMailSender mailSender;
+
+    @Autowired
+    private SimpleMailMessage templateMailMessage;//配置的模板,用此模板new一个需要使用的具体message对象,发送给用户邮箱
     @Autowired
     CommissionRecordRepository commissionRecordRepository;
     @Autowired
@@ -499,6 +510,7 @@ public class FinancialServiceImpl implements FinancialService {
                 } catch (Exception e) {
                     e.printStackTrace();
                     //通知微信服务器没有该订单，业务出现错误
+                    logger.error("没有该订单");
                     resXml = WePayUtil.NOTIFY_FAIL_SERVER_ERROR;
                     logger.error(resXml);
                 }
@@ -526,28 +538,25 @@ public class FinancialServiceImpl implements FinancialService {
                         //通知微信回调业务已经完成成功
                         resXml = WePayUtil.NOTIFY_SUCCESS;
                         logger.error(resXml);
-
-                        //此处添加付款成功的邮件通知
-                        logger.info("启动邮件发送线程");
-                        ((Runnable) () -> {
-                            logger.info("新的邮件发送线程开始执行");
-                            logger.info("支付回调执行成功，开始调用发送邮件任务");
-                            MailUtil mailUtil = new MailUtil();
-                            if(mailUtil.doOrderNotify(from,whoShouldBeNotified,order2)){
-                                logger.info("调用发送邮件任务成功");
-                            }else {
-                                logger.error("mailUtil.doOrderNotify(from,whoShouldBeNotified,order2) 发送邮件失败，返回了false");
-                            }
-                        }).run();
-                        logger.info("邮件发送线程启动完毕，雨女(wo)无瓜");
-
                     } catch (Exception e) {
                         e.printStackTrace();
+                        logger.error("orderSecretRepository.save(orderSecret)异常发生");
                         resXml = WePayUtil.NOTIFY_FAIL_SERVER_ERROR;
                         logger.error(resXml);
                         return resXml;
                     }
-
+                    //此处添加付款成功的邮件通知
+                    logger.info("启动邮件发送线程");
+                    ((Runnable) () -> {
+                        logger.info("新的邮件发送线程开始执行");
+                        logger.info("支付回调执行成功，开始调用发送邮件任务");
+                        if(doOrderNotify(from,whoShouldBeNotified,order2)){
+                            logger.info("调用发送邮件任务成功");
+                        }else {
+                            logger.error("mailUtil.doOrderNotify(from,whoShouldBeNotified,order2) 发送邮件失败，返回了false");
+                        }
+                    }).run();
+                    logger.info("邮件发送线程启动完毕，雨女(wo)无瓜");
                 } else {
                     //通知微信服务器回调遇到错误(保存订单状态时遇到错误)，业务出现错误
                     resXml = WePayUtil.NOTIFY_FAIL_SERVER_ERROR;
@@ -915,6 +924,49 @@ public class FinancialServiceImpl implements FinancialService {
             wallet.setCount(0);
         } else {
             wallet.setCount(count);
+        }
+    }
+
+    /**
+     * 通知有人下订单并且已经付款
+     * @param from
+     * @param whoShouldBeNotified
+     */
+    public boolean doOrderNotify(String from, String whoShouldBeNotified, Order order){
+        logger.info("开始执行发送邮件通知订单成功指令");
+        logger.info(whoShouldBeNotified + "将被通知,发送者是：" + from);
+        //定义邮件发送器
+        JavaMailSenderImpl sender = (JavaMailSenderImpl) mailSender;
+        logger.info("JavaMailSenderImpl sender = (JavaMailSenderImpl) mailSender");
+        //定义mime message
+        MimeMessage message = sender.createMimeMessage();
+        logger.info("MimeMessage message = sender.createMimeMessage()");
+        MimeMessageHelper helper;
+        logger.info("MimeMessageHelper helper");
+        try {
+            helper = new MimeMessageHelper(message, true);
+            //设置内容
+            helper.setSubject("下单成功通知");
+            helper.setTo(whoShouldBeNotified);
+            helper.setFrom(from);
+            helper.setText("<html>\r\n" +
+                    "	<body>\r\n" +
+                    "		<div style=\"width: 300px; margin: auto;\">\r\n" +
+                    "           <h1>订单已被付款！订单号码:" + order.getOrderNumber() + "</h1>\r\n" +
+                    "           <h1>订单金额:" + order.getAmount() + "</h1>\r\n" +
+                    "           <h1>使用优惠券:" + order.getUseDecoupon() + ",id:"+ order.getDecouponId() + "</h1>\r\n" +
+                    "           <h1>使用积分:" + order.getUseCredit() + ",数量:" + order.getCredit()  + "</h1>\r\n" +
+                    "		</div>\r\n" +
+                    "	</body>\r\n" +
+                    "</html>", true);
+            logger.info("开支执行发送邮件指令");
+            sender.send(message);
+            logger.info("发送邮件成功");
+            return true;
+        } catch (MessagingException e) {
+            e.printStackTrace();
+            logger.info("发送邮件失败" + e.getMessage());
+            return false;
         }
     }
 

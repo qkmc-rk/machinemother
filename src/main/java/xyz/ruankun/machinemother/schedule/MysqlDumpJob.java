@@ -45,12 +45,12 @@ public class MysqlDumpJob {
     public void mysqlDump(){
         logger.info("开始备份数据库");
         //String shellPath = "/root/mysqldump.sh";
-        //String shellPath = "/Users/ruan/mysqldump.sh";
-        Resource resource = new ClassPathResource("script/mysqldump.sh");
-        String shellPath = null;
+        String shellPath = "/Users/ruan/mysqldump.sh";
+        //Resource resource = new ClassPathResource("script/mysqldump.sh");
+        //String shellPath = null;
         //找到文件的路径
         try {
-            shellPath = resource.getURI().getPath();
+            //shellPath = resource.getURI().getPath();
             logger.info("shell脚本的位置在：" + shellPath);
             try {
                 Process process = Runtime.getRuntime().exec(shellPath);
@@ -77,7 +77,7 @@ public class MysqlDumpJob {
                 logger.error(e.getMessage());
                 logger.error("备份数据库失败");
             }
-        } catch (IOException e) {
+        } catch (Exception e) {
             e.printStackTrace();
             logger.error("读取shell脚本位置时发生错误，请确保shell脚本是否存在！");
             logger.error("备份数据库失败");

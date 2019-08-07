@@ -48,8 +48,11 @@ public class FinancialServiceImpl implements FinancialService {
     @Value("${weixin.pay_url}")
     private String url;
 
-    @Value("${machinemother.admin.order.whoShouldBeNotified}")
+    @Value("${spring.mail.receiver}")
     private String whoShouldBeNotified;
+
+    @Value("${spring.mail.username}")
+    private String from;
 
     @Value("${machinemother.shareCreditNum}")
     private Integer shareCreditNum;
@@ -531,8 +534,12 @@ public class FinancialServiceImpl implements FinancialService {
                         logger.error(resXml);
                         //此处添加付款成功的邮件通知
                         logger.info("支付回调执行成功，开始调用发送邮件任务");
-                        new MailUtil().doOrderNotify(whoShouldBeNotified,order2);
-                        logger.info("调用发送邮件任务成功");
+                        MailUtil mailUtil = new MailUtil();
+                        if(mailUtil.doOrderNotify(from,whoShouldBeNotified,order2)){
+                            logger.info("调用发送邮件任务成功");
+                        }else {
+                            logger.error("mailUtil.doOrderNotify(from,whoShouldBeNotified,order2) 发送邮件失败，返回了false");
+                        }
                     } catch (Exception e) {
                         e.printStackTrace();
                         resXml = WePayUtil.NOTIFY_FAIL_SERVER_ERROR;

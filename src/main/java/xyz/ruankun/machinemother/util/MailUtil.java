@@ -19,9 +19,6 @@ public class MailUtil {
 
     private static Logger logger = LoggerFactory.getLogger(MailUtil.class);
 
-    @Value("${spring.mail.username}")
-    private String from;
-
     @Autowired
     private JavaMailSender mailSender;
 
@@ -31,9 +28,10 @@ public class MailUtil {
 
     /**
      * 通知有人下订单并且已经付款
+     * @param from
      * @param whoShouldBeNotified
      */
-    public  void doOrderNotify(String whoShouldBeNotified, Order order){
+    public boolean doOrderNotify(String from, String whoShouldBeNotified, Order order){
         logger.info("开始执行发送邮件通知订单成功指令");
         logger.info(whoShouldBeNotified + "将被通知");
         //定义邮件发送器
@@ -60,9 +58,11 @@ public class MailUtil {
                     "</html>", true);
             sender.send(message);
             logger.info("发送邮件成功");
+            return true;
         } catch (MessagingException e) {
             e.printStackTrace();
             logger.info("发送邮件失败" + e.getMessage());
+            return false;
         }
     }
 }

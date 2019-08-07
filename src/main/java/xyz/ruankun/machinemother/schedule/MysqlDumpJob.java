@@ -74,12 +74,12 @@ public class MysqlDumpJob {
                 e.printStackTrace();
                 logger.error("执行命令时发生了未知异常，请参照异常 ↓");
                 logger.error(e.getMessage());
-                logger.info("备份数据库失败");
+                logger.error("备份数据库失败");
             }
         } catch (IOException e) {
             e.printStackTrace();
             logger.error("读取shell脚本位置时发生错误，请确保shell脚本是否存在！");
-            logger.info("备份数据库失败");
+            logger.error("备份数据库失败");
         }
 
 

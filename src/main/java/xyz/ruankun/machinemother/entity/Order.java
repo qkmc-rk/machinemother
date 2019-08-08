@@ -41,6 +41,16 @@ public class Order implements Serializable {
     private List<Item> items;
     @Transient
     private String indentStatus;
+    @Transient
+    private Addr addr;
+
+    public Addr getAddr() {
+        return addr;
+    }
+
+    public void setAddr(Addr addr) {
+        this.addr = addr;
+    }
 
     public String getIndentStatus() {
         return indentStatus;

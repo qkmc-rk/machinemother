@@ -144,15 +144,11 @@ public class Addr {
     public String toString() {
         return "Addr{" +
                 "id=" + id +
-                ", userId=" + userId +
-                ", country='" + country + '\'' +
-                ", province='" + province + '\'' +
-                ", city='" + city + '\'' +
-                ", detail='" + detail + '\'' +
-                ", gmtCreate=" + gmtCreate +
-                ", gmtModified=" + gmtModified +
-                ", username='" + username + '\'' +
-                ", phone='" + phone + '\'' +
+                ", 用户ID=" + userId +
+                ", 服务地址='" +province + city + country + detail + '\'' +
+                ", 地址修改时间=" + gmtModified +
+                ", 用户名='" + username + '\'' +
+                ", 联系电话='" + phone + '\'' +
                 '}';
     }
 }

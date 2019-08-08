@@ -10,12 +10,14 @@ import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import xyz.ruankun.machinemother.annotation.小坏蛋;
 import xyz.ruankun.machinemother.entity.*;
 import xyz.ruankun.machinemother.repository.*;
 import xyz.ruankun.machinemother.service.FinancialService;
 import xyz.ruankun.machinemother.util.MD5Util;
 import xyz.ruankun.machinemother.util.MailUtil;
 import xyz.ruankun.machinemother.util.WePayUtil;
+import xyz.ruankun.machinemother.util.constant.OrderIndentStatus;
 
 import javax.annotation.Resource;
 import javax.mail.MessagingException;
@@ -86,6 +88,10 @@ public class FinancialServiceImpl implements FinancialService {
     ProductRepository productRepository;
     @Resource
     WithDrawRepository withDrawRepository;
+    @Autowired
+    CommentRepository commentRepository;
+    @Autowired
+    AddrRepository addrRepository;
 
     @Override
     public Wallet selectWallet(Integer userId) {
@@ -932,7 +938,10 @@ public class FinancialServiceImpl implements FinancialService {
      * @param from
      * @param whoShouldBeNotified
      */
-    public boolean doOrderNotify(String from, String whoShouldBeNotified, Order order){
+    private boolean doOrderNotify(String from, String whoShouldBeNotified, Order order){
+
+        order = setOrderOfCommentProductPropsProductInfo(order);
+
         logger.info("开始执行发送邮件通知订单成功指令");
         logger.info(whoShouldBeNotified + "将被通知,发送者是：" + from);
         //定义邮件发送器
@@ -956,6 +965,10 @@ public class FinancialServiceImpl implements FinancialService {
                     "           <h1>订单金额:" + order.getAmount() + "</h1>\r\n" +
                     "           <h1>使用优惠券:" + order.getUseDecoupon() + ",id:"+ order.getDecouponId() + "</h1>\r\n" +
                     "           <h1>使用积分:" + order.getUseCredit() + ",数量:" + order.getCredit()  + "</h1>\r\n" +
+                    "           <hr>\r\n" +
+                    "           <h1>用户信息：</h1>" +
+                    "           <h1>" + order.getAddr().toString() + "</h1>" +
+
                     "		</div>\r\n" +
                     "	</body>\r\n" +
                     "</html>", true);
@@ -968,6 +981,83 @@ public class FinancialServiceImpl implements FinancialService {
             logger.info("发送邮件失败" + e.getMessage());
             return false;
         }
+    }
+
+    /**
+     * 丰富一下order的内容
+     *
+     * @param order
+     * @return
+     */
+    @小坏蛋(真的吗 = true)
+    private Order setOrderOfCommentProductPropsProductInfo(Order order) {
+        if (order == null) {
+            System.out.println("传入的order为空，不能为order设置comment product等相关信息");
+            return null;
+        } else if (order.getId() == 0) {
+            return order;
+        }
+        //第一步，设置indentStatus
+        Boolean paid = order.getIsPaid();
+        Boolean finished = order.getIsFinished();
+        Boolean cancle = order.getIsCancle();       //不知道是什么但还是加一个
+        if (cancle) {
+            order.setIndentStatus(OrderIndentStatus.CANCLE);
+        } else if (paid && finished) {
+            //已完成
+            order.setIndentStatus(OrderIndentStatus.FINISHED);
+        } else if (!paid.booleanValue()) {
+            //未支付
+            order.setIndentStatus(OrderIndentStatus.NOT_PAY);
+        } else if (paid.booleanValue() && !finished.booleanValue()) {
+            //已支付
+            order.setIndentStatus(OrderIndentStatus.PAYED);
+        } else if (!paid.booleanValue() && !finished.booleanValue()) {
+            //未支付
+            order.setIndentStatus(OrderIndentStatus.NOT_PAY);
+        }
+        //第二步，找到items，并为每个item设置comment,productInfo,productPropsInfo
+        List<Item> items = itemRepository.findByUserIdAndOrderNumber(order.getUserId(), order.getOrderNumber());
+        for (Item item :
+                items) {
+            //设置每个item的Comment,productInfo,productPropsInfo
+            List<Comment> comments = commentRepository.findByItemId(item.getId());
+            Product product = null;
+            ProductProps productProps = null;
+            try {
+                product = productRepository.findById(item.getProductId().intValue());
+                productProps = productPropsRepository.findById(item.getProductPropsId().intValue());
+
+                item.setProduct(product);
+                if (!comments.isEmpty())
+                    item.setCommentInfo(comments.get(0));
+                item.setProductProps(productProps);
+            } catch (Exception e) {
+                System.out.println("无相关product信息或者相关productProps信息");
+                Product product1 = new Product();
+                ProductProps productProps1 = new ProductProps();
+                productProps1.setServiceTime("没有找到任何相关product信息或者productProps信息");
+                product1.setContent("没有找到任何相关product信息或者productProps信息");
+                item.setProduct(product1);
+                e.printStackTrace();
+            }
+        }
+        //第三步设置地址
+        Integer addrId = order.getAddrId();
+        Addr addr = null;
+        if (addrId != null){
+            try {
+                addr = addrRepository.findById(addrId.intValue());
+            } catch (Exception e) {
+                e.printStackTrace();
+                logger.error("获取地址信息出现错误 + addrId：" + addrId);
+            }
+        }
+        order.setAddr(addr);
+        //xx
+        //第四步，设置order的items信息
+        order.setItems(items);
+        return order;
     }
 
 

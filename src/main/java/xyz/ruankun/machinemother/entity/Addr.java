@@ -142,13 +142,12 @@ public class Addr {
 
     @Override
     public String toString() {
-        return "Addr{" +
+        return "{" +
                 "id=" + id +
-                ", 用户ID=" + userId +
-                ", 服务地址='" +province + city + country + detail + '\'' +
-                ", 地址修改时间=" + gmtModified +
-                ", 用户名='" + username + '\'' +
-                ", 联系电话='" + phone + '\'' +
+                ", 用户ID:" + userId +
+                ", 服务地址:'" + country + province + city + detail + '\'' +
+                ", 联系人:'" + username + '\'' +
+                ", 联系电话:'" + phone + '\'' +
                 '}';
     }
 }

@@ -968,7 +968,10 @@ public class FinancialServiceImpl implements FinancialService {
                     "           <hr>\r\n" +
                     "           <h1>用户信息：</h1>" +
                     "           <h1>" + order.getAddr().toString() + "</h1>" +
-
+                    "           <hr>\r\n" +
+                    "           <h1>订单信息：</h1>" +
+                    "           <h1>订单状态:" + order.getIndentStatus() + "</h1>\r\n" +
+                    "           <h1>订单内容:" + order.toStringByProduct() + "</h1>\r\n" +
                     "		</div>\r\n" +
                     "	</body>\r\n" +
                     "</html>", true);

@@ -205,4 +205,24 @@ public class Order implements Serializable {
                 ", addrId=" + addrId +
                 '}';
     }
+
+    public String toStringByProduct(){
+
+        StringBuilder stringBuilder = new StringBuilder();
+        if (items != null){
+            for (int i=0; i<items.size(); i++){
+                stringBuilder.append(i);
+                stringBuilder.append(".id:" + items.get(i).getProduct().getId());
+                stringBuilder.append(", 名称:");
+                stringBuilder.append(items.get(i).getProduct().getTitle());
+                stringBuilder.append(", 简介:");
+                stringBuilder.append(items.get(i).getProduct().getIntro());
+                stringBuilder.append("   \n");
+                stringBuilder.append("    属性:" + items.get(i).getProductProps().toString());
+            }
+            return stringBuilder.toString();
+        }else {
+            return "no any items";
+        }
+    }
 }

@@ -73,4 +73,14 @@ public class ProductProps {
     public void setPrice(BigDecimal price) {
         this.price = price;
     }
+
+    @Override
+    public String toString() {
+        return "产品属性:" +
+                "id=" + id +
+                ", 服务日期:" + serviceDate +
+                ", 服务时间:'" + serviceTime + '\'' +
+                ", 价格:" + price +
+                '}';
+    }
 }

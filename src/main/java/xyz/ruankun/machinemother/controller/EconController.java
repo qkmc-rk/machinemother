@@ -200,7 +200,7 @@ public class EconController {
     public ResponseEntity getOrders(@RequestParam(value = "page") Integer page,
                                     @RequestParam(value = "limit") Integer limit) {
         Pageable pageable = PageRequest.of(page - 1, limit);
-        Page<Order> orders = econService.getOrders(pageable);
+        List<Order> orders = econService.getOrders(pageable);
         return ControllerUtil.getDataResult(orders);
     }
 

@@ -1,5 +1,6 @@
 package xyz.ruankun.machinemother.service.impl;
 
+import org.aspectj.weaver.ast.Or;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -252,8 +253,9 @@ public class EconServiceImpl implements EconService {
 
     @Override
     @Transactional
-    public Page<Order> getOrders(Pageable pageable) {
+    public List<Order> getOrders(Pageable pageable) {
         Page<Order> orders = orderRepository.findAll(pageable);
+        List<Order> orders1 = new ArrayList<>();
         for (Order order : orders) {
             if (!order.getIsPaid() && !order.getIsCancle() &&
                     order.getGmtCreate().getTime() <= System.currentTimeMillis() - 1000 * 60 * 30) {
@@ -261,8 +263,12 @@ public class EconServiceImpl implements EconService {
                 order.setGmtModified(new Date());
                 orderRepository.save(order);
             }
+            //保存之后要拿出其它数据
+            orders1.add(setOrderOfCommentProductPropsProductInfo(order));
         }
-        return orders;
+        //对orders进行遍历增加
+
+        return orders1;
     }
 
     @Override

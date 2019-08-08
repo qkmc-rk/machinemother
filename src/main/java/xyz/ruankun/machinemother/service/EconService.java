@@ -22,7 +22,7 @@ public interface EconService {
 
     List<Order> getOrders(int userId);
 
-    Page<Order> getOrders(Pageable pageable);
+    List<Order> getOrders(Pageable pageable);
 
     Integer deleteOrder(Integer id);
 

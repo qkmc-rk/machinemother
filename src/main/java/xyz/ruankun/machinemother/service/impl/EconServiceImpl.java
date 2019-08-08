@@ -263,8 +263,9 @@ public class EconServiceImpl implements EconService {
                 order.setGmtModified(new Date());
                 orderRepository.save(order);
             }
-            //保存之后要拿出其它数据
-            orders1.add(setOrderOfCommentProductPropsProductInfo(order));
+            //保存之后要拿出其它数据  //其中被删除的订单不能再使用
+            if(!order.getIsDelete())
+                orders1.add(setOrderOfCommentProductPropsProductInfo(order));
         }
         //对orders进行遍历增加
 

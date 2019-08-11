@@ -34,6 +34,9 @@ public class Order implements Serializable {
     @Column(name = "credit")
     private BigDecimal credit;
     private Integer addrId;
+    //订单备注
+    @Column(name = "tip")
+    private String tip = "无";
     //transient props
 //    @OneToMany(mappedBy = "orderNumber")
 //    @JoinColumn(name = "ordernumber", referencedColumnName = "orderid")
@@ -43,6 +46,14 @@ public class Order implements Serializable {
     private String indentStatus;
     @Transient
     private Addr addr;
+
+    public String getTip() {
+        return tip;
+    }
+
+    public void setTip(String tip) {
+        this.tip = tip;
+    }
 
     public Addr getAddr() {
         return addr;
@@ -203,6 +214,7 @@ public class Order implements Serializable {
                 ", decouponId=" + decouponId +
                 ", credit=" + credit +
                 ", addrId=" + addrId +
+                ", tip=" + tip +
                 '}';
     }
 
@@ -212,12 +224,12 @@ public class Order implements Serializable {
         if (items != null){
             for (int i=0; i<items.size(); i++){
                 stringBuilder.append(i);
-                stringBuilder.append(".id:" + items.get(i).getProduct().getId());
+                stringBuilder.append(".\r\nid:" + items.get(i).getProduct().getId());
                 stringBuilder.append(", 名称:");
                 stringBuilder.append(items.get(i).getProduct().getTitle());
                 stringBuilder.append(", 简介:");
                 stringBuilder.append(items.get(i).getProduct().getIntro());
-                stringBuilder.append("   \n");
+                stringBuilder.append("   \r\n");
                 stringBuilder.append("    属性:" + items.get(i).getProductProps().toString());
             }
             return stringBuilder.toString();

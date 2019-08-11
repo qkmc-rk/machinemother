@@ -99,7 +99,7 @@ public class EcomServiceImpl implements EcomService {
      */
     @Override
     @Transactional
-    public Map<String, Object> generateOrder(Integer userId, Integer decouponId, Boolean useCredit, Integer addrId) {
+    public Map<String, Object> generateOrder(Integer userId, Integer decouponId, Boolean useCredit, Integer addrId,String tip) {
         Map map = new HashMap();
         List<Item> items;
         BigDecimal amount = new BigDecimal("0");
@@ -112,6 +112,12 @@ public class EcomServiceImpl implements EcomService {
         order.setIsPaid(false);
         order.setIsFinished(false);
         order.setIsCancle(false);
+
+        if (tip != null)
+            order.setTip(tip);
+        else
+            order.setTip("-");
+
         /*********这部分内容填写了可能被覆盖，但是为了最后不为null，必须填写*******/
         order.setDecouponId(0);
         order.setUseCredit(false);

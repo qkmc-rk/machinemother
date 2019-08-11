@@ -2,6 +2,7 @@ package xyz.ruankun.machinemother.controller;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -13,6 +14,7 @@ import xyz.ruankun.machinemother.util.Constant;
 import xyz.ruankun.machinemother.util.constant.AuthAopConstant;
 import xyz.ruankun.machinemother.vo.ResponseEntity;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -33,12 +35,15 @@ public class QrCodeController {
      */
     @GetMapping("")
     @Authentication(role = AuthAopConstant.USER)
-    @ApiOperation(value = "[用户]获取小程序码",notes = "必须是登录用户才行，因为返回的小程序码需要带上用户的ID，小程序码唯一")
-    public ResponseEntity getQrCode(@RequestHeader String token){
+    @ApiOperation(value = "[用户]获取小程序码",notes = "必须是登录用户才行，因为返回的小程序码需要带上用户的ID，小程序码唯一,当传入productId字段时，scen的字段为(String)  uid&productId")
+    public ResponseEntity getQrCode(@RequestHeader String token,
+                                    @ApiParam(value = "产品的id productId,该字段应该与page字段搭配使用") @RequestParam(required = false) Integer productId,
+                                    @ApiParam(value = "必须是已经发布的小程序存在的页面（否则报错），例如 pages/index/index, 根路径前不要填加 /,不能携带参数（参数请放在scene字段里），如果不填写这个字段，默认跳主页面")
+                                        @RequestParam(required = false) String page){
         ResponseEntity<Map> responseEntity = new ResponseEntity<>();
         //鉴权那个地方才刚刚做了token存在验证，这么短时间token不可能丢失吧？
         Integer userId = Integer.parseInt(userInfoService.readDataFromRedis(token));
-        Map<String, String> qrcodeurl = qrCodeService.getQrCodeUrl(userId);
+        Map<String, String> qrcodeurl = qrCodeService.getQrCodeUrl(userId, productId, page);
         if (null != qrcodeurl.get("error"))
             responseEntity.error(Constant.FAILURE_CODE,"error occured", qrcodeurl);
         else
@@ -51,9 +56,16 @@ public class QrCodeController {
     public ResponseEntity getTemplate(){
         ResponseEntity<List<Template>>  responseEntity = new ResponseEntity<>();
         List<Template> templates = qrCodeService.getTemplate();
-        if (null != templates){
+        List<Template> templates1 = new ArrayList<>();
+        for (Template t:templates){
+            if (t.getProductId().intValue() < 1){
+                t.setProductId(null);
+            }
+            templates1.add(t);
+        }
+        if (null != templates1){
             //成功
-            responseEntity.success(templates);
+            responseEntity.success(templates1);
         }else{
             //失败
             responseEntity.serverError();
@@ -69,9 +81,9 @@ public class QrCodeController {
     @PutMapping("/template")
     @Authentication(role = AuthAopConstant.ADMIN)
     @ApiOperation(value = "[管理员]管理员上传一张图片模板存储到数据库",notes = "")
-    public ResponseEntity putOneTemplate(@RequestParam MultipartFile img){
+    public ResponseEntity putOneTemplate(@RequestParam MultipartFile img,@RequestParam Integer productId){
         ResponseEntity responseEntity = new ResponseEntity();
-        boolean rs = qrCodeService.putTemplate(img);
+        boolean rs = qrCodeService.putTemplate(img,productId);
         if (rs)
             responseEntity.success(null);
         else
@@ -87,9 +99,9 @@ public class QrCodeController {
     @PostMapping("/template/{id}")
     @Authentication(role = AuthAopConstant.ADMIN)
     @ApiOperation(value = "[管理员]管理员修改数据库中的模板信息",notes = "")
-    public ResponseEntity alterOneTemplate(@PathVariable Integer id, @RequestParam MultipartFile img){
+    public ResponseEntity alterOneTemplate(@PathVariable Integer id, @RequestParam MultipartFile img, @RequestParam(required = false) Integer productId){
         ResponseEntity responseEntity = new ResponseEntity();
-        boolean rs = qrCodeService.update(id,img);
+        boolean rs = qrCodeService.update(id,img, productId);
         if (rs)
             responseEntity.success(null);
         else

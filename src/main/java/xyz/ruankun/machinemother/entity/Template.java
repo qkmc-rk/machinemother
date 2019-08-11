@@ -22,6 +22,17 @@ public class Template {
     @Column
     private String imgpath;
 
+    @Column(name = "productId")
+    private Integer productId;
+
+    public Integer getProductId() {
+        return productId;
+    }
+
+    public void setProductId(Integer productId) {
+        this.productId = productId;
+    }
+
     public Integer getId() {
         return id;
     }

@@ -73,11 +73,12 @@ public class EcomController {
     public ResponseEntity makeOrder(@RequestHeader("token") String token,
                                     @RequestParam(required = false) Integer decouponId,
                                     @RequestParam Boolean useCredit,
-                                    @RequestParam Integer addrId) {
+                                    @RequestParam Integer addrId,
+                                    @RequestParam(required = false) String tip) {
         Integer userId = Integer.parseInt(userInfoService.readDataFromRedis(token));
         Map<String, Object> map = null;
         try {
-            map = ecomService.generateOrder(userId, decouponId, useCredit, addrId);
+            map = ecomService.generateOrder(userId, decouponId, useCredit, addrId, tip);
             return ControllerUtil.getDataResult(map);
         } catch (Exception e) {
             e.printStackTrace();

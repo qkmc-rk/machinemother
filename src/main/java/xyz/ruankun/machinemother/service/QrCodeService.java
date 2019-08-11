@@ -14,7 +14,7 @@ public interface QrCodeService {
      * @param userId
      * @return qrcode url
      */
-    Map<String, String> getQrCodeUrl(Integer userId);
+    Map<String, String> getQrCodeUrl(Integer userId, Integer productId, String page);
 
     /**
      * 你要获取二维码,你必须得有这个access_token.对吧？
@@ -33,7 +33,7 @@ public interface QrCodeService {
      * @param img 要保存的文件
      * @return 是否成功
      */
-    Boolean putTemplate(MultipartFile img,Integer... id);
+    Boolean putTemplate(MultipartFile img,Integer productId, Integer... id);
 
     /**
      * 更新模板图片，根据传入的ID属性更改
@@ -41,7 +41,7 @@ public interface QrCodeService {
      * @param img 图片二进制文件
      * @return 更新是否成功
      */
-    boolean update(Integer id, MultipartFile img);
+    boolean update(Integer id, MultipartFile img, Integer productId);
 
     /**
      * 删除一个嘛

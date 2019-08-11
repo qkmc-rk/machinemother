@@ -506,7 +506,6 @@ public class FinancialServiceImpl implements FinancialService {
         if ("SUCCESS".equals(returnCode)) {
             //如果微信发来的sign没有问题就会执行用户的业务逻辑代码
             if (WePayUtil.verifyWeixinNotify(map, key)) {
-                //重复回调是什么鬼？暂时不予考虑
                 //拿到订单号，然后把对应订单标记为已完成状态。
                 String orderNumber = (String) map.get("out_trade_no");
 
@@ -535,8 +534,8 @@ public class FinancialServiceImpl implements FinancialService {
                     orderSecret.setGmtCreate(new Date());
                     orderSecret.setGmtModified(new Date());
                     orderSecret.setOrderid(order2.getId());
-                    String orderSecStr = MD5Util.md5(String.valueOf(new Date().getTime()).toUpperCase());
-                    orderSecStr = orderSecStr.substring(0, 12).toUpperCase();
+                    String orderSecStr = MD5Util.randomTenNums();//orderSecret应该是10位数字
+                    //orderSecStr = orderSecStr.substring(0, 12).toUpperCase();
                     orderSecret.setSecret(orderSecStr);
                     orderSecret.setUserId(order2.getUserId());
                     try {
@@ -970,6 +969,7 @@ public class FinancialServiceImpl implements FinancialService {
                     "           <h1>" + order.getAddr().toString() + "</h1>" +
                     "           <hr>\r\n" +
                     "           <h1>订单信息：</h1>" +
+                    "           <h1>备注：" + order.getTip() + "</h1>" +
                     "           <h1>订单状态:" + order.getIndentStatus() + "</h1>\r\n" +
                     "           <h1>订单内容:" + order.toStringByProduct() + "</h1>\r\n" +
                     "		</div>\r\n" +

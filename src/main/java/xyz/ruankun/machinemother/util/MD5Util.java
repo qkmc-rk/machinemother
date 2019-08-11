@@ -64,6 +64,14 @@ public class MD5Util {
         return stringBuilder.toString();
     }
 
+    public static String randomTenNums() {
+        StringBuilder stringBuilder = new StringBuilder();
+        int x = (int) (Math.random() * 1000000000);
+        stringBuilder.append(x);
+        stringBuilder.append(String.valueOf(x).charAt(3));
+        return stringBuilder.toString();
+    }
+
     public static String trueMd5(String text) {
         System.out.println("before using algorithm:" + text);
         String str = DigestUtils.md5Hex(text);

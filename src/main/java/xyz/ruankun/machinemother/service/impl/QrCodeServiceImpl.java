@@ -50,7 +50,7 @@ public class QrCodeServiceImpl implements QrCodeService {
     private TemplateRepository templateRepository;
 
     @Override
-    public Map<String, String> getQrCodeUrl(Integer userId) {
+    public Map<String, String> getQrCodeUrl(Integer userId, Integer productId, String page) {
         String accessToken = getAccessToken();
         if (accessToken == null)
             return null;
@@ -63,7 +63,20 @@ public class QrCodeServiceImpl implements QrCodeService {
         //params.put("access_token",accessToken);
         //这个参数至关重要，在小程序通过scene获取userId
         Integer uid = Integer.parseInt(userId.toString());
-        params.put("scene",uid.intValue());
+
+        if (productId != null){
+            StringBuilder stringBuilder = new StringBuilder();
+            stringBuilder.append(uid.intValue());
+            stringBuilder.append("&");
+            stringBuilder.append(productId);
+
+            if (page != null)
+                params.put("page",page);
+
+        }else {
+            params.put("scene",uid.intValue());
+        }
+
         params.put("width",300);
         params.put("is_hyaline",true);
         params.put("auto_color",true);
@@ -125,7 +138,7 @@ public class QrCodeServiceImpl implements QrCodeService {
      * @param img 图片二进制流
      * @return 返回保存成功
      */
-    public Boolean putTemplate(MultipartFile img, Integer... id) {
+    public Boolean putTemplate(MultipartFile img,Integer productId, Integer... id) {
         //第一步上传到七牛云
         String imgPath;
         imgPath = QiNiuFileUtil.uploadImageToQiNiuWithHttps(img);
@@ -136,6 +149,12 @@ public class QrCodeServiceImpl implements QrCodeService {
         //第二步，保存到数据库
         Template template = new Template();
         template.setImgpath(imgPath);
+        //如果没有传入productId就给设置一个 -1
+        if (productId != null)
+            template.setProductId(productId);
+        else
+            template.setProductId(-1);
+
         if (id.length > 0){
             template.setId(id[0]);
             try {
@@ -163,8 +182,8 @@ public class QrCodeServiceImpl implements QrCodeService {
      * @return
      */
     @Override
-    public boolean update(Integer id, MultipartFile img) {
-        return putTemplate(img,id);
+    public boolean update(Integer id, MultipartFile img, Integer productId) {
+        return putTemplate(img,productId,id);
     }
 
     /**

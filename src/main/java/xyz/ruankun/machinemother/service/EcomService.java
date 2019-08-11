@@ -20,5 +20,5 @@ public interface EcomService {
      * @param useCredit
      * @return
      */
-    Map<String, Object> generateOrder(Integer userId, Integer decouponId, Boolean useCredit, Integer addrId);
+    Map<String, Object> generateOrder(Integer userId, Integer decouponId, Boolean useCredit, Integer addrId,String tip);
 }

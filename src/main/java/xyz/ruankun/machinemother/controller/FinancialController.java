@@ -307,22 +307,22 @@ public class FinancialController {
 
     /**
      * 回调函数，用户分享到朋友圈之后回调，会增加积分
+     *
      * @param token
      * @return
      */
     @PutMapping("/share/callback")
     @Authentication(role = AuthAopConstant.USER)
     @ApiOperation(value = "分享小程序成功的回调函数，用于增加用户积分")
-    public ResponseEntity shareCallback(@RequestHeader String token){
+    public ResponseEntity shareCallback(@RequestHeader String token) {
         Integer userId = Integer.valueOf(userInfoService.readDataFromRedis(token));
         //将对应用户的积分增加一定数量
         Wallet wallet = financialService.selectWallet(userId);
         if (wallet == null)
             return ControllerUtil.getFalseResultMsgBySelf("没有找到对应的钱包信息");
-        Map<String,String> result = financialService.addShareCredit(wallet);
+        Map<String, String> result = financialService.addShareCredit(wallet);
         if (result.get("error") != null)
             return ControllerUtil.getFalseResultMsgBySelf(result.toString());
         return ControllerUtil.getSuccessResultBySelf(result);
     }
-
 }

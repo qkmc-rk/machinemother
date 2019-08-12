@@ -21,17 +21,17 @@ public interface OrderSecretRepository extends JpaRepository<OrderSecret, Intege
 
     @Query(value = "delete from mm_ordersecret where orderid=?1", nativeQuery = true)
     @Modifying
-    @Transactional
+    @Transactional(rollbackFor = Exception.class)
     Integer deleteByOrderid(int orderid);
 
     @Query(value = "delete form mm_ordersecret where userid=?1", nativeQuery = true)
     @Modifying
-    @Transactional
+    @Transactional(rollbackFor = Exception.class)
     Integer deleteByUserId(int userId);
 
 
     @Query(value = "delete from mm_ordersecret where id=?1", nativeQuery = true)
     @Modifying
-    @Transactional
+    @Transactional(rollbackFor = Exception.class)
     Integer deleteById(int id);
 }

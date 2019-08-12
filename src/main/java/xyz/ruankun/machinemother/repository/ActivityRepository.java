@@ -21,7 +21,7 @@ public interface ActivityRepository extends JpaRepository<Activity,Integer> {
 
     @Modifying
     @Query(value = "delete from mm_activity where id=?1", nativeQuery = true)
-    @Transactional
+    @Transactional(rollbackFor = Exception.class)
     Integer deleteById(int id);
 
 }

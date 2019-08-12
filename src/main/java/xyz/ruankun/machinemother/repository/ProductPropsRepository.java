@@ -17,12 +17,12 @@ public interface ProductPropsRepository extends JpaRepository<ProductProps, Inte
     ProductProps getById(int id);
 
     @Modifying
-    @Transactional
+    @Transactional(rollbackFor = Exception.class)
     @Query(value = "delete from mm_productprops where productid=?1", nativeQuery = true)
     Integer deleteAllByProductId(int productId);
 
     @Modifying
-    @Transactional
+    @Transactional(rollbackFor = Exception.class)
     @Query(value = "delete from mm_productprops where id=?1", nativeQuery = true)
     Integer deleteById(int id);
 

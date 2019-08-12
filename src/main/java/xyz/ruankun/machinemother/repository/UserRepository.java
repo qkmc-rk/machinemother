@@ -31,12 +31,12 @@ public interface UserRepository extends JpaRepository<User, Integer> {
 
     @Modifying
     @Query(value = "delete from mm_user where openid=?1", nativeQuery = true)
-    @Transactional
+    @Transactional(rollbackFor = Exception.class)
     Integer deleteByOpenId(String openId);
 
     @Modifying
     @Query(value = "delete from mm_user where id=?1", nativeQuery = true)
-    @Transactional
+    @Transactional(rollbackFor = Exception.class)
     Integer deleteById(int id);
 
 //    Boolean deleteById(int id);

@@ -178,7 +178,7 @@ public class EconServiceImpl implements EconService {
      * @return
      */
     @Override
-    @Transactional
+    @Transactional(rollbackFor = Exception.class)
     public Order getOrder(int id) {
         try {
             Order order = orderRepository.findByIdAndIsDelete(id, false);
@@ -217,7 +217,7 @@ public class EconServiceImpl implements EconService {
         }
     }
 
-    @Transactional
+    @Transactional(rollbackFor = Exception.class)
     @Override
     public Integer cancelOrder(Integer userId, Integer OrderId) {
         Order order = getOrder(OrderId);
@@ -252,7 +252,7 @@ public class EconServiceImpl implements EconService {
     }
 
     @Override
-    @Transactional
+    @Transactional(rollbackFor = Exception.class)
     public List<Order> getOrders(Pageable pageable) {
         Page<Order> orders = orderRepository.findAll(pageable);
         List<Order> orders1 = new ArrayList<>();
@@ -286,7 +286,7 @@ public class EconServiceImpl implements EconService {
     }
 
     @Override
-    @Transactional
+    @Transactional(rollbackFor = Exception.class)
     public Boolean deleteOrders(int userId) {
         List<Order> order = getOrders(userId);
         if (order == null) {
@@ -401,7 +401,7 @@ public class EconServiceImpl implements EconService {
     }
 
     @Override
-    @Transactional
+    @Transactional(rollbackFor = Exception.class)
     public Integer deleteItem(int id) {
         Integer result = itemRepository.deleteById(id);
         if (result <= 0) {
@@ -460,7 +460,7 @@ public class EconServiceImpl implements EconService {
      * @return
      */
     @Override
-    @Transactional
+    @Transactional(rollbackFor = Exception.class)
     public Boolean confirmOrder(String orderSecret, String employee, Integer orderId) {
 
         OrderSecret orderSecret1 = null;

@@ -31,7 +31,7 @@ public class MySchedule {
      * 每日0点0分30秒时刷新数据库中未使用
      */
     @Scheduled(cron = "30 0 0 * * ?")
-    @Transactional
+    @Transactional(rollbackFor = Exception.class)
     public void flushDecoupon() {
         logger.info("start flush decounpon and cdKey");
         //未使用过

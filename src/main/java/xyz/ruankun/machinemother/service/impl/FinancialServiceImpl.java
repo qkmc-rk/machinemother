@@ -14,6 +14,7 @@ import xyz.ruankun.machinemother.annotation.小坏蛋;
 import xyz.ruankun.machinemother.entity.*;
 import xyz.ruankun.machinemother.repository.*;
 import xyz.ruankun.machinemother.service.FinancialService;
+import xyz.ruankun.machinemother.util.DateUtil;
 import xyz.ruankun.machinemother.util.MD5Util;
 import xyz.ruankun.machinemother.util.MailUtil;
 import xyz.ruankun.machinemother.util.WePayUtil;
@@ -93,6 +94,9 @@ public class FinancialServiceImpl implements FinancialService {
     @Autowired
     AddrRepository addrRepository;
 
+    @Resource
+    PublicDecouponRepository publicDecouponRepository;
+
     @Override
     public Wallet selectWallet(Integer userId) {
         try {
@@ -154,7 +158,7 @@ public class FinancialServiceImpl implements FinancialService {
      * @return
      */
     @Override
-    @Transactional
+    @Transactional(rollbackFor = Exception.class)
     public boolean confirmOrder(Integer orderid, String secret) {
         Order order;
         OrderSecret orderSecret;
@@ -208,7 +212,7 @@ public class FinancialServiceImpl implements FinancialService {
     }
 
     @Override
-    @Transactional
+    @Transactional(rollbackFor = Exception.class)
     public Decoupon convertDecoupon(Integer userid, String decouponKey) {
         DecouponCDKey decouponCDKey;
         //key是否存在或者过期
@@ -303,7 +307,7 @@ public class FinancialServiceImpl implements FinancialService {
 
     }
 
-    @Transactional
+    @Transactional(rollbackFor = Exception.class)
     @Override
     public Map<String, String> getPrepayInfo(Integer orderid, Integer userid, HttpServletRequest request) {
         Map<String, String> rs = new HashMap<>();
@@ -555,9 +559,9 @@ public class FinancialServiceImpl implements FinancialService {
                     ((Runnable) () -> {
                         logger.info("新的邮件发送线程开始执行");
                         logger.info("支付回调执行成功，开始调用发送邮件任务");
-                        if(doOrderNotify(from,whoShouldBeNotified,order2)){
+                        if (doOrderNotify(from, whoShouldBeNotified, order2)) {
                             logger.info("调用发送邮件任务成功");
-                        }else {
+                        } else {
                             logger.error("mailUtil.doOrderNotify(from,whoShouldBeNotified,order2) 发送邮件失败，返回了false");
                         }
                     }).run();
@@ -739,7 +743,7 @@ public class FinancialServiceImpl implements FinancialService {
     }
 
     @Override
-    @Transactional
+    @Transactional(rollbackFor = Exception.class)
     public Map<String, String> addShareCredit(Wallet wallet) {
         Map<String, String> resultMap = new HashMap<>();
         if (wallet == null) {
@@ -856,7 +860,7 @@ public class FinancialServiceImpl implements FinancialService {
         Decoupon decoupon = new Decoupon();
         //开始日期
         Calendar calendar = Calendar.getInstance();
-        calendar.set(Calendar.HOUR, 0);
+        calendar.set(Calendar.HOUR_OF_DAY, 0);
         calendar.set(Calendar.MINUTE, 0);
         calendar.set(Calendar.SECOND, 0);
         decoupon.setGmtCreate(calendar.getTime());
@@ -899,7 +903,7 @@ public class FinancialServiceImpl implements FinancialService {
         //这个是管理员发的，不算是兑换的，所以不是兑换而来
         decoupon1.setFromexchange(false);
         decoupon1.setGmtCreate(new Date());
-        decoupon1.setGmtPast(decoupon.getGmtPast());
+        decoupon1.setGmtPast(decoupon.getGmtPast());//todo 时间规范
         return decoupon1;
     }
 
@@ -934,10 +938,11 @@ public class FinancialServiceImpl implements FinancialService {
 
     /**
      * 通知有人下订单并且已经付款
+     *
      * @param from
      * @param whoShouldBeNotified
      */
-    private boolean doOrderNotify(String from, String whoShouldBeNotified, Order order){
+    private boolean doOrderNotify(String from, String whoShouldBeNotified, Order order) {
 
         order = setOrderOfCommentProductPropsProductInfo(order);
 
@@ -962,8 +967,8 @@ public class FinancialServiceImpl implements FinancialService {
                     "		<div style=\"width: 300px; margin: auto;\">\r\n" +
                     "           <h1>订单已被付款！订单号码:" + order.getOrderNumber() + "</h1>\r\n" +
                     "           <h1>订单金额:" + order.getAmount() + "</h1>\r\n" +
-                    "           <h1>使用优惠券:" + order.getUseDecoupon() + ",id:"+ order.getDecouponId() + "</h1>\r\n" +
-                    "           <h1>使用积分:" + order.getUseCredit() + ",数量:" + order.getCredit()  + "</h1>\r\n" +
+                    "           <h1>使用优惠券:" + order.getUseDecoupon() + ",id:" + order.getDecouponId() + "</h1>\r\n" +
+                    "           <h1>使用积分:" + order.getUseCredit() + ",数量:" + order.getCredit() + "</h1>\r\n" +
                     "           <hr>\r\n" +
                     "           <h1>用户信息：</h1>" +
                     "           <h1>" + order.getAddr().toString() + "</h1>" +
@@ -1048,7 +1053,7 @@ public class FinancialServiceImpl implements FinancialService {
         //第三步设置地址
         Integer addrId = order.getAddrId();
         Addr addr = null;
-        if (addrId != null){
+        if (addrId != null) {
             try {
                 addr = addrRepository.findById(addrId.intValue());
             } catch (Exception e) {
@@ -1063,5 +1068,87 @@ public class FinancialServiceImpl implements FinancialService {
         return order;
     }
 
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public Boolean addDecoupon(PublicDecoupon publicDecoupon) {
+        try {
+            publicDecouponRepository.save(publicDecoupon);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+        return true;
+    }
 
+    @Override
+    public PublicDecoupon getPublicDecoupon(Integer id) {
+        try {
+            PublicDecoupon publicDecoupon = publicDecouponRepository.findById(id.intValue());
+            if (publicDecoupon == null) {
+                publicDecoupon = new PublicDecoupon();
+            }
+            return publicDecoupon;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    @Override
+    public Integer geted(Integer userId, Integer pdId) {
+        return publicDecouponRepository.isGet(userId, pdId);
+    }
+
+    @Override
+    public Set<PublicDecoupon> getPublicDecoupons() {
+        return publicDecouponRepository.findAllByValidIsTrue();
+    }
+
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public Boolean updateDecoupon(PublicDecoupon publicDecoupon) {
+        try {
+            publicDecouponRepository.update(publicDecoupon);
+            return true;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public Boolean getDecoupon(Integer id, Integer userId) {
+        PublicDecoupon publicDecoupon = getPublicDecoupon(id);
+        if (publicDecoupon.getId() != 0) {
+            //当前是否是领取有效期
+            if (DateUtil.parse(publicDecoupon.getStartTime(), publicDecoupon.getEndTime())) {
+//                设置优惠券数据
+                Decoupon decoupon = new Decoupon();
+                decoupon.setPast(false);
+                decoupon.setWorth(publicDecoupon.getWorth());
+                decoupon.setMin(publicDecoupon.getMin());
+                decoupon.setGmtCreate(new Date());
+                decoupon.setUsed(false);
+                decoupon.setFromexchange(false);
+                decoupon.setUserid(userId);
+                //设置过期时间 三天后的0：0：0
+                Calendar calendar = Calendar.getInstance();
+                calendar.set(Calendar.HOUR_OF_DAY, 0);
+                calendar.set(Calendar.MINUTE, 0);
+                calendar.set(Calendar.SECOND, 0);
+                calendar.set(Calendar.DATE, calendar.get(Calendar.DATE) + 3);
+                decoupon.setGmtPast(calendar.getTime());
+                try {
+                    decouponRepository.save(decoupon);
+                    publicDecouponRepository.saveRelation(userId, id);
+                    return true;
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    return false;
+                }
+            }
+        }
+        return false;
+    }
 }

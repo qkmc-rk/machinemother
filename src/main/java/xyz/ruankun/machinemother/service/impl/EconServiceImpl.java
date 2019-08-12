@@ -328,6 +328,10 @@ public class EconServiceImpl implements EconService {
             if (count == items.size()) {
                 map.put("product", products);
                 map.put("item", items);
+                Order order = orderRepository.findByOrderNumberAndIsDelete(ordernumber,false);
+                if (order != null){
+                    map.put("tip",order.getTip());
+                }
             } else {
                 map.put("error", "数据错误");
             }

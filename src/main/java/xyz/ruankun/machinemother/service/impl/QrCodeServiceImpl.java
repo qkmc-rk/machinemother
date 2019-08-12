@@ -69,7 +69,7 @@ public class QrCodeServiceImpl implements QrCodeService {
             stringBuilder.append(uid.intValue());
             stringBuilder.append("&");
             stringBuilder.append(productId);
-
+            params.put("scene",stringBuilder.toString());
             if (page != null)
                 params.put("page",page);
 

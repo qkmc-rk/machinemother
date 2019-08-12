@@ -58,7 +58,7 @@ public class QrCodeController {
         List<Template> templates = qrCodeService.getTemplate();
         List<Template> templates1 = new ArrayList<>();
         for (Template t:templates){
-            if (t.getProductId().intValue() < 1){
+            if (t.getProductId() != null && t.getProductId().intValue() < 1){
                 t.setProductId(null);
             }
             templates1.add(t);

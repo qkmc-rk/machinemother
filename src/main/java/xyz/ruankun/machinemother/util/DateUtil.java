@@ -68,17 +68,26 @@ public class DateUtil {
     /**
      * 解析传入的数据，返回相应时间戳的date对象
      *
-     * @param text  yyyy-MM-dd HH:mm:ss
+     * @param text yyyy-MM-dd HH:mm:ss
      * @return
      */
     public static Date getDate(String text) {
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         Date date = null;
         try {
-             date = format.parse(text);
-        }catch (ParseException e){
+            date = format.parse(text);
+        } catch (ParseException e) {
             e.printStackTrace();
         }
         return date;
+    }
+
+    public static Boolean parse(Date start, Date end) {
+        Date date = new Date();
+        if (start.before(date) && end.after(date)) {
+            return true;
+        } else {
+            return false;
+        }
     }
 }

@@ -18,7 +18,7 @@ public interface AnnouncementRepository extends JpaRepository<Announcement, Inte
     List<Announcement> findAllByGmtCreateBetween(Date start, Date end);
 
     @Modifying
-    @Transactional
+    @Transactional(rollbackFor = Exception.class)
     @Query(value = "delete from mm_announcement where id=?1",nativeQuery = true)
     Integer deleteById(int id);
 

@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.*;
 import sun.security.provider.MD5;
 import xyz.ruankun.machinemother.annotation.Authentication;
 import xyz.ruankun.machinemother.entity.Decoupon;
+import xyz.ruankun.machinemother.entity.PublicDecoupon;
 import xyz.ruankun.machinemother.entity.Wallet;
 import xyz.ruankun.machinemother.entity.WithDraw;
 import xyz.ruankun.machinemother.service.FinancialService;
@@ -25,6 +26,7 @@ import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 @RestController
 @CrossOrigin
@@ -307,22 +309,101 @@ public class FinancialController {
 
     /**
      * 回调函数，用户分享到朋友圈之后回调，会增加积分
+     *
      * @param token
      * @return
      */
     @PutMapping("/share/callback")
     @Authentication(role = AuthAopConstant.USER)
     @ApiOperation(value = "分享小程序成功的回调函数，用于增加用户积分")
-    public ResponseEntity shareCallback(@RequestHeader String token){
+    public ResponseEntity shareCallback(@RequestHeader String token) {
         Integer userId = Integer.valueOf(userInfoService.readDataFromRedis(token));
         //将对应用户的积分增加一定数量
         Wallet wallet = financialService.selectWallet(userId);
         if (wallet == null)
             return ControllerUtil.getFalseResultMsgBySelf("没有找到对应的钱包信息");
-        Map<String,String> result = financialService.addShareCredit(wallet);
+        Map<String, String> result = financialService.addShareCredit(wallet);
         if (result.get("error") != null)
             return ControllerUtil.getFalseResultMsgBySelf(result.toString());
         return ControllerUtil.getSuccessResultBySelf(result);
+    }
+
+    @PostMapping(value = "/publicdecoupon")
+    @Authentication(role = AuthAopConstant.ADMIN)
+    @ApiOperation(value = "[管理员]添加待领取的优惠券")
+    public ResponseEntity publicDecoupon(@RequestBody PublicDecoupon publicDecoupon) {
+        Date date = new Date();
+        ResponseEntity responseEntity = new ResponseEntity();
+        publicDecoupon.setCreateTime(date);
+        publicDecoupon.setValid(true);
+        if (financialService.addDecoupon(publicDecoupon)) {
+            responseEntity.success(1, "添加成功", publicDecoupon);
+        } else {
+            responseEntity.error(-1, "添加失败", null);
+        }
+        return responseEntity;
+    }
+
+    @PutMapping(value = "/publicdecoupon")
+    @Authentication(role = AuthAopConstant.ADMIN)
+    @ApiOperation(value = "[管理员]修改优惠券状态")
+    public ResponseEntity updatePD(@RequestBody PublicDecoupon publicDecoupon) {
+        ResponseEntity responseEntity = new ResponseEntity();
+        if (financialService.updateDecoupon(publicDecoupon)) {
+            responseEntity.success(1, "操作成功", publicDecoupon);
+        } else {
+            responseEntity.error(-1, "操作失败", null);
+        }
+        return responseEntity;
+    }
+
+    @GetMapping(value = "/publicdecoupon")
+    @Authentication(role = AuthAopConstant.USER)
+    @ApiOperation(value = "[用户]查看某条优惠券信息")
+    public ResponseEntity getPD(@RequestParam(value = "id") Integer id) {
+        ResponseEntity responseEntity = new ResponseEntity();
+        PublicDecoupon publicDecoupon = financialService.getPublicDecoupon(id);
+        if (publicDecoupon == null) {
+            responseEntity.error(-1, "错误数据", null);
+        } else if (publicDecoupon.getId() == 0) {
+            responseEntity.error(-1, "错误数据", null);
+        } else {
+            responseEntity.success(1, "操作成功", publicDecoupon);
+        }
+        return responseEntity;
+    }
+
+    @GetMapping(value = "/publicdecoupons")
+    @Authentication(role = AuthAopConstant.ANON)
+    @ApiOperation(value = "获取所有可领取的优惠券数据")
+    public ResponseEntity getPDs() {
+        ResponseEntity responseEntity = new ResponseEntity();
+        Set<PublicDecoupon> decoupons = financialService.getPublicDecoupons();
+        if (decoupons == null) {
+            responseEntity.error(-1, "操作失败", null);
+        } else {
+            responseEntity.success(1, "操作成功", decoupons);
+        }
+        return responseEntity;
+    }
+
+    @PostMapping(value = "/toDecoupon")
+    @Authentication(role = AuthAopConstant.USER)
+    @ApiOperation(value = "[用户]领取优惠券")
+    public ResponseEntity getDecoupon(@RequestParam(value = "id") Integer id, @RequestHeader(value = "token") String token) {
+        ResponseEntity responseEntity = new ResponseEntity();
+        Integer userId = Integer.valueOf(userInfoService.readDataFromRedis(token));
+        Integer result = financialService.geted(userId, id);
+        if (result == null || result <= 0) {
+            if (financialService.getDecoupon(id, userId)) {
+                responseEntity.success(1, "操作成功", null);
+            } else {
+                responseEntity.error(-1, "操作失败", null);
+            }
+        } else {
+            responseEntity.error(-1, "你已经领取过了", null);
+        }
+        return responseEntity;
     }
 
 }

@@ -139,7 +139,7 @@ public class UserInfoServiceImpl implements UserInfoService {
     }
 
     @Override
-    @Transactional
+    @Transactional(rollbackFor = Exception.class)
     public Integer register(String code, User user) {
         WxServerResult wxServerResult = requestWxServerWithCode(code);
         if (wxServerResult.getErrcode() != null && wxServerResult.getErrcode().equals(Constant.WX_ERROR_CODE))
@@ -335,7 +335,7 @@ public class UserInfoServiceImpl implements UserInfoService {
     }
 
     @Override
-    @Transactional
+    @Transactional(rollbackFor = Exception.class)
     public User save(User user) {
         return userRepository.save(user);
     }

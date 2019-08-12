@@ -32,7 +32,7 @@ public class ProductServiceImpl implements ProductService {
     @Resource
     private ItemRepository itemRepository;
 
-    @Transactional
+    @Transactional(rollbackFor = Exception.class)
     @Override
     public Boolean addProduct(Product product, List<ProductProps> productProps) {
         try {
@@ -92,7 +92,7 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    @Transactional
+    @Transactional(rollbackFor = Exception.class)
     public Boolean updateProduct(Product product) {
         Product check = getProduct(product.getId());
         if (check == null || check.getId() == 0 ||!check.getIsVisible()) {
@@ -134,7 +134,7 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    @Transactional
+    @Transactional(rollbackFor = Exception.class)
     public Integer deleteProduct(Integer id) {
         Product product = getProduct(id);
         if (product == null || product.getId() == 0||! product.getIsVisible()) {

@@ -206,7 +206,6 @@ public class UserController {
                 user = userInfoService.update(user);
                 responseEntity.success(user);
 //                } else {
-                //
 //                    responseEntity.error(UserCode.INVALID_OPERATION, UserCode.INVALID_MSG, null);
 //                }
             }

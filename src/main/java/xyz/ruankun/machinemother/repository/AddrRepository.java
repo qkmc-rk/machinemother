@@ -25,12 +25,12 @@ public interface AddrRepository extends JpaRepository<Addr,Integer> {
     Page<Addr> findAllByVisible(Pageable pageable, Boolean visible);
 
     @Query(value = "delete from mm_addr where userid=?1", nativeQuery = true)
-    @Transactional
+    @Transactional(rollbackFor = Exception.class)
     @Modifying
     Integer deleteByUserId(int userId);
 
     @Query(value = "delete from mm_addr where id=?1", nativeQuery = true)
-    @Transactional
+    @Transactional(rollbackFor = Exception.class)
     @Modifying
     Integer deleteById(int id);
 }

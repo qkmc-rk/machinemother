@@ -7,6 +7,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 public interface FinancialService {
 
@@ -80,5 +81,17 @@ public interface FinancialService {
     Boolean updateWithDraw(Integer id, Boolean option, String orderStr);
 
     Map<String,String> addShareCredit(Wallet wallet);
+
+    Boolean addDecoupon(PublicDecoupon publicDecoupon);
+
+    PublicDecoupon getPublicDecoupon(Integer id);
+
+    Integer geted(Integer userId, Integer pdId);
+
+    Set<PublicDecoupon> getPublicDecoupons();
+
+    Boolean updateDecoupon(PublicDecoupon publicDecoupon);
+
+    Boolean getDecoupon(Integer id, Integer userId);
 
 }

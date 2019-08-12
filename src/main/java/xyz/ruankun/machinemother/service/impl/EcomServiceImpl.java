@@ -98,7 +98,7 @@ public class EcomServiceImpl implements EcomService {
      * @return
      */
     @Override
-    @Transactional
+    @Transactional(rollbackFor = Exception.class)
     public Map<String, Object> generateOrder(Integer userId, Integer decouponId, Boolean useCredit, Integer addrId,String tip) {
         Map map = new HashMap();
         List<Item> items;

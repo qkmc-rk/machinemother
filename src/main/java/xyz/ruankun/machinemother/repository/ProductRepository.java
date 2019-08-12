@@ -26,7 +26,7 @@ public interface ProductRepository extends JpaRepository<Product, Integer> {
     List<Product> findAll();
 
     @Modifying
-    @Transactional
+    @Transactional(rollbackFor = Exception.class)
     @Query(value = "delete from mm_product where id=?1", nativeQuery = true)
     Integer deleteById(int id);
 

@@ -15,7 +15,7 @@ public interface AdvertisementRepository extends JpaRepository<Advertisement,Int
     List<Advertisement> findAllByIsVisible(Boolean isVisible);
 
     @Modifying
-    @Transactional
+    @Transactional(rollbackFor = Exception.class)
     @Query(value = "delete from mm_index_advertisement where id=?1", nativeQuery = true)
     Integer deleteById(int id);
 

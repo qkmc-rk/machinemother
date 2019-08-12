@@ -28,13 +28,13 @@ public interface ItemRepository extends JpaRepository<Item, Integer> {
 
     List<Item> findByProductId(int productId);
 
-    @Transactional
+    @Transactional(rollbackFor = Exception.class)
     @Query(value = "delete from mm_item where userid=?1", nativeQuery = true)
     @Modifying
     Integer deleteByUserId(Integer userId);
 
     @Query(value = "delete from mm_item where id=?1", nativeQuery = true)
-    @Transactional
+    @Transactional(rollbackFor = Exception.class)
     @Modifying
     Integer deleteById(int id);
 

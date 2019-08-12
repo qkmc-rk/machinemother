@@ -15,7 +15,7 @@ public interface WithDrawRepository  extends JpaRepository<WithDraw, Integer> {
     List<WithDraw> findByUserid(Integer userId);
 
     @Modifying
-    @Transactional
+    @Transactional(rollbackFor = Exception.class)
     @Query(value = "delete from mm_withdraw where id=?1", nativeQuery = true)
     Integer deleteById(int id);
 

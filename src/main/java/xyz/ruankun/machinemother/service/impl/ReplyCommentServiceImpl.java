@@ -30,7 +30,7 @@ public class ReplyCommentServiceImpl implements ReplyCommentService {
     private Log logger = LogFactory.getLog(ReplyCommentServiceImpl.class);
 
     @Override
-    @Transactional
+    @Transactional(rollbackFor = Exception.class)
     public Comment putComment(Comment comment) {
         Item item = itemRepository.findById(comment.getItemId().intValue());
         if (item == null) {

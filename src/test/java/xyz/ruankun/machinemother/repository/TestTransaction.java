@@ -2,18 +2,17 @@ package xyz.ruankun.machinemother.repository;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.omg.CORBA.ORB;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
-import xyz.ruankun.machinemother.entity.*;
+import xyz.ruankun.machinemother.entity.Item;
+import xyz.ruankun.machinemother.entity.Order;
+import xyz.ruankun.machinemother.entity.User;
 
 import javax.annotation.Resource;
 import java.math.BigDecimal;
-import java.sql.SQLOutput;
 import java.util.Date;
-import java.util.List;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
@@ -26,13 +25,7 @@ public class TestTransaction {
     private OrderRepository orderRepository;
 
     @Resource
-    private YxRepository yxRepository;
-
-    @Resource
     private OrderSecretRepository orderSecretRepository;
-
-    @Resource
-    private ProductRepository productRepository;
 
     @Resource
     private ItemRepository itemRepository;
@@ -89,19 +82,9 @@ public class TestTransaction {
 
     }
 
-    @Test
     @Transactional(propagation = Propagation.REQUIRED, rollbackFor = RuntimeException.class)
-    public void singleton() {
-        List<Product> products = productRepository.findAll();
-        for (Product product: products){
-            Yingxiao data = new Yingxiao();
-            data.setCount(100);
-            data.setProductId(product.getId());
-            try {
-                yxRepository.save(data);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
+    public void all() {
+        User user = addUser();
+        order();
     }
 }

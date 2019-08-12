@@ -11,7 +11,7 @@ public interface WalletRepository extends JpaRepository<Wallet, Integer> {
     Wallet findByUserId(Integer userId);
 
     @Modifying
-    @Transactional
+    @Transactional(rollbackFor = Exception.class)
     @Query(value = "delete from mm_wallet where id=?1", nativeQuery = true)
     Integer deleteById(int id);
 }

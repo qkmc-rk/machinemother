@@ -30,6 +30,7 @@ public class SMSUtil {
                                                    String phoneNumber, Integer templateId,
                                                    String[] params){
         System.out.println("sendSMSByOne电话号码:" + phoneNumber);
+        String phone = phoneNumber;
         Map<String, Object> map = new HashMap<>();
         //准备参数
         //int type = 0;//普通短信,1位营销短信
@@ -38,7 +39,7 @@ public class SMSUtil {
         try {
             SmsSingleSender ssender = new SmsSingleSender(appid,appKey);
             SmsSingleSenderResult result = ssender.
-                    sendWithParam(nationCode,phoneNumber,templateId,params,"","","");
+                    sendWithParam(nationCode,phone,templateId,params,"","","");
             map.put("SUCCESS","send sms successfully");
             ObjectMapper objectMapper = new ObjectMapper();
             SMSResult smsResult = objectMapper.readValue(result.toString(),SMSResult.class);

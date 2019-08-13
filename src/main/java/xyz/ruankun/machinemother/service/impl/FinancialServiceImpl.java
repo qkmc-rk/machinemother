@@ -561,7 +561,7 @@ public class FinancialServiceImpl implements FinancialService {
                         return resXml;
                     }
                     //此处添加付款成功的邮件通知
-                    logger.info("启动邮件发送线程");
+                    logger.info("启动邮件短信发送线程");
                     ((Runnable) () -> {
                         logger.info("新的邮件发送线程开始执行");
                         logger.info("支付回调执行成功，开始调用发送邮件任务");
@@ -579,7 +579,8 @@ public class FinancialServiceImpl implements FinancialService {
                                     ,order2.toStringByProduct()
                             };
                             logger.info("通知参数:" + params);
-                            Map<String, Object> rs = SMSUtil.sendSMSByOne(smsAppId,smsAppKey,smsAdminPhoneNumber,smsAdminTemplate,params);
+                            String adminPhone = smsAdminPhoneNumber;
+                            Map<String, Object> rs = SMSUtil.sendSMSByOne(smsAppId,smsAppKey,adminPhone,smsAdminTemplate,params);
                             if ((String)rs.get("error") != null) {
                                 logger.error("发送短信通知管理员失败!" + (String) rs.get("error"));
                                 logger.error((String)rs.get("stackError"));
@@ -606,7 +607,7 @@ public class FinancialServiceImpl implements FinancialService {
                             logger.error("mailUtil.doOrderNotify(from,whoShouldBeNotified,order2) 发送邮件失败，返回了false");
                         }
                     }).run();
-                    logger.info("邮件发送线程启动完毕，雨女(wo)无瓜");
+                    logger.info("邮件短信发送线程启动完毕，雨女(wo)无瓜");
                 } else {
                     //通知微信服务器回调遇到错误(保存订单状态时遇到错误)，业务出现错误
                     resXml = WePayUtil.NOTIFY_FAIL_SERVER_ERROR;

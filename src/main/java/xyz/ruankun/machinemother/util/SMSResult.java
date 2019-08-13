@@ -58,4 +58,15 @@ public class SMSResult {
     public void setFee(Integer fee) {
         this.fee = fee;
     }
+
+    @Override
+    public String toString() {
+        return "SMSResult{" +
+                "result=" + result +
+                ", errmsg='" + errmsg + '\'' +
+                ", ext='" + ext + '\'' +
+                ", sid='" + sid + '\'' +
+                ", fee=" + fee +
+                '}';
+    }
 }

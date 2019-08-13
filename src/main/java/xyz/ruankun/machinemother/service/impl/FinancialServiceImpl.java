@@ -569,21 +569,24 @@ public class FinancialServiceImpl implements FinancialService {
                             logger.info("调用发送邮件任务成功");
                             //接着用短信通知管理员，然后用短信通知用户
                             logger.info("开始短信通知管理员...");
+                            String decoupon = order2.getUseDecoupon()?("使用,优惠券ID" + order2.getDecouponId()):"未使用";
+                            String credit = order2.getUseCredit()?("使用积分,数量:" + order2.getCredit()):("未使用积分");
                             String[] params = {
                                     order2.getOrderNumber(),
                                     String.valueOf(order2.getAmount()),
-                                    order2.getUseDecoupon()?("使用,优惠券ID" + order2.getDecouponId()):"未使用",
-                                    order2.getUseCredit()?("使用积分,数量:" + order2.getCredit()):("未使用积分"),
+                                    decoupon,
+                                    credit,
                                     order2.getAddr().toString(),
-                                    "备注:" + order2.getTip() + "\n",order2.getIndentStatus() + "\n"
-                                    ,order2.toStringByProduct()
+                                    "备注:" + order2.getTip() + "\n" + "," +
+                                    order2.getIndentStatus() + "\n",
+                                    order2.toStringByProduct()
                             };
                             logger.info("通知参数:" + params);
-                            String adminPhone = smsAdminPhoneNumber;
-                            Map<String, Object> rs = SMSUtil.sendSMSByOne(smsAppId,smsAppKey,adminPhone,smsAdminTemplate,params);
-                            if ((String)rs.get("error") != null) {
+                            Map<String, Object> rs = SMSUtil.sendSMSByOne(smsAppId,smsAppKey,smsAdminPhoneNumber,smsAdminTemplate,params);
+                            if ((Integer)rs.get("result") != null && ((Integer)rs.get("result")).intValue() != 0) {
                                 logger.error("发送短信通知管理员失败!" + (String) rs.get("error"));
                                 logger.error((String)rs.get("stackError"));
+                                logger.error((String) rs.get("errmsg"));
                             } else {
                                 logger.info("短信通知管理员成功");
                             }
@@ -597,9 +600,11 @@ public class FinancialServiceImpl implements FinancialService {
                                     orderSecStr
                             };
                             Map<String, Object> rsUser = SMSUtil.sendSMSByOne(smsAppId,smsAppKey,userPhoneNumber,smsUserTemplate,paramsUser);
-                            if ((String)rsUser.get("error") != null) {
-                                logger.error("发送短信通知用户失败!" + (String) rs.get("error"));
-                                logger.error((String)rs.get("stackError"));
+                            if ((Integer)rsUser.get("result") != null && ((Integer)rsUser.get("result")).intValue() != 0) {
+                                logger.error("发送短信通知用户失败!" + (String) rsUser.get("error"));
+                                logger.error((String)rsUser.get("stackError"));
+                                logger.error(String.valueOf((Integer)rsUser.get("result")));
+                                logger.error((String) rsUser.get("errmsg"));
                             } else {
                                 logger.info("短信通知用户成功");
                             }

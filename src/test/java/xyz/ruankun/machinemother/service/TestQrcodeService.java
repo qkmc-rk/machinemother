@@ -16,6 +16,6 @@ public class TestQrcodeService {
     @Test
     public void m1(){
         System.out.println("哈哈:" + qrCodeService.getAccessToken());
-        System.out.println("哈哈2:" + qrCodeService.getQrCodeUrl(2));
+        //System.out.println("哈哈2:" + qrCodeService.getQrCodeUrl(2));
     }
 }

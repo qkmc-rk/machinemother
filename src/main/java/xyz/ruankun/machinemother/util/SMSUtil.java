@@ -29,6 +29,7 @@ public class SMSUtil {
     public static Map<String, Object> sendSMSByOne(Integer appid, String appKey,
                                                    String phoneNumber, Integer templateId,
                                                    String[] params){
+        System.out.println("sendSMSByOne电话号码:" + phoneNumber);
         Map<String, Object> map = new HashMap<>();
         //准备参数
         //int type = 0;//普通短信,1位营销短信

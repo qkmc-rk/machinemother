@@ -578,6 +578,7 @@ public class FinancialServiceImpl implements FinancialService {
                                     "备注:" + order2.getTip() + "\n",order2.getIndentStatus() + "\n"
                                     ,order2.toStringByProduct()
                             };
+                            logger.info("通知参数:" + params);
                             Map<String, Object> rs = SMSUtil.sendSMSByOne(smsAppId,smsAppKey,smsAdminPhoneNumber,smsAdminTemplate,params);
                             if ((String)rs.get("error") != null) {
                                 logger.error("发送短信通知管理员失败!" + (String) rs.get("error"));
@@ -596,7 +597,7 @@ public class FinancialServiceImpl implements FinancialService {
                             };
                             Map<String, Object> rsUser = SMSUtil.sendSMSByOne(smsAppId,smsAppKey,userPhoneNumber,smsUserTemplate,paramsUser);
                             if ((String)rsUser.get("error") != null) {
-                                logger.error("发送短信通知管理员失败!" + (String) rs.get("error"));
+                                logger.error("发送短信通知用户失败!" + (String) rs.get("error"));
                                 logger.error((String)rs.get("stackError"));
                             } else {
                                 logger.info("短信通知用户成功");

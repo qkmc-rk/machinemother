@@ -14,10 +14,7 @@ import xyz.ruankun.machinemother.annotation.小坏蛋;
 import xyz.ruankun.machinemother.entity.*;
 import xyz.ruankun.machinemother.repository.*;
 import xyz.ruankun.machinemother.service.FinancialService;
-import xyz.ruankun.machinemother.util.DateUtil;
-import xyz.ruankun.machinemother.util.MD5Util;
-import xyz.ruankun.machinemother.util.MailUtil;
-import xyz.ruankun.machinemother.util.WePayUtil;
+import xyz.ruankun.machinemother.util.*;
 import xyz.ruankun.machinemother.util.constant.OrderIndentStatus;
 
 import javax.annotation.Resource;
@@ -50,15 +47,24 @@ public class FinancialServiceImpl implements FinancialService {
     private String key;
     @Value("${weixin.pay_url}")
     private String url;
-
     @Value("${spring.mail.receiver}")
     private String whoShouldBeNotified;
-
     @Value("${spring.mail.username}")
     private String from;
-
     @Value("${machinemother.shareCreditNum}")
     private Integer shareCreditNum;
+
+    @Value("${qcloud.sms.appid}")
+    private Integer smsAppId;
+    @Value("${qcloud.sms.appkey}")
+    private String smsAppKey;
+    @Value("${qcloud.sms.adminphonenumber}")
+    private String smsAdminPhoneNumber;
+    @Value("${qcloud.sms.template.admin}")
+    private Integer smsAdminTemplate;
+    @Value("${qcloud.sms.template.user}")
+    private Integer smsUserTemplate;
+
 
     @Autowired
     private JavaMailSender mailSender;
@@ -561,6 +567,40 @@ public class FinancialServiceImpl implements FinancialService {
                         logger.info("支付回调执行成功，开始调用发送邮件任务");
                         if (doOrderNotify(from, whoShouldBeNotified, order2)) {
                             logger.info("调用发送邮件任务成功");
+                            //接着用短信通知管理员，然后用短信通知用户
+                            logger.info("开始短信通知管理员...");
+                            String[] params = {
+                                    order2.getOrderNumber(),
+                                    String.valueOf(order2.getAmount()),
+                                    order2.getUseDecoupon()?("使用,优惠券ID" + order2.getDecouponId()):"未使用",
+                                    order2.getUseCredit()?("使用积分,数量:" + order2.getCredit()):("未使用积分"),
+                                    order2.getAddr().toString(),
+                                    "备注:" + order2.getTip() + "\n",order2.getIndentStatus() + "\n"
+                                    ,order2.toStringByProduct()
+                            };
+                            Map<String, Object> rs = SMSUtil.sendSMSByOne(smsAppId,smsAppKey,smsAdminPhoneNumber,smsAdminTemplate,params);
+                            if ((String)rs.get("error") != null) {
+                                logger.error("发送短信通知管理员失败!" + (String) rs.get("error"));
+                                logger.error((String)rs.get("stackError"));
+                            } else {
+                                logger.info("短信通知管理员成功");
+                            }
+                            logger.info("开始短信通知用户...");
+
+                            String userPhoneNumber = order2.getAddr().getPhone();
+                            String[] paramsUser = {
+                                order2.getAddr().getUsername(),
+                                    order2.getOrderNumber(),
+                                    String.valueOf(order2.getAmount()),
+                                    orderSecStr
+                            };
+                            Map<String, Object> rsUser = SMSUtil.sendSMSByOne(smsAppId,smsAppKey,userPhoneNumber,smsUserTemplate,paramsUser);
+                            if ((String)rsUser.get("error") != null) {
+                                logger.error("发送短信通知管理员失败!" + (String) rs.get("error"));
+                                logger.error((String)rs.get("stackError"));
+                            } else {
+                                logger.info("短信通知用户成功");
+                            }
                         } else {
                             logger.error("mailUtil.doOrderNotify(from,whoShouldBeNotified,order2) 发送邮件失败，返回了false");
                         }

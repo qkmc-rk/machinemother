@@ -48,6 +48,10 @@ dependencies {
 	implementation 'io.springfox:springfox-swagger-ui:2.7.0'
 	
 	compile group: 'javax.mail', name: 'mail', version: '1.4.1'
+
+	//引入sms相关依赖
+	implementation 'com.github.qcloudsms:qcloudsms:1.0.6'
+	
 	//implementation 'com.github.joschi.jackson:jackson-datatype-threetenbp:2.6.4'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 }

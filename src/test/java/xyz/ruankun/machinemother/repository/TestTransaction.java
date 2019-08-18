@@ -8,11 +8,13 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import xyz.ruankun.machinemother.entity.Item;
 import xyz.ruankun.machinemother.entity.Order;
+import xyz.ruankun.machinemother.entity.PublicDecoupon;
 import xyz.ruankun.machinemother.entity.User;
 
 import javax.annotation.Resource;
 import java.math.BigDecimal;
 import java.util.Date;
+import java.util.Set;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
@@ -29,6 +31,9 @@ public class TestTransaction {
 
     @Resource
     private ItemRepository itemRepository;
+
+    @Resource
+    private PublicDecouponRepository publicDecouponRepository;
 
     @Test
     public void ad() {
@@ -82,9 +87,9 @@ public class TestTransaction {
 
     }
 
-    @Transactional(propagation = Propagation.REQUIRED, rollbackFor = RuntimeException.class)
+    @Test
     public void all() {
-        User user = addUser();
-        order();
+        Set<PublicDecoupon > publicDecoupons = publicDecouponRepository.findDecoupon(27);
+        System.out.println(publicDecoupons);
     }
 }

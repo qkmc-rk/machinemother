@@ -94,4 +94,5 @@ public interface FinancialService {
 
     Boolean getDecoupon(Integer id, Integer userId);
 
+    Set<PublicDecoupon> toGet(Integer userId);
 }

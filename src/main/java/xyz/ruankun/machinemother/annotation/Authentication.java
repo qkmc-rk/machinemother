@@ -20,5 +20,7 @@ public @interface Authentication {
      */
     boolean pass() default true;
 
+    int count() default 5;
+
     AuthAopConstant role() default AuthAopConstant.ANON;
 }

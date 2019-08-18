@@ -387,6 +387,20 @@ public class FinancialController {
         return responseEntity;
     }
 
+    @GetMapping(value = "/publicdecouponing")
+    @Authentication(role = AuthAopConstant.ANON)
+    @ApiOperation(value = "查看排除已领取的优惠券")
+    public ResponseEntity noGet(@RequestParam(value = "userId") Integer userId) {
+        ResponseEntity responseEntity = new ResponseEntity();
+        Set<PublicDecoupon> publicDecoupons = financialService.toGet(userId);
+        if (publicDecoupons == null) {
+            responseEntity.error(-1, "操作失败", null);
+        } else {
+            responseEntity.success(1, "操作成功", publicDecoupons);
+        }
+        return responseEntity;
+    }
+
     @PostMapping(value = "/toDecoupon")
     @Authentication(role = AuthAopConstant.USER)
     @ApiOperation(value = "[用户]领取优惠券")

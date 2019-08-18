@@ -19,6 +19,12 @@ public interface PublicDecouponRepository extends JpaRepository<PublicDecoupon, 
 
     Set<PublicDecoupon> findAllByValidIsTrue();
 
+    @Query(value = "select pd.id as id, pd.createtime as createTime, pd.endtime as endTime," +
+            " pd.min as min, pd.remarks as remarks, pd.starttime as starttime," +
+            " pd.valid as valid, pd.worth as worth from mm_pubdecoupon pd where valid = true and id not in " +
+            "(select public_decoupon from mm_pbdcp_get where userId=?1)", nativeQuery = true)
+    Set<PublicDecoupon> findDecoupon(Integer userId);
+
     @Modifying
     @Query(value = "update mm_pubdecoupon set starttime=#{startTime}," +
             "endtime=#{endTime}, valid=#{valid} where id=#{id}", nativeQuery = true)

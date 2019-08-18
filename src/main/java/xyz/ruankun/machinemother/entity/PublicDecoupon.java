@@ -86,4 +86,18 @@ public class PublicDecoupon {
     public void setRemarks(String remarks) {
         this.remarks = remarks;
     }
+
+    @Override
+    public String toString() {
+        return "PublicDecoupon{" +
+                "id=" + id +
+                ", min=" + min +
+                ", worth=" + worth +
+                ", valid=" + valid +
+                ", createTime=" + createTime +
+                ", startTime=" + startTime +
+                ", endTime=" + endTime +
+                ", remarks='" + remarks + '\'' +
+                '}';
+    }
 }

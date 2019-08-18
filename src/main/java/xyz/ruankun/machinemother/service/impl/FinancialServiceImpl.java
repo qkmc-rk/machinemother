@@ -1151,6 +1151,7 @@ public class FinancialServiceImpl implements FinancialService {
         return publicDecouponRepository.findAllByValidIsTrue();
     }
 
+
     @Override
     @Transactional(rollbackFor = Exception.class)
     public Boolean updateDecoupon(PublicDecoupon publicDecoupon) {
@@ -1161,6 +1162,11 @@ public class FinancialServiceImpl implements FinancialService {
             e.printStackTrace();
             return false;
         }
+    }
+
+    @Override
+    public Set<PublicDecoupon> toGet(Integer userId) {
+        return publicDecouponRepository.findDecoupon(userId);
     }
 
     @Override

@@ -254,8 +254,15 @@ public class EconServiceImpl implements EconService {
     @Override
     @Transactional(rollbackFor = Exception.class)
     public List<Order> getOrders(Pageable pageable) {
-        Page<Order> orders = orderRepository.findAll(pageable);
+        Page<Order> orders = orderRepository.findAllByIsDelete(false, pageable);
         List<Order> orders1 = new ArrayList<>();
+        int all = orderRepository.countAllByIsDelete(false);
+        int allPage = 0;
+        if (all % pageable.getPageSize() != 0)
+            allPage = all / pageable.getPageSize() + 1;
+        else
+            allPage = all / pageable.getPageSize();
+
         for (Order order : orders) {
             if (!order.getIsPaid() && !order.getIsCancle() &&
                     order.getGmtCreate().getTime() <= System.currentTimeMillis() - 1000 * 60 * 30) {
@@ -264,8 +271,10 @@ public class EconServiceImpl implements EconService {
                 orderRepository.save(order);
             }
             //保存之后要拿出其它数据  //其中被删除的订单不能再使用
-            if(!order.getIsDelete())
+            if(!order.getIsDelete()){
+                order.setAllPage(allPage);
                 orders1.add(setOrderOfCommentProductPropsProductInfo(order));
+            }
         }
         //对orders进行遍历增加
 
@@ -282,16 +291,31 @@ public class EconServiceImpl implements EconService {
     @Transactional(rollbackFor = Exception.class)
     public List<Order> getOrders(Integer page, Integer limit) {
         List<Order> orders = orderRepository.findAll();
+
+        //先排除不能算的order ： delete的不能算
+        List<Order> ordersTmp = new ArrayList<>();
+        for (Order order:orders){
+            if (!order.getIsDelete())
+                ordersTmp.add(order);
+        }
+        orders = ordersTmp;
+
         List<Order> orders1 = new ArrayList<>();
         int index = (page - 1) * limit;
         //算出总页数
         int allPage;
         if (orders.size() % limit != 0){
-            allPage = orders.size() / 10 + 1;
+            allPage = orders.size() / limit + 1;
         }else{
-            allPage = orders.size() / 10;
+            allPage = orders.size() / limit;
         }
         for (; index < page * limit; index++ ) {
+            try {
+                orders.get(index);
+            } catch (IndexOutOfBoundsException e) {
+                System.out.println("最后一页越界了,循环应该终止");
+                break;
+            }
             if (!orders.get(index).getIsPaid() && !orders.get(index).getIsCancle() &&
                     orders.get(index).getGmtCreate().getTime() <= System.currentTimeMillis() - 1000 * 60 * 30) {
                 orders.get(index).setIsCancle(true);

@@ -1,5 +1,7 @@
 package xyz.ruankun.machinemother.repository;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -10,12 +12,15 @@ import java.util.List;
 public interface OrderRepository extends JpaRepository<Order, Integer> {
 
     Order findById(int id);
+    Page<Order> findAllByIsDelete(Boolean isDelete, Pageable pageable);
 
     Order findByIdAndIsDelete(int id, Boolean isDelete);
 
     List<Order> findByIsDelete(Boolean isDelete);
 
     Order findByOrderNumberAndIsDelete(String orderNumber, Boolean isDelete);
+
+    int countAllByIsDelete(Boolean isDelete);
 
     List<Order> findByUserIdAndIsDelete(int userId, Boolean isDelete);
 

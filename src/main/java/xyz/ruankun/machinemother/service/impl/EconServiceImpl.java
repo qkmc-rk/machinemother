@@ -299,9 +299,10 @@ public class EconServiceImpl implements EconService {
                 orderRepository.save(orders.get(index));
             }
             //保存之后要拿出其它数据  //其中被删除的订单不能再使用
-            if(!orders.get(index).getIsDelete())
+            if(!orders.get(index).getIsDelete()){
                 orders.get(index).setAllPage(allPage);
                 orders1.add(setOrderOfCommentProductPropsProductInfo(orders.get(index)));
+            }
         }
         //对orders进行遍历增加
         return orders1;

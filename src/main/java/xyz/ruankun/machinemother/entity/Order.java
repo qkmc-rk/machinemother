@@ -46,6 +46,16 @@ public class Order implements Serializable {
     private String indentStatus;
     @Transient
     private Addr addr;
+    @Transient
+    private Integer allPage;
+
+    public Integer getAllPage() {
+        return allPage;
+    }
+
+    public void setAllPage(Integer allPage) {
+        this.allPage = allPage;
+    }
 
     public String getTip() {
         return tip;

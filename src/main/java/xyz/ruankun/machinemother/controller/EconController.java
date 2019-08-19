@@ -203,6 +203,14 @@ public class EconController {
         List<Order> orders = econService.getOrders(pageable);
         return ControllerUtil.getDataResult(orders);
     }
+    @GetMapping(value = "/orders2")
+    @Authentication(role = AuthAopConstant.ADMIN)
+    @ApiOperation(value = "[管理员]获取全部order")
+    public ResponseEntity getOrders2(@RequestParam(value = "page") Integer page,
+                                    @RequestParam(value = "limit") Integer limit) {
+        List<Order> orders = econService.getOrders(page, limit);
+        return ControllerUtil.getDataResult(orders);
+    }
 
     @PostMapping(value = "/order/{orderId}/back")
     @Authentication(role = AuthAopConstant.USER)

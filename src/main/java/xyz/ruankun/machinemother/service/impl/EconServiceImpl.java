@@ -272,6 +272,41 @@ public class EconServiceImpl implements EconService {
         return orders1;
     }
 
+    /**
+     * 重载 getorders   当订单数目过大时，可能出现性能问题。
+     * @param page 第几页
+     * @param limit
+     * @return
+     */
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public List<Order> getOrders(Integer page, Integer limit) {
+        List<Order> orders = orderRepository.findAll();
+        List<Order> orders1 = new ArrayList<>();
+        int index = (page - 1) * limit;
+        //算出总页数
+        int allPage;
+        if (orders.size() % limit != 0){
+            allPage = orders.size() / 10 + 1;
+        }else{
+            allPage = orders.size() / 10;
+        }
+        for (; index < page * limit; index++ ) {
+            if (!orders.get(index).getIsPaid() && !orders.get(index).getIsCancle() &&
+                    orders.get(index).getGmtCreate().getTime() <= System.currentTimeMillis() - 1000 * 60 * 30) {
+                orders.get(index).setIsCancle(true);
+                orders.get(index).setGmtModified(new Date());
+                orderRepository.save(orders.get(index));
+            }
+            //保存之后要拿出其它数据  //其中被删除的订单不能再使用
+            if(!orders.get(index).getIsDelete())
+                orders.get(index).setAllPage(allPage);
+                orders1.add(setOrderOfCommentProductPropsProductInfo(orders.get(index)));
+        }
+        //对orders进行遍历增加
+        return orders1;
+    }
+
     @Override
     @Transactional(rollbackFor = Exception.class)
     public Integer deleteOrder(Integer id) {

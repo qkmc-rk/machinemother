@@ -17,8 +17,8 @@ configurations {
 }
 
 repositories {
-        mavenLocal()
-        maven {url 'http://maven.aliyun.com/nexus/content/groups/public'}
+	mavenLocal()
+	maven {url 'http://maven.aliyun.com/nexus/content/groups/public'}
 	mavenCentral()
 }
 //默认采用UTF-8编码

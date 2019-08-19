@@ -24,6 +24,8 @@ public interface EconService {
 
     List<Order> getOrders(Pageable pageable);
 
+    List<Order> getOrders(Integer page, Integer limit);
+
     Integer deleteOrder(Integer id);
 
     Boolean deleteOrders(int userId);

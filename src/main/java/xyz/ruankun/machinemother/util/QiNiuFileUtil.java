@@ -10,11 +10,13 @@ import com.qiniu.util.Auth;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.*;
+
 import org.springframework.web.multipart.MultipartFile;
 import xyz.ruankun.machinemother.util.constant.ImageType;
 
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.Date;
 import java.util.Properties;
 
@@ -204,5 +206,32 @@ public class QiNiuFileUtil {
                 break;
         }
         return tail;
+    }
+
+    /**
+     * 下载下来的文件以输入流的形式保存
+     * @param urlList
+     * @return
+     */
+    //链接url下载图片
+    public static InputStream downloadFile(String urlList) {
+        URL url;
+        try {
+            url = new URL(urlList);
+            DataInputStream dataInputStream = new DataInputStream(url.openStream());
+            if (dataInputStream != null){
+                return dataInputStream;
+            }
+            else{
+                dataInputStream.close();
+                return null;
+            }
+
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 }

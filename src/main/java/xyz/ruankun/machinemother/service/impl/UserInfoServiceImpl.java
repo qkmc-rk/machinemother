@@ -19,14 +19,12 @@ import xyz.ruankun.machinemother.repository.UserRepository;
 import xyz.ruankun.machinemother.repository.WalletRepository;
 import xyz.ruankun.machinemother.service.FinancialService;
 import xyz.ruankun.machinemother.service.UserInfoService;
-import xyz.ruankun.machinemother.util.Constant;
-import xyz.ruankun.machinemother.util.DataCode;
-import xyz.ruankun.machinemother.util.EntityUtil;
-import xyz.ruankun.machinemother.util.MD5Util;
+import xyz.ruankun.machinemother.util.*;
 import xyz.ruankun.machinemother.vo.weixin.WxServerResult;
 
 import javax.annotation.Resource;
 import java.io.IOException;
+import java.io.InputStream;
 import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
@@ -141,6 +139,14 @@ public class UserInfoServiceImpl implements UserInfoService {
     @Override
     @Transactional(rollbackFor = Exception.class)
     public Integer register(String code, User user) {
+        //头像要用本地图像，不能用微信服务器地址，否则分享页面加载头像会出错
+        InputStream inputStream = QiNiuFileUtil.downloadFile(user.getAvator());
+        if (inputStream != null){
+            String avator = QiNiuFileUtil.uploadToQiNiu(inputStream, MD5Util.md5(new Date().toString()));
+            if (avator != null)
+                user.setAvator(avator);
+        }
+
         WxServerResult wxServerResult = requestWxServerWithCode(code);
         if (wxServerResult.getErrcode() != null && wxServerResult.getErrcode().equals(Constant.WX_ERROR_CODE))
             return Constant.REGISTER_CODE_ERROR;

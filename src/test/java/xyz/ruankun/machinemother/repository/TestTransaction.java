@@ -10,8 +10,11 @@ import xyz.ruankun.machinemother.entity.Item;
 import xyz.ruankun.machinemother.entity.Order;
 import xyz.ruankun.machinemother.entity.PublicDecoupon;
 import xyz.ruankun.machinemother.entity.User;
+import xyz.ruankun.machinemother.util.MD5Util;
+import xyz.ruankun.machinemother.util.QiNiuFileUtil;
 
 import javax.annotation.Resource;
+import java.io.InputStream;
 import java.math.BigDecimal;
 import java.util.Date;
 import java.util.Set;
@@ -91,5 +94,16 @@ public class TestTransaction {
     public void all() {
         Set<PublicDecoupon > publicDecoupons = publicDecouponRepository.findDecoupon(27);
         System.out.println(publicDecoupons);
+    }
+
+    /**
+     * 测试一哈上传头像到七牛云保存到数据库的接口
+     */
+    @Test
+    public void ttt(){
+        System.out.println("哈哈哈哈！");
+        InputStream inputStream = QiNiuFileUtil.downloadFile("https://wx.qlogo.cn/mmopen/vi_32/DYAIOgq83eribnVtm379TFU0wmDJNbROyMXYZhjR2qXvC2vvm4tH9wXXGsHAicVGoyHDPO0ibTD71fP72J4Zwj5EQ/132");
+        System.out.println(QiNiuFileUtil.uploadToQiNiu(inputStream, MD5Util.md5(new Date().toString())));
+
     }
 }

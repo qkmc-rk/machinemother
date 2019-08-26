@@ -205,6 +205,34 @@ public class HomeServiceImpl implements HomeService {
     }
 
     @Override
+    public Recommend putRecommend(Integer productId, MultipartFile img) {
+        Recommend recommend = new Recommend();
+        recommend.setGmtCreate(new Date());
+        recommend.setGmtModified(new Date());
+        recommend.setProductId(productId);
+        String imageSrc = QiNiuFileUtil.uploadImageToQiNiu(img);
+        if (imageSrc == null) {
+            logger.error("上传图片遇到一些错误,不能插入banner到数据库");
+            return null;
+        }
+        recommend.setImageSrc(imageSrc);
+        Product product = productRepository.findById(recommend.getProductId().intValue());
+        if (product == null) {
+            logger.error("推荐设置有误,productid:" + recommend.getProductId() + "不存在");
+            return null;
+        } else {
+            try {
+                recommend.setTitle(product.getTitle());
+                return recommendRepository.save(recommend);
+            } catch (Exception e) {
+                e.printStackTrace();
+                logger.error("唉，推荐失败");
+                return null;
+            }
+        }
+    }
+
+    @Override
     public boolean deleteRecommend(Integer id) {
         try {
             recommendRepository.deleteById(id);

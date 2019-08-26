@@ -109,6 +109,13 @@ public class HomeController {
         return getDataResult(homeService.putRecommend(recommend));
     }
 
+    @PutMapping("/recommend2")
+    @Authentication(role = AuthAopConstant.ADMIN)
+    @ApiOperation(value = "[管理员]操作,推荐一个产品2")
+    public ResponseEntity putRecommend(@RequestParam Integer productId, @RequestParam MultipartFile img) {
+        return getDataResult(homeService.putRecommend(productId, img));
+    }
+
     @DeleteMapping("/recommend/{id}")
     @Authentication(role = AuthAopConstant.ADMIN)
     @ApiOperation(value = "[管理员]操作,删除一个推荐")

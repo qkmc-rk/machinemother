@@ -43,6 +43,7 @@ public interface HomeService {
     List<Recommend> getAllRecommend();
 
     Recommend putRecommend(Recommend recommend);
+    Recommend putRecommend(Integer productId, MultipartFile img);
 
     boolean deleteRecommend(Integer id);
 }

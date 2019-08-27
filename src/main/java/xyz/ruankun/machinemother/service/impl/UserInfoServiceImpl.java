@@ -142,7 +142,7 @@ public class UserInfoServiceImpl implements UserInfoService {
         //头像要用本地图像，不能用微信服务器地址，否则分享页面加载头像会出错
         InputStream inputStream = QiNiuFileUtil.downloadFile(user.getAvator());
         if (inputStream != null){
-            String avator = QiNiuFileUtil.uploadToQiNiu(inputStream, MD5Util.md5(new Date().toString()));
+            String avator = QiNiuFileUtil.uploadToQiNiuWithHttps(inputStream, MD5Util.md5(new Date().toString()));
             if (avator != null)
                 user.setAvator(avator);
         }

@@ -50,31 +50,23 @@ public class ServerJobServiceImpl implements ServerJobService {
         try {
             //shellPath = resource.getURI().getPath();
             logger.info("shell脚本的位置：" + shellPath);
-            try {
-                Process process = Runtime.getRuntime().exec(shellPath);
-                process.waitFor();
-                StringBuffer sb = new StringBuffer();
-                BufferedReader br = new BufferedReader(new InputStreamReader(process.getInputStream()));
-                String line;
-                List<String> strss = new ArrayList<>();
-                while ((line = br.readLine()) != null) {
-                    strss.add(line);
-                }
-                sb.append(strss.get(strss.size() - 1));
-                String result = sb.toString();
-                //获得结果再说
-                logger.info("输出结果:" + result);
-                //备份完成后进行邮件发送
-                doSendDataBase(result);
-                logger.info("备份数据库完成");
-                map.put("status","SUCCESS");
-            } catch (IOException | InterruptedException e) {
-                map.put("error","执行命令时发生了未知异常，请参照异常 ↓ \n" + e.getMessage());
-                e.printStackTrace();
-                logger.error("执行命令时发生了未知异常，请参照异常 ↓");
-                logger.error(e.getMessage());
-                logger.error("备份数据库失败");
+            Process process = Runtime.getRuntime().exec(shellPath);
+            process.waitFor();
+            StringBuffer sb = new StringBuffer();
+            BufferedReader br = new BufferedReader(new InputStreamReader(process.getInputStream()));
+            String line;
+            List<String> strss = new ArrayList<>();
+            while ((line = br.readLine()) != null) {
+                strss.add(line);
             }
+            sb.append(strss.get(strss.size() - 1));
+            String result = sb.toString();
+            //获得结果再说
+            logger.info("输出结果:" + result);
+            //备份完成后进行邮件发送
+            doSendDataBase(result);
+            logger.info("备份数据库完成");
+            map.put("status","SUCCESS");
         } catch (Exception e) {
             e.printStackTrace();
             logger.error("读取shell脚本位置时发生错误，请确保shell脚本是否存在！");

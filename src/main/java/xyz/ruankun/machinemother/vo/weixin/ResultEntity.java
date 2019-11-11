@@ -1,5 +1,5 @@
 
-package wechatpay.utils.entity;
+package xyz.ruankun.machinemother.vo.weixin;
 
 
 public class ResultEntity

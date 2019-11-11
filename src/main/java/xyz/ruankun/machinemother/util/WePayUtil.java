@@ -5,8 +5,13 @@ import org.dom4j.Document;
 import org.dom4j.DocumentException;
 import org.dom4j.Element;
 import org.dom4j.io.SAXReader;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.web.client.RestTemplate;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
+import xyz.ruankun.machinemother.vo.weixin.ResultEntity;
+import xyz.ruankun.machinemother.vo.weixin.TransferDto;
 
 import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
@@ -30,256 +35,259 @@ import java.util.*;
  */
 public class WePayUtil {
 
+    private static Logger logger = LoggerFactory.getLogger(WePayUtil.class);
 
+    /**
+     * 获取随机字符串 (采用截取8位当前日期数  + 4位随机整数)
+     * @return
+     */
+    public static String getNonceStr() {
+        //获得当前日期
+        Date now = new Date();
+        SimpleDateFormat outFormat = new SimpleDateFormat("yyyyMMddHHmmss");
+        String currTime = outFormat.format(now);
+        //截取8位
+        String strTime = currTime.substring(8, currTime.length());
+        //得到4位随机整数
+        int num = 1;
+        double random = Math.random();
+        if (random < 0.1) {
+            random = random + 0.1;
+        }
+        for (int i = 0; i < 4; i++) {
+            num = num * 10;
+        }
+        num = (int)random * num;
+        return strTime + num;
+    }
+
+    /**
+     * 把数组所有元素排序，并按照“参数=参数值”的模式用“&”字符拼接成字符串
+     * @param params 需要排序并参与字符拼接的参数组
+     * @return 拼接后字符串
+     */
+    public static String createLinkString(Map<String, String> params) {
+        List<String> keys = new ArrayList<String>(params.keySet());
+        Collections.sort(keys);
+
+        String prestr = "";
+
+        for (int i = 0; i < keys.size(); i++) {
+            String key = keys.get(i);
+            String value = params.get(key);
+            if (i == keys.size() - 1) {// 拼接时，不包括最后一个&字符
+                prestr = prestr + key + "=" + value;
+            } else {
+                prestr = prestr + key + "=" + value + "&";
+            }
+        }
+        return prestr;
+    }
+    /**
+     * 把数组所有元素排序，并按照“参数=参数值”的模式用“&”字符拼接成字符串
+     * @return 拼接后字符串
+     */
+    public static String createLinkString(TransferDto dto) {
+        Map<String, String> dtoMap = new HashMap<>();
+        dtoMap.put("check_name",dto.getCheck_name());
+        dtoMap.put("desc",dto.getDesc());
+        dtoMap.put("mch_appid",dto.getMch_appid());
+        dtoMap.put("mchid",dto.getMchid());
+        dtoMap.put("non_str",dto.getNon_str());
+        dtoMap.put("openid",dto.getOpenid());
+        dtoMap.put("partner_trade_no",dto.getPartner_trade_no());
+        dtoMap.put("partner_trade_no",String.valueOf(dto.getAmount()));
+        return createLinkString(dtoMap);
+    }
+
+    /**
+     * 除去数组中的空值和签名参数
+     * @param sArray 签名参数组
+     * @return 去掉空值与签名参数后的新签名参数组
+     */
+    public static Map<String, String> paraFilter(Map<String, String> sArray) {
+        Map<String, String> result = new HashMap<String, String>();
+        if (sArray == null || sArray.size() <= 0) {
+            return result;
+        }
+        for (String key : sArray.keySet()) {
+            String value = sArray.get(key);
+            if (value == null || value.equals("") || key.equalsIgnoreCase("sign")
+                    || key.equalsIgnoreCase("sign_type")) {
+                continue;
+            }
+            result.put(key, value);
+        }
+        return result;
+    }
+
+    /**
+     * MD5 加密，转为指定类型
+     * @param text
+     * @param key
+     * @param input_charset
+     * @return
+     */
+    public static String sign(String text, String key, String input_charset) {
+        text = text + "&key=" + key;
+        return DigestUtils.md5Hex(getContentBytes(text, input_charset));
+    }
+
+    public static byte[] getContentBytes(String content, String charset) {
+        if (charset == null || "".equals(charset)) {
+            return content.getBytes();
+        }
+        try {
+            return content.getBytes(charset);
+        } catch (UnsupportedEncodingException e) {
+            throw new RuntimeException("MD5签名过程中出现错误,指定的编码集不对,您目前指定的编码集是:" + charset);
+        }
+    }
 
 
     /**
-         * 获取随机字符串 (采用截取8位当前日期数  + 4位随机整数)
-         * @return
-         */
-        public static String getNonceStr() {
-            //获得当前日期
-            Date now = new Date();
-            SimpleDateFormat outFormat = new SimpleDateFormat("yyyyMMddHHmmss");
-            String currTime = outFormat.format(now);
-            //截取8位
-            String strTime = currTime.substring(8, currTime.length());
-            //得到4位随机整数
-            int num = 1;
-            double random = Math.random();
-            if (random < 0.1) {
-                random = random + 0.1;
-            }
-            for (int i = 0; i < 4; i++) {
-                num = num * 10;
-            }
-            num = (int)random * num;
-            return strTime + num;
+     * 元转换成分
+     * @return
+     */
+    public static String getMoney(String amount) {
+        if(amount==null){
+            return "";
         }
-
-        /**
-         * 把数组所有元素排序，并按照“参数=参数值”的模式用“&”字符拼接成字符串
-         * @param params 需要排序并参与字符拼接的参数组
-         * @return 拼接后字符串
-         */
-        public static String createLinkString(Map<String, String> params) {
-            List<String> keys = new ArrayList<String>(params.keySet());
-            Collections.sort(keys);
-
-            String prestr = "";
-
-            for (int i = 0; i < keys.size(); i++) {
-                String key = keys.get(i);
-                String value = params.get(key);
-                if (i == keys.size() - 1) {// 拼接时，不包括最后一个&字符
-                    prestr = prestr + key + "=" + value;
-                } else {
-                    prestr = prestr + key + "=" + value + "&";
-                }
-            }
-            return prestr;
+        // 金额转化为分为单位
+        String currency =  amount.replaceAll("\\$|\\￥|\\,", "");  //处理包含, ￥ 或者$的金额
+        int index = currency.indexOf(".");
+        int length = currency.length();
+        Long amLong = 0l;
+        if(index == -1){
+            amLong = Long.valueOf(currency+"00");
+        }else if(length - index >= 3){
+            amLong = Long.valueOf((currency.substring(0, index+3)).replace(".", ""));
+        }else if(length - index == 2){
+            amLong = Long.valueOf((currency.substring(0, index+2)).replace(".", "")+0);
+        }else{
+            amLong = Long.valueOf((currency.substring(0, index+1)).replace(".", "")+"00");
         }
+        return amLong.toString();
+    }
 
-        /**
-         * 除去数组中的空值和签名参数
-         * @param sArray 签名参数组
-         * @return 去掉空值与签名参数后的新签名参数组
-         */
-        public static Map<String, String> paraFilter(Map<String, String> sArray) {
-            Map<String, String> result = new HashMap<String, String>();
-            if (sArray == null || sArray.size() <= 0) {
-                return result;
-            }
-            for (String key : sArray.keySet()) {
-                String value = sArray.get(key);
-                if (value == null || value.equals("") || key.equalsIgnoreCase("sign")
-                        || key.equalsIgnoreCase("sign_type")) {
-                    continue;
-                }
-                result.put(key, value);
-            }
-            return result;
+    /**
+     * 解析xml得到 prepay_id 预支付id
+     * @param result
+     * @return
+     * @throws DocumentException
+     */
+    public static String getPayNo(String result) throws DocumentException {
+        Map<String, String> map = new HashMap<>();
+        InputStream in = new ByteArrayInputStream(result.getBytes());
+        SAXReader read = new SAXReader();
+        Document doc = read.read(in);
+        //得到xml根元素
+        Element root = doc.getRootElement();
+        //遍历  得到根元素的所有子节点
+        @SuppressWarnings("unchecked")
+        List<Element> list =root.elements();
+        for(Element element:list){
+            //装进map
+            map.put(element.getName(), element.getText());
         }
-
-        /**
-         * MD5 加密，转为指定类型
-         * @param text
-         * @param key
-         * @param input_charset
-         * @return
-         */
-        public static String sign(String text, String key, String input_charset) {
-            text = text + "&key=" + key;
-            return DigestUtils.md5Hex(getContentBytes(text, input_charset));
+        //返回码
+        String return_code = map.get("return_code");
+        //返回信息
+        String result_code = map.get("result_code");
+        //预支付id
+        String prepay_id = "";
+        //return_code 和result_code 都为SUCCESS 的时候返回 预支付id
+        if(return_code.equals("SUCCESS")&&result_code.equals("SUCCESS")){
+            prepay_id = map.get("prepay_id");
         }
-
-        public static byte[] getContentBytes(String content, String charset) {
-            if (charset == null || "".equals(charset)) {
-                return content.getBytes();
-            }
-            try {
-                return content.getBytes(charset);
-            } catch (UnsupportedEncodingException e) {
-                throw new RuntimeException("MD5签名过程中出现错误,指定的编码集不对,您目前指定的编码集是:" + charset);
-            }
+        return prepay_id;
+    }
+    /**
+     * 解析 回调时的xml装进map 返回
+     * @param result
+     * @return
+     * @throws DocumentException
+     */
+    public static Map<String, String> getNotifyUrl(String result) throws DocumentException{
+        Map<String, String> map = new HashMap<String, String>();
+        InputStream in = new ByteArrayInputStream(result.getBytes());
+        SAXReader read = new SAXReader();
+        Document doc = read.read(in);
+        //得到xml根元素
+        Element root = doc.getRootElement();
+        //遍历  得到根元素的所有子节点
+        @SuppressWarnings("unchecked")
+        List<Element> list =root.elements();
+        for(Element element:list){
+            //装进map
+            map.put(element.getName().toString(), element.getText().toString());
         }
+        return map;
+    }
 
-
-        /**
-         * 元转换成分
-         * @return
-         */
-        public static String getMoney(String amount) {
-            if(amount==null){
-                return "";
-            }
-            // 金额转化为分为单位
-            String currency =  amount.replaceAll("\\$|\\￥|\\,", "");  //处理包含, ￥ 或者$的金额
-            int index = currency.indexOf(".");
-            int length = currency.length();
-            Long amLong = 0l;
-            if(index == -1){
-                amLong = Long.valueOf(currency+"00");
-            }else if(length - index >= 3){
-                amLong = Long.valueOf((currency.substring(0, index+3)).replace(".", ""));
-            }else if(length - index == 2){
-                amLong = Long.valueOf((currency.substring(0, index+2)).replace(".", "")+0);
-            }else{
-                amLong = Long.valueOf((currency.substring(0, index+1)).replace(".", "")+"00");
-            }
-            return amLong.toString();
+    /**
+     * 验证签名，判断是否是从微信发过来
+     * 验证方法：接收微信服务器回调我们url的时候传递的xml中的参数 然后再次加密，看是否与传递过来的sign签名相同
+     * @param map
+     * @return
+     */
+    public static boolean verifyWeixinNotify(Map<String, String> map,String key) {
+        //根据微信服务端传来的各项参数 进行再一次加密后  与传过来的 sign 签名对比
+        String signWx = map.get("sign");
+        map.remove("sign");//重新获得签名一定要去除sign
+        String mapStr = createLinkString(map);
+        System.out.println("回调获得的数据组成mapStr" + mapStr);
+        String signOwn = sign(mapStr, key, "utf-8").toUpperCase();         //根据微信端参数进行加密的签名
+        System.out.println("回调获得的数据进行重新加密认证得到sign:" + signOwn);
+                       //微信端传过来的签名
+        if(signOwn.equals(signWx)){
+            //如果两个签名一致，验证成功
+            return true;
         }
+        return false;
+    }
 
-        /**
-         * 解析xml得到 prepay_id 预支付id
-         * @param result
-         * @return
-         * @throws DocumentException
-         */
-        public static String getPayNo(String result) throws DocumentException {
-            Map<String, String> map = new HashMap<>();
-            InputStream in = new ByteArrayInputStream(result.getBytes());
-            SAXReader read = new SAXReader();
-            Document doc = read.read(in);
-            //得到xml根元素
-            Element root = doc.getRootElement();
-            //遍历  得到根元素的所有子节点
-            @SuppressWarnings("unchecked")
-            List<Element> list =root.elements();
-            for(Element element:list){
-                //装进map
-                map.put(element.getName(), element.getText());
+    /**
+     *
+     * @param requestUrl
+     * @param requestMethod
+     * @param outputStr
+     */
+    public static String httpRequest(String requestUrl,String requestMethod,String outputStr){
+        // 创建SSLContext
+        StringBuffer buffer=null;
+        try{
+            URL url = new URL(requestUrl);
+            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+            conn.setRequestMethod(requestMethod);
+            conn.setDoOutput(true);
+            conn.setDoInput(true);
+            conn.connect();
+
+            //往服务器端写内容
+            if(null !=outputStr){
+                OutputStream os=conn.getOutputStream();
+                os.write(outputStr.getBytes("utf-8"));
+                os.close();
             }
-            //返回码
-            String return_code = map.get("return_code");
-            //返回信息
-            String result_code = map.get("result_code");
-            //预支付id
-            String prepay_id = "";
-            //return_code 和result_code 都为SUCCESS 的时候返回 预支付id
-            if(return_code.equals("SUCCESS")&&result_code.equals("SUCCESS")){
-                prepay_id = map.get("prepay_id");
+            // 读取服务器端返回的内容
+            InputStream is = conn.getInputStream();
+            InputStreamReader isr = new InputStreamReader(is, "utf-8");
+            BufferedReader br = new BufferedReader(isr);
+            buffer = new StringBuffer();
+            String line = null;
+            while ((line = br.readLine()) != null) {
+                buffer.append(line);
             }
-            return prepay_id;
+        }catch(Exception e){
+            e.printStackTrace();
         }
-        /**
-         * 解析 回调时的xml装进map 返回
-         * @param result
-         * @return
-         * @throws DocumentException
-         */
-        public static Map<String, String> getNotifyUrl(String result) throws DocumentException{
-            Map<String, String> map = new HashMap<String, String>();
-            InputStream in = new ByteArrayInputStream(result.getBytes());
-            SAXReader read = new SAXReader();
-            Document doc = read.read(in);
-            //得到xml根元素
-            Element root = doc.getRootElement();
-            //遍历  得到根元素的所有子节点
-            @SuppressWarnings("unchecked")
-            List<Element> list =root.elements();
-            for(Element element:list){
-                //装进map
-                map.put(element.getName().toString(), element.getText().toString());
-            }
-            return map;
-        }
-
-        /**
-         * 验证签名，判断是否是从微信发过来
-         * 验证方法：接收微信服务器回调我们url的时候传递的xml中的参数 然后再次加密，看是否与传递过来的sign签名相同
-         * @param map
-         * @return
-         */
-        public static boolean verifyWeixinNotify(Map<String, String> map,String key) {
-            //根据微信服务端传来的各项参数 进行再一次加密后  与传过来的 sign 签名对比
-            String signWx = map.get("sign");
-            map.remove("sign");//重新获得签名一定要去除sign
-            String mapStr = createLinkString(map);
-            System.out.println("回调获得的数据组成mapStr" + mapStr);
-            String signOwn = sign(mapStr, key, "utf-8").toUpperCase();         //根据微信端参数进行加密的签名
-            System.out.println("回调获得的数据进行重新加密认证得到sign:" + signOwn);
-                           //微信端传过来的签名
-            if(signOwn.equals(signWx)){
-                //如果两个签名一致，验证成功
-                return true;
-            }
-            return false;
-        }
-
-        /**
-         *
-         * @param requestUrl
-         * @param requestMethod
-         * @param outputStr
-         */
-        public static String httpRequest(String requestUrl,String requestMethod,String outputStr){
-            // 创建SSLContext
-            StringBuffer buffer=null;
-            try{
-                URL url = new URL(requestUrl);
-                HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-                conn.setRequestMethod(requestMethod);
-                conn.setDoOutput(true);
-                conn.setDoInput(true);
-                conn.connect();
-
-                //往服务器端写内容
-                if(null !=outputStr){
-                    OutputStream os=conn.getOutputStream();
-                    os.write(outputStr.getBytes("utf-8"));
-                    os.close();
-                }
-                // 读取服务器端返回的内容
-                InputStream is = conn.getInputStream();
-                InputStreamReader isr = new InputStreamReader(is, "utf-8");
-                BufferedReader br = new BufferedReader(isr);
-                buffer = new StringBuffer();
-                String line = null;
-                while ((line = br.readLine()) != null) {
-                    buffer.append(line);
-                }
-            }catch(Exception e){
-                e.printStackTrace();
-            }
-            return buffer.toString();
-        }
-
-
-
-
-
-
-
-
+        return buffer.toString();
+    }
 
     public enum SignType {
         MD5, HMACSHA256
     }
-
-
-
-
 
     /**
      * 作用：统一下单<br>
@@ -604,4 +612,57 @@ public class WePayUtil {
             "  <return_code><![CDATA[FAIL]]></return_code>\n" +
             "  <return_msg><![该订单已经支付，请勿重复回调!]]></return_msg>\n" +
             "</xml>";
+
+
+    /**
+     * 企业付款到个人零钱核心代码 该方法实现企业付款给个人
+     * @param appkey
+     * @param certPath
+     * @param model
+     * @param enpayuser 企业付款的微信api地址
+     * @return
+     */
+    public static ResultEntity doTransfers(String enpayuser, String appkey, String certPath, TransferDto model) throws Exception {
+        //appkey 和 certPath传入
+        String APP_KEY = appkey;
+        String CERT_PATH = certPath;
+
+        try {
+            //1.计算参数签名
+            String paramStr = createLinkString(model);
+            String mysign = paramStr + "&key=" + APP_KEY;
+            String sign = MD5(mysign).toUpperCase();
+
+            //2.封装请求参数
+            StringBuilder reqXmlStr = new StringBuilder();
+            reqXmlStr.append("<xml>");
+            reqXmlStr.append("<mchid>" + model.getMchid() + "</mchid>");
+            reqXmlStr.append("<mch_appid>" + model.getMch_appid() + "</mch_appid>");
+            reqXmlStr.append("<nonce_str>" + model.getNon_str() + "</nonce_str>");
+            reqXmlStr.append("<check_name>" + model.getCheck_name() + "</check_name>");
+            reqXmlStr.append("<openid>" + model.getOpenid() + "</openid>");
+            reqXmlStr.append("<amount>" + model.getAmount() + "</amount>");
+            reqXmlStr.append("<desc>" + model.getDesc() + "</desc>");
+            reqXmlStr.append("<sign>" + sign + "</sign>");
+            reqXmlStr.append("<partner_trade_no>" + model.getPartner_trade_no() + "</partner_trade_no>");
+            reqXmlStr.append("<spbill_create_ip>" + model.getSpbill_create_ip() + "</spbill_create_ip>");
+            reqXmlStr.append("</xml>");
+
+            logger.info("request xml = " + reqXmlStr);
+
+            //使用https访问接口
+
+            //3.加载证书请求接口
+            String result = HttpRequestHandler.httpsRequest(enpayuser, reqXmlStr.toString(),
+                    model, CERT_PATH);
+            if(result.contains("CDATA[FAIL]")){
+                return new ResultEntity(false, "调用微信接口失败, 具体信息请查看访问日志");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new ResultEntity(false, e.getMessage());
+        }
+        return new ResultEntity(true);
     }
+
+}

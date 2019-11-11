@@ -77,7 +77,7 @@ public class AddrController {
         if (MD5Util.parsePhone(addr.getPhone())) {
             User user = userInfoService.getUser(addr.getUserId());
             if (user == null) {
-                responseEntity.error(-1, "服务器故障", null);
+                responseEntity.error(-1, "服务器故障,传到服务器的 userId: " + addr.getUserId(), null);
             } else if (user.getId() == 0) {
                 responseEntity.error(-1, UserCode.NO_SUCH_USER, null);
 //            responseEntity.serverError();

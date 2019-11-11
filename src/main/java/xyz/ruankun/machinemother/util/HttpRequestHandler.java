@@ -1,4 +1,4 @@
-package wechatpay.utils;
+package xyz.ruankun.machinemother.util;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -27,7 +27,7 @@ import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.util.EntityUtils;
 
-import wechatpay.utils.entity.TransfersDto;
+import xyz.ruankun.machinemother.vo.weixin.TransferDto;
 
 
 public class HttpRequestHandler
@@ -55,11 +55,11 @@ public class HttpRequestHandler
      * @throws NoSuchAlgorithmException
      * @throws KeyManagementException
      */
-    private static void initCert(String path, TransfersDto transfer)
+    private static void initCert(String path, TransferDto transfer)
         throws IOException, KeyStoreException, UnrecoverableKeyException,
         NoSuchAlgorithmException, KeyManagementException
     {
-        // 拼接证书的路径
+        // 拼接证书的路径   //这个依赖是加载的本地依赖
         KeyStore keyStore = KeyStores.getInstance("PKCS12", path, transfer.map());
 
         // 加载本地的证书进行https加密传输
@@ -112,7 +112,7 @@ public class HttpRequestHandler
      * @throws NoSuchAlgorithmException
      * @throws KeyManagementException
      */
-    public static String httpsRequest(String url, String xmlObj, TransfersDto model, String path)
+    public static String httpsRequest(String url, String xmlObj, TransferDto model, String path)
         throws IOException, KeyStoreException, UnrecoverableKeyException,
         NoSuchAlgorithmException, KeyManagementException
     {

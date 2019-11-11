@@ -723,7 +723,6 @@ public class FinancialServiceImpl implements FinancialService {
      */
     @Override
     @Transactional(rollbackFor = Exception.class)
-//    @Deprecated
     public Boolean updateWithDraw(Integer id, Boolean option, String orderStr) {
         WithDraw withDraw = getWithDraw(id);
         if (withDraw == null || withDraw.getId() == 0 || withDraw.getFailed() || withDraw.getConfirm()) {

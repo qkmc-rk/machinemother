@@ -18,6 +18,7 @@ public class WithDraw {
     private Boolean isFailed;
     private Date gmtCreate;
     private Date gmtModified;
+    private String ordernum;
 
     public WithDraw() {
     }
@@ -30,6 +31,14 @@ public class WithDraw {
         this.isFailed = isFailed;
         this.gmtCreate = gmtCreate;
         this.gmtModified = gmtModified;
+    }
+
+    public String getOrdernum() {
+        return ordernum;
+    }
+
+    public void setOrdernum(String ordernum) {
+        this.ordernum = ordernum;
     }
 
     public Integer getId() {
@@ -94,5 +103,20 @@ public class WithDraw {
 
     public void setGmtModified(Date gmtModified) {
         this.gmtModified = gmtModified;
+    }
+
+    @Override
+    public String toString() {
+        return "WithDraw{" +
+                "id=" + id +
+                ", userid=" + userid +
+                ", recnum='" + recnum + '\'' +
+                ", amount=" + amount +
+                ", isConfirm=" + isConfirm +
+                ", isFailed=" + isFailed +
+                ", gmtCreate=" + gmtCreate +
+                ", gmtModified=" + gmtModified +
+                ", ordernum='" + ordernum + '\'' +
+                '}';
     }
 }

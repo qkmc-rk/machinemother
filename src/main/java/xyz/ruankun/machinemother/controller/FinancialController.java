@@ -201,6 +201,10 @@ public class FinancialController {
     @PostMapping(value = "user/withdraw")
     @Authentication(role = AuthAopConstant.USER)
     @ApiOperation(value = "[用户] 发起提现请求", notes = "仅传需提现金额即可")
+    /**
+     * limo在配置文件中定义
+     * key:userid+limo+amount
+     */
     public ResponseEntity withdraw(@ApiParam(value = "提现所需金额") @RequestParam(value = "amount") BigDecimal amount,
                                    @ApiParam(value = "验证信息, userid+limo+amount") @RequestParam(value = "key") String key,
                                    @RequestHeader(value = "token") String token) {
@@ -214,6 +218,8 @@ public class FinancialController {
             withDraw.setUserid(userId);
             withDraw.setFailed(false);
             withDraw.setConfirm(false);
+            int digit = 32;
+            withDraw.setOrdernum(MD5Util.randomNumsStr(digit));
             Boolean result = financialService.addWithDraw(withDraw);
             if (result) {
                 responseEntity.success(withDraw);
@@ -298,6 +304,7 @@ public class FinancialController {
                                    @ApiParam(value = "是否确认, true为确认,false为拒绝") @RequestParam(value = "option") Boolean option,
                                    @ApiParam(value = "微信支付账单号, 若管理员拒绝，则忽略此字段；") @RequestParam(value = "orderStr", required = false, defaultValue = "refuse") String orderStr) {
         ResponseEntity responseEntity = new ResponseEntity();
+        //关键在于updateWithdraw
         Boolean result = financialService.updateWithDraw(withdrawId, option, orderStr);
         if (result) {
             responseEntity.success(null);

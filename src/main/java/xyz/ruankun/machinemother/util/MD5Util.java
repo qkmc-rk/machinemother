@@ -64,6 +64,10 @@ public class MD5Util {
         return stringBuilder.toString();
     }
 
+    /**
+     * 不是很好用，局限性太大，但是代码中引用了，不想动它，以免又发生各种连锁反应
+     * @return
+     */
     public static String randomTenNums() {
         StringBuilder stringBuilder = new StringBuilder();
         int x = (int) (Math.random() * 1000000000);
@@ -72,10 +76,26 @@ public class MD5Util {
         return stringBuilder.toString();
     }
 
+    /**
+     * 传入位数
+     * @param digit 位数
+     * @return
+     */
+    public static String randomNumsStr(int digit) {
+        int count;
+        int nums[] = {0,1,2,3,4,5,6,7,8,9};
+        StringBuilder result = new StringBuilder();
+        for (count=0; count<digit; count++){
+            int pos = (int)Math.random()*10;
+            result.append(nums[pos]);
+        }
+        return result.toString();
+    }
+
     public static String trueMd5(String text) {
-        System.out.println("before using algorithm:" + text);
+        //System.out.println("before using algorithm:" + text);
         String str = DigestUtils.md5Hex(text);
-        System.out.println("after using algorithm override：" + str);
+        //System.out.println("after using algorithm override：" + str);
         return str;
     }
 

@@ -1,6 +1,7 @@
 package xyz.ruankun.machinemother.service;
 
 import xyz.ruankun.machinemother.entity.*;
+import xyz.ruankun.machinemother.vo.weixin.ResultEntity;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -78,7 +79,14 @@ public interface FinancialService {
 
     Boolean deleteWithDraw(Integer id);
 
-    Boolean updateWithDraw(Integer id, Boolean option, String orderStr);
+    Boolean updateWithDraw(Integer id, Boolean option);
+
+    /**
+     * 将钱发送给用户
+     * @param withDraw
+     * @return
+     */
+    ResultEntity sendMoneyToWechatUser(WithDraw withDraw);
 
     Map<String,String> addShareCredit(Wallet wallet);
 

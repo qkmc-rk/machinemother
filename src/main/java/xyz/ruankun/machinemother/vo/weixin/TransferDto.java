@@ -32,7 +32,8 @@ public class TransferDto {
     // 商户名称, 如'XXX服务号'
     private String mch_name;
 
-    private String appkey;
+    //注：key为商户平台设置的密钥key
+    private String appkey;// ? ? ?
 
     //企业付款备注
     private String desc;
@@ -61,38 +62,6 @@ public class TransferDto {
 
     public void setSpbill_create_ip(String spbill_create_ip) {
         this.spbill_create_ip = spbill_create_ip;
-    }
-
-    @Transient
-    public Map<String, String> map()
-    {
-        Map<String, String> map = new HashMap<String, String>();
-        map.put("mch_appid", this.mch_appid);
-        map.put("mchid", this.mchid);
-        map.put("mch_name", this.mch_name);
-        map.put("openid", this.openid);
-        map.put("amount", String.valueOf(this.amount));
-        map.put("desc", this.desc);
-        map.put("appkey", this.appkey);
-        map.put("nonce_str", this.non_str);
-        map.put("partner_trade_no", this.partner_trade_no);
-        map.put("spbill_create_ip", this.spbill_create_ip);
-        return map;
-    }
-
-    @Override
-    public String toString() {
-        return "TransferDto{" +
-                "mch_appid='" + mch_appid + '\'' +
-                ", mchid='" + mchid + '\'' +
-                ", partner_trade_no='" + partner_trade_no + '\'' +
-                ", openid='" + openid + '\'' +
-                ", check_name='" + check_name + '\'' +
-                ", amount=" + amount +
-                ", non_str='" + non_str + '\'' +
-                ", desc='" + desc + '\'' +
-                ", spbill_create_ip='" + spbill_create_ip + '\'' +
-                '}';
     }
 
     public String getMch_appid() {
@@ -157,5 +126,37 @@ public class TransferDto {
 
     public void setDesc(String desc) {
         this.desc = desc;
+    }
+
+    @Transient
+    public Map<String, String> map()
+    {
+        Map<String, String> map = new HashMap<String, String>();
+        map.put("mch_appid", this.mch_appid);
+        map.put("mchid", this.mchid);
+        map.put("mch_name", this.mch_name);
+        map.put("openid", this.openid);
+        map.put("amount", String.valueOf(this.amount));
+        map.put("desc", this.desc);
+        map.put("appkey", this.appkey);
+        map.put("nonce_str", this.non_str);
+        map.put("partner_trade_no", this.partner_trade_no);
+        map.put("spbill_create_ip", this.spbill_create_ip);
+        return map;
+    }
+
+    @Override
+    public String toString() {
+        return "TransferDto{" +
+                "mch_appid='" + mch_appid + '\'' +
+                ", mchid='" + mchid + '\'' +
+                ", partner_trade_no='" + partner_trade_no + '\'' +
+                ", openid='" + openid + '\'' +
+                ", check_name='" + check_name + '\'' +
+                ", amount=" + amount +
+                ", non_str='" + non_str + '\'' +
+                ", desc='" + desc + '\'' +
+                ", spbill_create_ip='" + spbill_create_ip + '\'' +
+                '}';
     }
 }

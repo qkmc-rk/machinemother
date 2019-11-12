@@ -16,11 +16,14 @@ import xyz.ruankun.machinemother.repository.*;
 import xyz.ruankun.machinemother.service.FinancialService;
 import xyz.ruankun.machinemother.util.*;
 import xyz.ruankun.machinemother.util.constant.OrderIndentStatus;
+import xyz.ruankun.machinemother.vo.weixin.ResultEntity;
+import xyz.ruankun.machinemother.vo.weixin.TransferDto;
 
 import javax.annotation.Resource;
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
 import javax.servlet.http.HttpServletRequest;
+import javax.xml.transform.Result;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.math.BigDecimal;
@@ -53,6 +56,12 @@ public class FinancialServiceImpl implements FinancialService {
     private String from;
     @Value("${machinemother.shareCreditNum}")
     private Integer shareCreditNum;
+    @Value("${weixin.enpayuserdesc}")
+    private String enpayuserDesc;
+    @Value("${weixin.enpayuser}")
+    private String enpayuser;
+    @Value("${weixin.cert_path}")
+    private String cert_path;
 
     @Value("${qcloud.sms.appid}")
     private Integer smsAppId;
@@ -714,16 +723,16 @@ public class FinancialServiceImpl implements FinancialService {
 
     /**
      * 若为真则说明提现成功， 反则失败，为wallet添加回相应的提现金额
-     * 7.3 需求变更，这个方法就不用了。看着糟心,
-     * 7.4 重新启用
-     *
+     * 2019. 7. 3 需求变更，这个方法就不用了。看着糟心,
+     * 2019. 7. 4 重新启用
+     * 2019。 11. 11 这个方法需要重新设计, 需要使用接口提现
      * @param id
      * @param option
      * @return
      */
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public Boolean updateWithDraw(Integer id, Boolean option, String orderStr) {
+    public Boolean updateWithDraw(Integer id, Boolean option) {
         WithDraw withDraw = getWithDraw(id);
         if (withDraw == null || withDraw.getId() == 0 || withDraw.getFailed() || withDraw.getConfirm()) {
             return false;
@@ -731,21 +740,18 @@ public class FinancialServiceImpl implements FinancialService {
             withDraw.setGmtModified(new Date());
             //判断管理员是否同意
             if (option) {
-                //同意则判断上传的orderStr是否合法,仅含数字
-                Pattern pattern = Pattern.compile("[0-9]*");
-                if (pattern.matcher(orderStr).matches() && orderStr.length() >= 24) {
-                    withDraw.setConfirm(true);
-                    withDraw.setFailed(false);
-                    withDraw.setRecnum(orderStr);
-                    try {
-                        withDrawRepository.save(withDraw);
-                        return true;
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                        return false;
-                    }
-                } else {
-                    logger.error("提交的账单号有误");
+                ResultEntity rs = sendMoneyToWechatUser(withDraw);
+                logger.info("user successfully obtained the money.information:" + rs.toString());
+                withDraw.setConfirm(true);
+                withDraw.setFailed(false);
+                String msg = rs.getMsg();
+                //找到支付单号,填到数据库
+                withDraw.setRecnum(msg.substring(msg.indexOf("<payment_no><![CDATA[") + "<payment_no><![CDATA[".length(), msg.indexOf("]]></payment_no>")));
+                try {
+                    withDrawRepository.save(withDraw);
+                    return true;
+                } catch (Exception e) {
+                    e.printStackTrace();
                     return false;
                 }
             } else {
@@ -759,7 +765,7 @@ public class FinancialServiceImpl implements FinancialService {
                         withDraw.setFailed(true);
                         withDraw.setGmtModified(new Date());
                         withDraw.setConfirm(false);
-                        withDraw.setRecnum(orderStr);
+                        withDraw.setRecnum("提现失败--管理员已拒绝");
                         //归还后的账户余额
                         BigDecimal commission = wallet.getCommission().add(withDraw.getAmount());
                         //wallet
@@ -785,6 +791,55 @@ public class FinancialServiceImpl implements FinancialService {
                     return false;
                 }
             }
+        }
+    }
+
+    /**
+     * 这是一个至关重要的方法, 要打款给用户
+     *
+     * @param withDraw
+     * @return
+     */
+    @Override
+    public ResultEntity sendMoneyToWechatUser(WithDraw withDraw){
+        User user = null;
+        try {
+            user = userRepository.findById((int)withDraw.getUserid());
+            System.out.println("拿到USER：" + user.toString());
+        } catch (Exception e) {
+            e.printStackTrace();
+            logger.error("查询user时出错,USER ID:" + withDraw.getUserid());
+        }
+        String openId = user.getOpenId();
+
+        TransferDto transferDto = new TransferDto();
+        //元转换为分
+        transferDto.setAmount((withDraw.getAmount().multiply(new BigDecimal(100))).intValue());
+        transferDto.setAppkey(key);
+        transferDto.setSpbill_create_ip(IPUtil.getIPAddressByLast32());
+        transferDto.setCheck_name("NO_CHECK");
+        transferDto.setDesc(enpayuserDesc);
+        transferDto.setMch_appid(appid);  //申请商铺号的APPID
+        transferDto.setMch_name("machinemother");
+        transferDto.setMchid(mch_id);
+        transferDto.setNon_str(WePayUtil.getNonceStr());
+        transferDto.setOpenid(openId);
+        transferDto.setPartner_trade_no(withDraw.getOrdernum());
+
+        String url = enpayuser;
+        String APP_KEY = key;
+        String CERT_PATH = cert_path;
+        logger.info("做成transferDto: " + transferDto.toString());
+        try {
+            ResultEntity resultEntity = WePayUtil.doTransfers(url, APP_KEY, CERT_PATH, transferDto);
+            logger.info("哈哈,调用成功:" + resultEntity.toString());
+            if (resultEntity.isSuccess())
+                return resultEntity;
+            else
+                return null;
+        } catch (Exception e) {
+            logger.error("emmm调用WePayUtil.doTransfers出现了异常:{msg}", e.getMessage());
+            return null;
         }
     }
 

@@ -172,4 +172,24 @@ public class User implements Serializable {
     public void setOrdered(Boolean ordered) {
         this.ordered = ordered;
     }
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "id=" + id +
+                ", openId='" + openId + '\'' +
+                ", name='" + name + '\'' +
+                ", gmtCreate=" + gmtCreate +
+                ", invitorId=" + invitorId +
+                ", phone='" + phone + '\'' +
+                ", avator='" + avator + '\'' +
+                ", award=" + award +
+                ", integration=" + integration +
+                ", wxId='" + wxId + '\'' +
+                ", gmtModified=" + gmtModified +
+                ", ordered=" + ordered +
+                ", isBlack=" + isBlack +
+                ", extras=" + extras +
+                '}';
+    }
 }

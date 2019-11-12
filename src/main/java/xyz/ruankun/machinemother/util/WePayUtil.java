@@ -7,7 +7,6 @@ import org.dom4j.Element;
 import org.dom4j.io.SAXReader;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.web.client.RestTemplate;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import xyz.ruankun.machinemother.vo.weixin.ResultEntity;
@@ -89,14 +88,15 @@ public class WePayUtil {
      */
     public static String createLinkString(TransferDto dto) {
         Map<String, String> dtoMap = new HashMap<>();
+        dtoMap.put("amount",String.valueOf(dto.getAmount()));
         dtoMap.put("check_name",dto.getCheck_name());
         dtoMap.put("desc",dto.getDesc());
         dtoMap.put("mch_appid",dto.getMch_appid());
         dtoMap.put("mchid",dto.getMchid());
-        dtoMap.put("non_str",dto.getNon_str());
+        dtoMap.put("nonce_str",dto.getNon_str());
         dtoMap.put("openid",dto.getOpenid());
         dtoMap.put("partner_trade_no",dto.getPartner_trade_no());
-        dtoMap.put("partner_trade_no",String.valueOf(dto.getAmount()));
+        dtoMap.put("spbill_create_ip",dto.getSpbill_create_ip());
         return createLinkString(dtoMap);
     }
 
@@ -616,9 +616,9 @@ public class WePayUtil {
 
     /**
      * 企业付款到个人零钱核心代码 该方法实现企业付款给个人
-     * @param appkey
-     * @param certPath
-     * @param model
+     * @param appkey 小程序的appKey
+     * @param certPath 加密pem文件的位置
+     * @param model 封装请求信息的对象
      * @param enpayuser 企业付款的微信api地址
      * @return
      */
@@ -647,22 +647,22 @@ public class WePayUtil {
             reqXmlStr.append("<partner_trade_no>" + model.getPartner_trade_no() + "</partner_trade_no>");
             reqXmlStr.append("<spbill_create_ip>" + model.getSpbill_create_ip() + "</spbill_create_ip>");
             reqXmlStr.append("</xml>");
-
             logger.info("request xml = " + reqXmlStr);
-
             //使用https访问接口
-
             //3.加载证书请求接口
             String result = HttpRequestHandler.httpsRequest(enpayuser, reqXmlStr.toString(),
                     model, CERT_PATH);
             if(result.contains("CDATA[FAIL]")){
-                return new ResultEntity(false, "调用微信接口失败, 具体信息请查看访问日志");
+                logger.error(result);
+                return new ResultEntity(false, "调用微信接口失败, 具体信息请查看访问日志: " + result);
+            }else{
+                logger.error(result);
+                return new ResultEntity(true, result);
             }
         } catch (Exception e) {
             e.printStackTrace();
             return new ResultEntity(false, e.getMessage());
         }
-        return new ResultEntity(true);
     }
 
 }

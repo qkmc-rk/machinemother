@@ -301,11 +301,10 @@ public class FinancialController {
     @Authentication(role = AuthAopConstant.ADMIN)
     @ApiOperation(value = "[管理员]关于提现处理", notes = "true则已确认提现成功，false则拒绝提现")
     public ResponseEntity withdraw(@ApiParam(value = "提现记录Id,由路径获取") @PathVariable(value = "withdrawId") Integer withdrawId,
-                                   @ApiParam(value = "是否确认, true为确认,false为拒绝") @RequestParam(value = "option") Boolean option,
-                                   @ApiParam(value = "微信支付账单号, 若管理员拒绝，则忽略此字段；") @RequestParam(value = "orderStr", required = false, defaultValue = "refuse") String orderStr) {
+                                   @ApiParam(value = "是否确认, true为确认,false为拒绝") @RequestParam(value = "option") Boolean option) {
         ResponseEntity responseEntity = new ResponseEntity();
         //关键在于updateWithdraw
-        Boolean result = financialService.updateWithDraw(withdrawId, option, orderStr);
+        Boolean result = financialService.updateWithDraw(withdrawId, option);
         if (result) {
             responseEntity.success(null);
         } else {
